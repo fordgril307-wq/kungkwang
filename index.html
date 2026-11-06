@@ -210,7 +210,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .icon-btn{width:44px;height:44px;padding:0;border-radius:12px;flex:none}
 .icon-btn[aria-expanded="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 .set-panel{display:flex;flex-direction:column;gap:12px}
-.stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;padding:34px 16px 22px;border-radius:28px;background:radial-gradient(120% 90% at 50% 0%,var(--accent-soft),transparent 70%),var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 16px 16px;border-radius:28px;background:radial-gradient(120% 90% at 50% 0%,var(--accent-soft),transparent 70%),var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
 .stage.drag{border-color:var(--accent)}
 .rec{position:relative;width:172px;height:172px;border-radius:50%;flex-direction:column;gap:2px;border:0!important;color:#fff;background:linear-gradient(155deg,var(--rec-a),var(--rec-b) 55%,var(--rec-c));box-shadow:0 22px 44px -18px color-mix(in srgb,var(--accent) 80%,transparent),inset 0 2px 0 rgba(255,255,255,.18)}
 .rec::before,.rec::after{content:"";position:absolute;border-radius:50%;pointer-events:none;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
@@ -262,6 +262,19 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .card-h .scale{margin-top:0}
 .cta-bar{display:none}
 .empty-j{padding:18px 4px;color:var(--fg2);font-size:13px}
+/* STEP 2 머리 */
+.jhead{display:flex;flex-direction:column;gap:4px}
+.jrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.jrow h1{font-size:28px;font-weight:900;letter-spacing:-.03em}
+.jrow .sp{flex:1}
+.mini{min-height:30px;height:30px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;color:var(--fg2);background:var(--surface);border:1px solid var(--line2)}
+.mini.ic{width:34px;height:34px;min-height:34px;padding:0;border-radius:10px}
+.mini[aria-pressed="true"]{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.jsum{font-size:14px;color:var(--fg2)}
+.jsum b{color:var(--fg);font-weight:900}
+.jsum .hot{color:var(--bad)}
+.jtabs{max-width:360px}
+.br .go{color:var(--fg3);font-size:18px;text-align:right}
 /* STEP 2 게시판 */
 .head .tools{margin-left:auto}
 .desc{color:var(--fg2);font-size:14.5px;margin-top:6px;line-height:1.55}
@@ -274,7 +287,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .board{padding:0;overflow:hidden}
 .board-h{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 12px}
 .bt{border-top:2px solid var(--fg)}
-.br{display:grid;grid-template-columns:44px 150px minmax(0,1fr) 70px 90px 96px;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px;width:100%;text-align:left;background:var(--surface);border-radius:0;border-left:0;border-right:0;border-top:0;min-height:52px;cursor:pointer}
+.br{display:grid;grid-template-columns:44px 150px minmax(0,1fr) 70px 90px 96px 20px;text-decoration:none;color:var(--fg);align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px;width:100%;text-align:left;background:var(--surface);border-radius:0;border-left:0;border-right:0;border-top:0;min-height:52px;cursor:pointer}
 .br:hover{background:var(--sunk)}
 .br.th{font-size:12.5px;color:var(--fg2);font-weight:700;min-height:0;padding-block:9px;background:var(--sunk);cursor:default}
 .br .no{color:var(--fg2);font-variant-numeric:tabular-nums;text-align:center}
@@ -294,11 +307,14 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .pager button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
 @media (max-width:680px){
   .br.th{display:none}
+  .br .go{display:none}
+  .jrow h1{font-size:24px}
   .br{grid-template-columns:30px minmax(0,1fr) auto;grid-template-rows:auto auto;gap:2px 10px;padding:12px 16px}
   .br .no{grid-row:span 2;align-self:start;padding-top:2px}
   .br .dt,.br .n2{display:none}
   .br .ttl{font-size:15px}
   .br .pill{grid-row:span 2}
+  .br .pill{font-size:11px;padding:2px 7px}
   .br .meta{display:block;grid-column:2;font-size:12.5px;color:var(--fg2);font-variant-numeric:tabular-nums}
   .bd{padding-left:56px}
   .board-h{padding:16px 16px 10px}
@@ -378,7 +394,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   .stats.mini .k{font-size:10.5px;line-height:1.3}
   .stats.mini .stat{padding:8px 8px}
   .savebar{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));z-index:24;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
-  #v-result{padding-bottom:70px}
+  #v-result{padding-bottom:96px}
   .sum-t{font-size:30px}
 }
 /* 파일 고르기 시트 */
@@ -435,7 +451,9 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   .checks{grid-template-columns:minmax(0,1fr)}
   .verdict .main{font-size:27px}
   .home-top h1{font-size:26px}
-  .rec{width:156px;height:156px}
+  .rec{width:136px;height:136px}
+  .rec::after{inset:-24px}
+  .home{gap:14px}
   .doc{padding:20px 16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;animation:none!important}}
@@ -480,7 +498,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       </div>
       <button class="recent" id="recent" type="button" hidden></button>
       <div class="status" id="aiStatus"><span class="dot busy"></span><span>AI 소리 인식 모델을 불러오는 중…</span></div>
-      <p class="privacy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>녹음 원본은 이 기기 밖으로 나가지 않습니다</p>
+      <p class="privacy" id="privacy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>녹음 원본은 이 기기 밖으로 나가지 않습니다</p>
     </div>
   </section>
 
@@ -494,27 +512,27 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 
   <!-- STEP 2 -->
   <section class="view" id="v-journal" aria-labelledby="h1-journal" hidden>
-    <div class="head">
-      <div><div class="eyebrow">STEP 2 · 소음 일지</div><h1 id="h1-journal">내 소음 기록</h1><p class="desc">분석해 저장한 기록이 여기 쌓여요.<br>관리사무소·이웃사이센터에 그대로 낼 수 있어요.</p></div>
-      <div class="tools">
-        <label class="tgl" for="exTgl"><input type="checkbox" id="exTgl" role="switch"><span class="tr" aria-hidden="true"></span>예시</label>
-        <button class="icon-btn" id="copyLog" type="button" aria-label="상담용 일지 복사" title="상담용 일지 복사"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
-        <button class="icon-btn" id="clearLog" type="button" aria-label="내 기록 지우기" title="내 기록 지우기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+    <div class="jhead">
+      <div class="eyebrow">STEP 2 · 소음 일지</div>
+      <div class="jrow">
+        <h1 id="h1-journal">내 소음 기록</h1>
+        <button class="mini" id="exBtn" type="button" aria-pressed="false">예시</button>
+        <span class="sp"></span>
+        <button class="mini ic" id="copyLog" type="button" aria-label="상담용 일지 복사" title="상담용 일지 복사"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
+        <button class="mini ic" id="clearLog" type="button" aria-label="내 기록 지우기" title="내 기록 지우기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
         <a class="btn primary next-top" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
+      <p class="jsum num" id="jSum"></p>
     </div>
     <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
-    <div class="sec-t"><h2>한눈에 보기</h2></div>
-    <div class="stats mini" id="jStats"></div>
-    <div class="card">
-      <div class="card-h"><div><h2>언제 시끄러웠나</h2><p class="cap">최근 7일, 시간대별로 들린 횟수예요. 진할수록 많이 들렸어요.</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
-      <div class="heat-wrap"><div class="heat" id="heat"></div></div>
-      <p class="cap" style="margin-top:8px">밑줄 칸 = 야간(22~06시)</p>
-    </div>
-    <div class="card board">
-      <div class="board-h"><h2>기록 게시판</h2><span class="note num" id="bCount"></span></div>
+    <div class="seg jtabs" role="tablist"><button type="button" role="tab" data-jt="board" aria-pressed="true">기록 게시판</button><button type="button" role="tab" data-jt="pattern" aria-pressed="false">시간대 패턴</button></div>
+    <div class="card board" id="jBoard">
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
+    </div>
+    <div class="card" id="jPattern" hidden>
+      <div class="card-h"><div><h2>언제 시끄러웠나</h2><p class="cap">최근 7일, 시간대별로 들린 횟수예요. 밑줄 칸은 야간이에요.</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
+      <div class="heat-wrap"><div class="heat" id="heat"></div></div>
     </div>
     <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </section>
@@ -792,13 +810,15 @@ if (typeof module !== 'undefined') module.exports = KE;
   const VIEWS = ['analyze', 'result', 'journal', 'report', 'rdetail'];
   function show() {
     const h = location.hash.slice(1), rid = h.startsWith('r-') && OPTS.some((o) => o.id === h.slice(2)) ? h.slice(2) : null;
-    const v = rid ? 'rdetail' : VIEWS.includes(h) ? h : 'analyze';
+    const lts = h.startsWith('log-') ? +h.slice(4) : null, le = lts ? entries().concat(log).find((e) => e.ts === lts && e.res) : null;
+    const v = rid ? 'rdetail' : le ? 'result' : VIEWS.includes(h) ? h : 'analyze';
     if (rid) { cur = rid; renderNav(); renderPanel(); }
+    let shown = null; if (le) { shown = restore(le.res); render(shown, true); } else if (v === 'result' && lastRes) render(lastRes, false);
     VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
-    const tabv = v === 'result' ? 'analyze' : v === 'rdetail' ? 'report' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+    const tabv = v === 'result' ? (le ? 'journal' : 'analyze') : v === 'rdetail' ? 'report' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     $('footer').hidden = v === 'analyze' || v === 'result';
     if (v === 'journal') renderJournal();
-    if (v === 'result' && lastRes) requestAnimationFrame(() => drawChart(lastRes));
+    if (v === 'result' && (shown || lastRes)) { const rr = shown || lastRes; requestAnimationFrame(() => drawChart(rr)); }
     if (v === 'result' && !lastRes) { location.replace('#analyze'); return; }
     window.scrollTo({ top: 0 });
   }
@@ -922,8 +942,10 @@ if (typeof module !== 'undefined') module.exports = KE;
     const col = st === 'over' ? 'var(--bad)' : st === 'near' ? 'var(--warn)' : st === 'ok' ? 'var(--ok)' : 'var(--fg3)';
     return `<div class="gauge" aria-hidden="true"><div class="f" style="width:${p(v)}%;background:${col}"></div><div class="m" style="left:calc(${p(lim)}% - 1px)"></div></div>`;
   }
-  function render(r) {
+  function render(r, fromLog) {
     const el = $('#result');
+    const bk = $('#v-result .back'); bk.lastChild.textContent = fromLog ? '기록 게시판' : '다시 분석'; bk.setAttribute('href', fromLog ? '#journal' : '#analyze');
+    $('#v-result .res-top .eyebrow').textContent = fromLog ? 'STEP 2 · 기록 상세' : 'STEP 1 · 분석 결과';
     const main = r.main ? T[r.main].name : '뚜렷한 소리 없음';
     const n = Object.values(r.counts).reduce((a, b) => a + b, 0);
     const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : r.checks.every((c) => c.st === 'na') ? 'na' : 'ok';
@@ -953,12 +975,12 @@ if (typeof module !== 'undefined') module.exports = KE;
         </tbody></table></div>
         <p class="note" style="margin-top:6px">${r.ym ? '1단 AI(YAMNet)가 들은 소리: ' + [...new Set(r.ym.chunks.flatMap((c) => c.top))].slice(0, 5).join(', ') + ' → 2단 층간소음 판별로 보정' : '2단 판별 규칙만으로 분석했습니다.'}</p></details>
       <p class="note">휴대폰 측정 참고값입니다. 법적 판정은 공인 측정으로 정해집니다.</p>
-      <div class="savebar"><button class="primary wide" id="save" type="button">일지에 저장</button></div>`;
+      ${fromLog ? '' : '<div class="savebar"><button class="primary wide" id="save" type="button">일지에 저장</button></div>'}`;
     requestAnimationFrame(() => drawChart(r));
-    $('#save').addEventListener('click', () => { addEntry(r); toast('일지에 저장했습니다'); go('journal'); });
+    if (!fromLog) $('#save').addEventListener('click', () => { addEntry(r); toast('일지에 저장했습니다'); go('journal'); });
   }
   function drawChart(r) {
-    const cv = $('#cv'); if (!cv || !cv.clientWidth) return;
+    const cv = $('#cv'); if (!cv || !cv.clientWidth) return; cv._r = r;
     const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, Hh = cv.clientHeight;
     cv.width = W * dpr; cv.height = Hh * dpr; const g = cv.getContext('2d'); g.scale(dpr, dpr);
     const padL = 30, padB = 20, padT = 14, w = W - padL - 8, h = Hh - padT - padB;
@@ -979,65 +1001,71 @@ if (typeof module !== 'undefined') module.exports = KE;
     g.fillStyle = css('--bad'); g.textAlign = 'right'; g.font = '600 11px ' + css('--font'); g.fillText(`기준 ${lim}dB`, padL + w, yOf(lim) - 5); g.textAlign = 'left';
     r.ev.forEach((e) => { const x = xOf(e.t + Math.min(e.span, 0.2) / 2), yy = yOf(e.peak) - 8; g.fillStyle = css('--t-' + T[e.type].color); g.beginPath(); g.arc(x, yy, 3, 0, Math.PI * 2); g.fill(); });
   }
-  window.addEventListener('resize', () => { if (lastRes) drawChart(lastRes); });
+  window.addEventListener('resize', () => { const c = $('#cv'); if (c && c._r) drawChart(c._r); });
 
   /* ---------- 일지 ---------- */
   const KEY = 'kungkwang.v1';
   let log = []; let isExample = false; let exMode = null; let page = 0, openRow = null;
   try { log = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem('kunglog.v1') || '[]'); } catch (e) { log = []; }
+  function snapshot(r) {
+    const k = Math.max(1, Math.ceil(r.Lf.length / 600)), Lf = [];
+    for (let i = 0; i < r.Lf.length; i += k) Lf.push(+Math.max(...r.Lf.slice(i, i + k)).toFixed(1));
+    return { main: r.main, counts: r.counts, checks: r.checks.map((c) => ({ k: c.k, v: +c.v.toFixed(1), lim: c.lim, st: c.st, note: c.note })), night: r.night, period: r.period, start: r.start.getTime(), durSec: r.durSec,
+      Lf, hop: r.hop * k, lmax: r.lmax, overLmax: r.overLmax, leq1: r.leq1, label: r.label, cal: r.cal,
+      ev: r.ev.slice(0, 300).map((e) => ({ t: +e.t.toFixed(2), span: +e.span.toFixed(2), type: e.type, peak: +e.peak.toFixed(1), conf: +e.conf.toFixed(2), why: e.why })) };
+  }
+  const restore = (x) => ({ ...x, start: new Date(x.start), ym: null });
+  const worstOf = (r) => r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : 'ok';
+  let exCache = null;
   function exampleLog() {
+    if (exCache) return exCache;
     const out = [], base = new Date(); base.setHours(0, 0, 0, 0);
-    const plan = [[0, 22, 40, 'run', 18, 63.1], [0, 23, 15, 'walk', 11, 58.4], [1, 22, 55, 'run', 22, 64.0], [1, 23, 40, 'drag', 2, 59.8], [2, 7, 10, 'walk', 6, 55.2], [2, 22, 30, 'run', 15, 62.2],
-      [3, 23, 5, 'walk', 9, 57.6], [4, 10, 20, 'hammer', 24, 66.3], [4, 22, 45, 'run', 20, 63.5], [5, 0, 20, 'walk', 7, 56.9], [5, 21, 50, 'run', 12, 61.0], [6, 22, 35, 'run', 17, 62.8], [6, 23, 50, 'drag', 3, 60.4]];
-    for (const [ago, hh, mm, type, count, lmax] of plan) {
+    const plan = [[0, 22, 40, 'run'], [0, 23, 15, 'walk'], [1, 22, 55, 'run'], [1, 23, 40, 'drag'], [2, 7, 10, 'walk'], [2, 22, 30, 'run'], [3, 23, 5, 'walk'], [4, 10, 20, 'hammer'], [4, 22, 45, 'run'], [5, 0, 20, 'walk'], [5, 21, 50, 'run'], [6, 22, 35, 'run'], [6, 23, 50, 'drag']];
+    plan.forEach(([ago, hh, mm, type], i) => {
       const d = new Date(base); d.setDate(d.getDate() - 6 + ago); d.setHours(hh, mm);
-      const night = KE.isNight(d), lim = KE.STD.impact[night ? 'night' : 'day'].lmax;
-      out.push({ ts: d.getTime(), type, count, lmax, night, over: lmax > lim ? (count >= 3 ? 'over' : 'near') : lmax > lim - 3 ? 'near' : 'ok', src: '예시', example: true });
-    }
-    return out;
+      const r = KE.analyze(KE.synth(type, 20 + i), { cal: 100, start: d }); r.label = `예시_${T[type].name.replace(/[()\s]/g, '')}.wav`;
+      out.push({ ts: d.getTime(), type: r.main || type, count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worstOf(r), src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1), example: true, res: snapshot(r) });
+    });
+    return (exCache = out);
   }
   function entries() { if (exMode === null) exMode = !log.length; isExample = exMode; return exMode ? exampleLog() : log; }
   function addEntry(r) {
-    const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : 'ok';
-    exMode = false; log.push({ cal: r.cal, ts: r.start.getTime(), type: r.main || 'other', count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worst, src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1) });
+    exMode = false; log.push({ cal: r.cal, ts: r.start.getTime(), type: r.main || 'other', count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worstOf(r), src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1), res: snapshot(r) });
     log.sort((a, b) => a.ts - b.ts);
-    try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { toast('저장 공간이 부족해 그래프 없이 저장했습니다'); log[log.length - 1].res = null; try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e2) {} }
   }
+  let jtab = 'board';
   function renderJournal() {
     const E = entries();
-    $('#exTgl').checked = isExample;
-    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0);
-    const over = E.filter((e) => e.over === 'over' || e.over === 'near').length;
-    $('#jStats').innerHTML = [
-      [E.length, '건', '기록', ''], [total, '회', '들린 소리', ''], [total ? Math.round(nightN / total * 100) : 0, '%', '야간 비중', ''], [over, '건', '초과·근접', over ? 'hot' : '']
-    ].map(([v, u, k, c]) => `<div class="stat ${c}"><div class="v">${v}<small>${u}</small></div><div class="k">${k}</div></div>`).join('');
+    $('#exBtn').setAttribute('aria-pressed', String(isExample));
+    $('#jBoard').hidden = jtab !== 'board'; $('#jPattern').hidden = jtab !== 'pattern';
+    $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
+    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0), over = E.filter((e) => e.over === 'over' || e.over === 'near').length;
+    $('#jSum').innerHTML = E.length ? `기록 <b>${E.length}</b>건 · 소리 <b>${total}</b>회 · 야간 <b>${total ? Math.round(nightN / total * 100) : 0}%</b> · 초과 <b class="${over ? 'hot' : ''}">${over}</b>건` : '저장한 기록이 없어요.';
+    // 히트맵
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
     for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
     const grid = days.map(() => new Array(24).fill(0));
     E.forEach((e) => { const d = new Date(e.ts), di = days.findIndex((x) => x.getTime() === new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()); if (di >= 0) grid[di][d.getHours()] += e.count; });
     const mx = Math.max(1, ...grid.flat());
     let html = '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="hl">${h % 3 === 0 ? h : ''}</div>`).join('');
-    days.forEach((d, di) => {
-      html += `<div class="dl">${d.getMonth() + 1}/${d.getDate()} (${wk[d.getDay()]})</div>`;
-      grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; });
-    });
+    days.forEach((d, di) => { html += `<div class="dl">${d.getMonth() + 1}/${d.getDate()} (${wk[d.getDay()]})</div>`;
+      grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; }); });
     $('#heat').innerHTML = html;
-    $('#bCount').textContent = E.length ? `${isExample ? '예시 · ' : ''}전체 ${E.length}건 · 최신순` : '';
-    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j" style="padding:18px 20px">아직 저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.<br>오른쪽 위 \'예시\'를 켜면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
+    // 게시판
+    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j" style="padding:18px 20px">아직 저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.<br>\'예시\'를 누르면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
     const R = [...E].reverse(), PER = 8, pages = Math.ceil(R.length / PER); if (page >= pages) page = pages - 1;
     const latest = R[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
-    const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span></div>`;
-    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const idx = page * PER + k, no = R.length - idx, d = new Date(e.ts);
-      const det = e.counts ? Object.entries(e.counts).map(([t, c]) => `${T[t].name} <b>${c}회</b>`).join(' · ') : `${T[e.type].name} <b>${e.count}회</b>`;
-      return `<button type="button" class="br" role="listitem" aria-expanded="${openRow === e.ts}" data-ts="${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
+    const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div>`;
+    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const no = R.length - (page * PER + k), d = new Date(e.ts);
+      return `<a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
         <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
-        <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span>
-        <span class="meta">${fmt(d)}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></button>
-        ${openRow === e.ts ? `<div class="bd"><span>들린 소리 ${det}</span>${e.leq1 ? `<span>1분 평균 <b>${e.leq1}dB</b></span>` : ''}<span>최고 <b>${e.lmax}dB(A)</b></span><span>출처 <b>${e.src || '-'}</b></span></div>` : ''}`; }).join('');
-    $$('#jList .br[data-ts]').forEach((b) => b.addEventListener('click', () => { const t = +b.dataset.ts; openRow = openRow === t ? null : t; renderJournal(); }));
+        <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span><span class="go" aria-hidden="true">›</span>
+        <span class="meta">${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}${e.night ? ' 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></a>`; }).join('');
     $('#pager').innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) => `<button type="button" data-pg="${i}" ${i === page ? 'aria-current="page"' : ''}>${i + 1}</button>`).join('') : '';
     $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
   }
+  $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
   function logText() {
     const E = entries(); if (!E.length) return '';
     const by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
@@ -1067,7 +1095,7 @@ ${lines.join('\n')}
 작성일 ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}. · 작성 도구: 쿵쾅(층간소음 AI 기록 서비스)`;
   }
   $('#copyLog').addEventListener('click', () => { const t = logText(); if (!t) { toast('복사할 기록이 없습니다'); return; } copy(t, '상담용 일지를 복사했습니다'); });
-  $('#exTgl').addEventListener('change', (e) => { exMode = e.target.checked; renderJournal(); toast(exMode ? '예시 일지를 보여 줍니다' : '내 기록을 보여 줍니다'); });
+  $('#exBtn').addEventListener('click', () => { exMode = !isExample; page = 0; renderJournal(); toast(exMode ? '예시 일지를 보여 줍니다' : '내 기록을 보여 줍니다'); });
   $('#clearLog').addEventListener('click', () => { if (!log.length) { toast('지울 내 기록이 없습니다'); return; } $('#clearConfirm').hidden = false; });
   $('#clearNo').addEventListener('click', () => { $('#clearConfirm').hidden = true; });
   $('#clearYes').addEventListener('click', () => { log = []; try { localStorage.removeItem(KEY); localStorage.removeItem('kunglog.v1'); } catch (e) {} $('#clearConfirm').hidden = true; exMode = null; renderJournal(); toast('기록을 지웠습니다'); });
