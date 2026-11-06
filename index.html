@@ -302,6 +302,30 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .rhead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:10px 16px}
 .rchips{display:flex;flex-wrap:wrap;gap:6px}
 .rchips span{font-size:11.5px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 9px;font-weight:700}
+/* 선택·삭제 */
+.brow{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:stretch;border-bottom:1px solid var(--line);background:var(--surface)}
+.brow .br{border-bottom:0;padding-left:0}
+.brow.th{background:var(--sunk)}
+.brow.on,.brow.on .br{background:var(--accent-soft)}
+.ck{display:grid;place-items:center;cursor:pointer}
+.thm{display:none}
+.ck input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+.selbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barH,60px));z-index:12;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 16px;background:var(--accent-soft);border-bottom:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.selc{font-weight:900;color:var(--accent)}
+.selbtns{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.selbtns button,.selconf button{min-height:36px;padding:4px 12px;font-size:13px}
+.danger{color:var(--bad)!important;border-color:color-mix(in srgb,var(--bad) 40%,transparent)!important}
+.danger:hover{background:var(--bad-soft)}
+.linkish{border-color:transparent;background:transparent;color:var(--fg2)}
+.selconf{display:flex;align-items:center;gap:8px;width:100%;font-size:13px;color:var(--fg)}
+.selconf span{flex:1}
+.racts{display:flex;flex-wrap:wrap;gap:8px}
+.racts button{min-height:40px}
+.racts .sp{flex:1}
+.pickban{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:13px}
+.pickban b{color:var(--accent)}
+.pickban button{min-height:30px;padding:2px 10px;font-size:12.5px}
+@media (max-width:680px){.thm{display:flex;align-items:center;font-size:12.5px;color:var(--fg2);font-weight:700;cursor:pointer;min-height:40px}.brow{grid-template-columns:36px minmax(0,1fr)}.selbtns{margin-left:0;width:100%}.selbtns button{flex:1 1 auto}}
 /* 대시보드 */
 .dash{display:flex;flex-direction:column;gap:14px}
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
@@ -601,6 +625,11 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <div class="adv-row"><span class="adv-k">최고 소음</span><div class="adv-v"><input type="number" id="minDb" min="0" max="120" step="1" placeholder="예: 55" aria-label="최고 소음 최소값"><span>dB 이상</span></div></div>
         <div class="adv-row end"><button type="button" id="advReset">조건 초기화</button><button type="button" class="primary" id="advApply">이 조건으로 검색</button></div>
       </div>
+      <div class="selbar" id="selBar" hidden>
+        <span class="selc num" id="selC"></span>
+        <div class="selbtns"><button type="button" class="primary" id="selGo">이 기록으로 알리기</button><button type="button" id="selCopy">일지 복사</button><button type="button" class="danger" id="selDel">삭제</button><button type="button" class="linkish" id="selClear">선택 해제</button></div>
+        <div class="selconf" id="selConf" hidden><span id="selConfT"></span><button type="button" class="danger" id="selDelYes">지우기</button><button type="button" id="selDelNo">취소</button></div>
+      </div>
       <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span></div>
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
@@ -886,7 +915,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     const lts = h.startsWith('log-') ? +h.slice(4) : null, le = lts ? entries().concat(log).find((e) => e.ts === lts && e.res) : null;
     const v = rid ? 'rdetail' : le ? 'result' : VIEWS.includes(h) ? h : 'analyze';
     if (rid) { cur = rid; renderNav(); renderPanel(); }
-    let shown = null; if (le) { shown = restore(le.res); render(shown, true); } else if (v === 'result' && lastRes) render(lastRes, false);
+    let shown = null; if (le) { shown = restore(le.res); render(shown, true, le.ts); } else if (v === 'result' && lastRes) render(lastRes, false);
     VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
     const tabv = v === 'result' ? (le ? 'journal' : 'analyze') : v === 'rdetail' ? 'report' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     $('footer').hidden = v === 'analyze' || v === 'result';
@@ -1015,7 +1044,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     const col = st === 'over' ? 'var(--bad)' : st === 'near' ? 'var(--warn)' : st === 'ok' ? 'var(--ok)' : 'var(--fg3)';
     return `<div class="gauge" aria-hidden="true"><div class="f" style="width:${p(v)}%;background:${col}"></div><div class="m" style="left:calc(${p(lim)}% - 1px)"></div></div>`;
   }
-  function render(r, fromLog) {
+  function render(r, fromLog, ts) {
     const el = $('#result');
     const bk = $('#v-result .back'); bk.lastChild.textContent = fromLog ? '기록 게시판' : '다시 분석'; bk.setAttribute('href', fromLog ? '#journal' : '#analyze');
     $('#v-result .res-top .eyebrow').textContent = fromLog ? 'STEP 2 · 기록 상세' : 'STEP 1 · 분석 결과';
@@ -1035,6 +1064,7 @@ if (typeof module !== 'undefined') module.exports = KE;
         <h1 class="sum-t">${main}</h1>
         <p class="sum-lead st-${worst}"><span class="sdot"></span><span>${lead}</span></p>
       </div>
+      ${fromLog ? `<div class="racts"><button type="button" class="primary" id="dGo">이 기록으로 알리기</button><button type="button" id="dCopy">일지 복사</button><span class="sp"></span><button type="button" class="danger" id="dDel">삭제</button></div><div class="selconf callout" id="dConf" hidden><span>이 기록을 지울까요? 되돌릴 수 없어요.</span><button type="button" class="danger" id="dDelYes">지우기</button><button type="button" id="dDelNo">취소</button></div>` : ''}
       <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas></div>
       ${rows.length ? `<div class="blk"><h2>기준과 비교</h2><div class="cmp">${rows.map((c) => `
         <div class="cmp-r"><div><div class="cmp-k">${label[c.k]}</div><div class="cmp-s">${sub[c.k](c)}</div></div>
@@ -1050,6 +1080,14 @@ if (typeof module !== 'undefined') module.exports = KE;
       <p class="note">휴대폰 측정 참고값입니다. 법적 판정은 공인 측정으로 정해집니다.</p>
       ${fromLog ? '' : '<div class="savebar"><button class="primary wide" id="save" type="button">일지에 저장</button></div>'}`;
     requestAnimationFrame(() => drawChart(r));
+    if (fromLog) {
+      const ent = () => entries().find((e) => e.ts === ts);
+      $('#dGo').addEventListener('click', () => { pick.clear(); pick.add(ts); toast('이 기록으로 서류를 만들어요'); go('report'); });
+      $('#dCopy').addEventListener('click', () => { const e = ent(); if (e) copy(logText([e]), '이 기록 일지를 복사했습니다'); });
+      $('#dDel').addEventListener('click', () => { $('#dConf').hidden = false; });
+      $('#dDelNo').addEventListener('click', () => { $('#dConf').hidden = true; });
+      $('#dDelYes').addEventListener('click', () => { delEntries([ts]); go('journal'); });
+    }
     if (!fromLog) $('#save').addEventListener('click', () => { addEntry(r); toast('일지에 저장했습니다'); go('journal'); });
   }
   function drawChart(r) {
@@ -1171,6 +1209,18 @@ if (typeof module !== 'undefined') module.exports = KE;
     if (SF.minDb && e.lmax < +SF.minDb) return false;
     return true;
   }
+  const pick = new Set();
+  function renderSel() {
+    const n = pick.size; $('#selBar').hidden = !n; $('#selC').textContent = `${n}건 선택`; if (!n) $('#selConf').hidden = true;
+  }
+  function delEntries(ts) {
+    const S2 = new Set(ts);
+    if (isExample) exCache = exampleLog().filter((e) => !S2.has(e.ts));
+    else { log = log.filter((e) => !S2.has(e.ts)); try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) {} if (!log.length) exMode = false; }
+    S2.forEach((t) => pick.delete(t));
+    toast(`${S2.size}건을 지웠습니다${isExample ? ' (예시는 새로고침하면 돌아와요)' : ''}`);
+  }
+  const chosen = () => { const E = entries(); return pick.size ? E.filter((e) => pick.has(e.ts)) : E; };
   function renderJournal() {
     const E = entries();
     $('#exBtn').setAttribute('aria-pressed', String(isExample));
@@ -1180,6 +1230,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
     if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#heat').innerHTML = heatHTML(E); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
     const All = [...E].reverse(), R = All.filter(matches);
+    [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
     SF.types.forEach((t) => tags.push(T[t].name)); if (SF.tz !== 'all') tags.push(SF.tz === 'day' ? '주간' : '야간'); SF.vd.forEach((v) => tags.push(stTxt[v])); if (SF.minDb) tags.push(`${SF.minDb}dB 이상`);
     $('#rCount').textContent = tags.length ? `검색 결과 ${R.length}건 / 전체 ${All.length}건` : `전체 ${All.length}건 · 최신순`;
@@ -1188,16 +1239,26 @@ if (typeof module !== 'undefined') module.exports = KE;
     const PER = 8, pages = Math.max(1, Math.ceil(R.length / PER)); if (page >= pages) page = pages - 1;
     if (!R.length) { $('#jList').innerHTML = '<p class="nores">조건에 맞는 기록이 없어요. 검색어나 상세 조건을 바꿔 보세요.</p>'; $('#pager').innerHTML = ''; return; }
     const latest = All[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
-    const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div>`;
-    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
-      return `<a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
+    const pageRows = R.slice(page * PER, page * PER + PER), allOn = pageRows.length && pageRows.every((e) => pick.has(e.ts));
+    const head = `<div class="brow th"><label class="ck" aria-label="이 페이지 모두 선택"><input type="checkbox" id="ckAll" ${allOn ? 'checked' : ''}></label><label class="thm" for="ckAll">이 페이지 전체 선택</label><div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div></div>`;
+    $('#jList').innerHTML = head + pageRows.map((e) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
+      return `<div class="brow${pick.has(e.ts) ? ' on' : ''}"><label class="ck" aria-label="${no}번 선택"><input type="checkbox" data-sel="${e.ts}" ${pick.has(e.ts) ? 'checked' : ''}></label><a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
         <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
         <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span><span class="go" aria-hidden="true">›</span>
-        <span class="meta">${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}${e.night ? ' 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></a>`; }).join('');
+        <span class="meta">${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}${e.night ? ' 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></a></div>`; }).join('');
+    $$('[data-sel]').forEach((c) => c.addEventListener('change', () => { const t = +c.dataset.sel; c.checked ? pick.add(t) : pick.delete(t); renderJournal(); }));
+    $('#ckAll') && $('#ckAll').addEventListener('change', (ev) => { pageRows.forEach((e) => ev.target.checked ? pick.add(e.ts) : pick.delete(e.ts)); renderJournal(); });
+    renderSel();
     $('#pager').innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) => `<button type="button" data-pg="${i}" ${i === page ? 'aria-current="page"' : ''}>${i + 1}</button>`).join('') : '';
     $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
   }
   $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
+  $('#selGo').addEventListener('click', () => { toast(`선택한 ${pick.size}건으로 서류를 만들어요`); go('report'); });
+  $('#selCopy').addEventListener('click', () => copy(logText(chosen()), `선택한 ${pick.size}건 일지를 복사했습니다`));
+  $('#selDel').addEventListener('click', () => { $('#selConfT').textContent = `선택한 ${pick.size}건을 지울까요? 되돌릴 수 없어요.`; $('#selConf').hidden = false; });
+  $('#selDelNo').addEventListener('click', () => { $('#selConf').hidden = true; });
+  $('#selDelYes').addEventListener('click', () => { delEntries([...pick]); renderJournal(); });
+  $('#selClear').addEventListener('click', () => { pick.clear(); renderJournal(); });
   const doSearch = () => { SF.field = $('#qField').value; SF.q = $('#q').value; page = 0; renderJournal(); };
   $('#sForm').addEventListener('submit', (e) => { e.preventDefault(); doSearch(); });
   $('#q').addEventListener('input', doSearch); $('#qField').addEventListener('change', doSearch);
@@ -1207,8 +1268,8 @@ if (typeof module !== 'undefined') module.exports = KE;
   $$('[data-vd]').forEach((b) => b.addEventListener('click', () => { const k = b.dataset.vd; SF.vd.has(k) ? SF.vd.delete(k) : SF.vd.add(k); b.setAttribute('aria-pressed', String(SF.vd.has(k))); }));
   $('#advApply').addEventListener('click', () => { SF.from = $('#dFrom').value; SF.to = $('#dTo').value; SF.minDb = $('#minDb').value; doSearch(); });
   $('#advReset').addEventListener('click', () => { Object.assign(SF, { from: '', to: '', tz: 'all', minDb: '' }); SF.types.clear(); SF.vd.clear(); $('#dFrom').value = $('#dTo').value = $('#minDb').value = ''; $$('#adv [aria-pressed]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tz === 'all'))); doSearch(); });
-  function logText() {
-    const E = entries(); if (!E.length) return '';
+  function logText(list) {
+    const E = list || entries(); if (!E.length) return '';
     const by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
     const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0);
     const d = new Date(), cal = E.find((e) => e.cal)?.cal ?? +$('#cal').value;
@@ -1244,7 +1305,7 @@ ${lines.join('\n')}
   /* ---------- STEP 3: 알리는 방법 5가지 ---------- */
   const getSample = async () => { try { return window.claude?.use ? await window.claude.use('sample') : null; } catch (e) { return null; } };
   function logSummary() {
-    const E = entries(), by = {}, hours = {};
+    const E = chosen(), by = {}, hours = {};
     if (!E.length) return null;
     E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; const h = new Date(e.ts).getHours(); hours[h] = (hours[h] || 0) + e.count; });
     const total = E.reduce((s, e) => s + e.count, 0);
@@ -1320,7 +1381,7 @@ ${lines.join('\n')}
   }
   function renderPanel() {
     const o = OPTS.find((x) => x.id === cur), P = $('#optPanel');
-    P.innerHTML = `<div><h2>${o.t}</h2><span class="law">${o.law}</span></div>
+    P.innerHTML = `${pick.size ? `<div class="pickban"><span>선택한 기록 <b>${pick.size}건</b>으로 작성해요</span><button type="button" id="pickAll">전체 기록으로 바꾸기</button></div>` : ''}<div><h2>${o.t}</h2><span class="law">${o.law}</span></div>
       <ul class="guide">${o.guide.map((g) => `<li>${g}</li>`).join('')}</ul>
       ${o.safety ? `<div class="safety"><b>보내기 전에</b><ul>${o.safety.map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       <div class="sub-h">입력</div>${o.form()}
@@ -1328,6 +1389,7 @@ ${lines.join('\n')}
       <button type="button" class="primary wide" id="genBtn">${o.btn}</button>
       <div class="doc"><div class="out" id="docOut" contenteditable="true" aria-label="문서 내용(직접 고칠 수 있음)" spellcheck="false">${F['doc_' + o.id] ? F['doc_' + o.id].replace(/</g, '&lt;') : `'${o.btn}'를 누르면 소음 일지로 문서 초안이 여기에 써집니다.`}</div></div>
       <div class="row" style="justify-content:space-between"><span class="note" id="genSrc"></span><button id="copyDoc" type="button">복사</button></div>`;
+    $('#pickAll') && $('#pickAll').addEventListener('click', () => { pick.clear(); renderPanel(); toast('전체 기록으로 작성해요'); });
     P.querySelectorAll('[data-f]').forEach((el) => el.addEventListener('input', () => { F[el.dataset.f] = el.value; }));
     P.querySelectorAll('[data-c]').forEach((el) => el.addEventListener('change', () => { F[el.dataset.c] = el.checked ? '1' : ''; }));
     P.querySelectorAll('[data-tone]').forEach((b) => b.addEventListener('click', () => { F.tone = b.dataset.tone; P.querySelectorAll('[data-tone]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); }));
