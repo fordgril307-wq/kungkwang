@@ -43,7 +43,8 @@ html{scroll-padding-top:80px}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
 h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
-p{margin:0}
+p{margin:0;text-wrap:pretty}
+body,button,input,textarea,select{word-break:keep-all;overflow-wrap:anywhere}
 .num{font-variant-numeric:tabular-nums}
 .gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .inner{max-width:1040px;margin:0 auto}
@@ -167,7 +168,7 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 .heat{display:grid;grid-template-columns:62px repeat(24,minmax(14px,1fr));gap:3px;min-width:460px;font-size:11px;color:var(--fg2)}
 .heat .c{aspect-ratio:1;border-radius:4px;background:var(--sunk);max-width:100%}
 .heat .night{box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--accent) 22%,transparent)}
-.heat .hl{text-align:center;font-variant-numeric:tabular-nums}
+.heat .hl{text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap;overflow-wrap:normal;overflow:visible}
 .heat .dl{display:flex;align-items:center;font-variant-numeric:tabular-nums}
 .scale{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--fg2);margin-top:10px}
 .scale i{width:14px;height:14px;border-radius:4px;display:inline-block}
@@ -241,6 +242,45 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .res-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .back{color:var(--fg);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:4px;padding:8px 10px 8px 4px;border-radius:8px}
 .back:hover{background:var(--sunk)}
+/* 공통 머리 */
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px}
+.head h1{font-size:28px;font-weight:900;letter-spacing:-.03em;margin-top:2px}
+.tools{display:flex;align-items:center;gap:8px}
+.tgl{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--fg2);cursor:pointer;padding:6px 10px 6px 6px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);min-height:44px}
+.tgl input{position:absolute;opacity:0;width:1px;height:1px}
+.tgl .tr{width:34px;height:20px;border-radius:999px;background:var(--line2);position:relative;transition:background .15s}
+.tgl .tr::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tgl input:checked+.tr{background:var(--warn)}
+.tgl input:checked+.tr::after{transform:translateX(14px)}
+.tgl:has(input:checked){color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,transparent);background:var(--warn-soft)}
+.tgl:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.stats.mini{gap:8px}
+.stats.mini .stat{padding:10px 12px;box-shadow:none}
+.stats.mini .v{font-size:22px}
+.stats.mini .k{font-size:11.5px}
+.card-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px}
+.card-h .scale{margin-top:0}
+.cta-bar{display:none}
+.empty-j{padding:18px 4px;color:var(--fg2);font-size:13px}
+/* STEP 3 선택지 */
+.rep{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:18px;align-items:start}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);min-height:0}
+.opt .k{grid-row:span 2;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;background:var(--sunk);color:var(--fg2)}
+.opt b{font-size:14.5px}
+.opt small{font-size:12px;color:var(--fg2)}
+.opt .lv{grid-row:span 2;font-size:11px;font-weight:700;color:var(--fg2);background:var(--sunk);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.opt[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent) inset}
+.opt[aria-checked="true"] .k{background:var(--accent);color:var(--accent-ink)}
+.panel h2{font-size:19px;font-weight:900;letter-spacing:-.02em}
+.law{display:inline-block;font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 8px;margin-top:4px}
+.guide{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--fg2)}
+.guide b{color:var(--fg)}
+.safety{background:var(--warn-soft);border-radius:12px;padding:10px 12px;font-size:13px}
+.safety b{color:var(--warn)}
+.safety ul{margin:4px 0 0;padding-left:18px;color:var(--fg)}
+.sub-h{font-size:13px;font-weight:700;color:var(--fg);margin-top:2px}
+.fields textarea{font:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;width:100%;min-height:72px;resize:vertical}
 /* 결과 화면 */
 .resbody{gap:22px}
 .sum{display:flex;flex-direction:column;gap:6px}
@@ -270,6 +310,15 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .leg b{color:var(--fg)}
 .savebar{padding-top:4px}
 @media (max-width:680px){
+  .next-top{display:none}
+  .cta-bar{display:block;position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));z-index:24;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+  #v-journal{padding-bottom:70px}
+  .head h1{font-size:24px}
+  .stats.mini{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stats.mini .v{font-size:18px}
+  .stats.mini .v small{font-size:11px}
+  .stats.mini .k{font-size:10.5px;line-height:1.3}
+  .stats.mini .stat{padding:8px 8px}
   .savebar{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));z-index:24;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
   #v-result{padding-bottom:70px}
   .sum-t{font-size:30px}
@@ -314,7 +363,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .rung b{font-size:14px}
 .rung p{font-size:12.5px;color:var(--fg2)}
 .rung .tel{font-weight:700;color:var(--fg);user-select:all}
-@media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.grid2,.rep{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:680px){
   .bar{backdrop-filter:none;background:var(--surface)}
   .tabs{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-right,0px));z-index:25;justify-content:space-around}
@@ -356,19 +405,19 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <div class="home">
       <div class="home-top">
         <div><div class="eyebrow">STEP 1 · 소리 분석</div><h1 id="h1-analyze">어떤 소리였나요?</h1>
-          <p>녹음하면 AI가 소리 종류를 가려내고 법정 기준과 비교해요.</p></div>
+          <p>녹음하면 AI가 소리 종류와<br>기준 초과 여부를 알려 드려요.</p></div>
         <button class="icon-btn" id="setBtn" type="button" aria-expanded="false" aria-controls="setPanel" aria-label="측정 설정"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
       </div>
       <div class="card set-panel" id="setPanel" hidden>
         <h2>측정 설정</h2>
         <div class="fields" style="margin-top:0">
-          <label for="when">녹음 시각 · 주간(06~22시)과 야간 기준이 다릅니다<input id="when" type="datetime-local"></label>
-          <label for="cal">보정값 <span class="num" id="calV" style="color:var(--fg);font-weight:700">100</span> dB · 소음측정기 값에 맞춰 조정<input id="cal" type="range" min="80" max="120" step="1" value="100"></label>
+          <label for="when">녹음 시각 <span class="note" id="whenSrc">파일·녹음 시각으로 자동 입력</span><input id="when" type="datetime-local"></label>
+          <label for="cal">보정값 <span class="num" id="calV" style="color:var(--fg);font-weight:700">100</span> dB <span class="note">소음측정기 값과 맞추기</span><input id="cal" type="range" min="80" max="120" step="1" value="100"></label>
         </div>
       </div>
       <div class="stage" id="drop">
         <button class="rec" id="micBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><b>녹음 시작</b><small>30초 동안 들어요</small></button>
-        <p class="sub">소리가 날 때 휴대폰을 바닥이나 식탁에 두고 눌러 주세요</p>
+        <p class="sub">휴대폰을 바닥이나 식탁에 두고 눌러 주세요</p>
         <button class="link-btn" id="openPick" type="button" aria-haspopup="dialog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>또는 녹음 파일 올리기</button>
       </div>
       <button class="recent" id="recent" type="button" hidden></button>
@@ -387,65 +436,39 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 
   <!-- STEP 2 -->
   <section class="view" id="v-journal" aria-labelledby="h1-journal" hidden>
-    <div class="hero">
-      <div><div class="eyebrow">STEP 2</div><h1 id="h1-journal">언제, 무엇이, 얼마나 컸는지</h1>
-        <p>분석 결과가 쌓이면 소음 패턴이 보입니다. 이웃사이센터 상담 때 그대로 내밀 수 있는 일지로 정리됩니다.</p></div>
-      <div class="row"><button id="copyLog" type="button" class="primary">상담용 일지 복사</button><button id="clearLog" type="button">기록 지우기</button></div>
+    <div class="head">
+      <div><div class="eyebrow">STEP 2 · 소음 일지</div><h1 id="h1-journal">언제, 무엇이, 얼마나</h1></div>
+      <div class="tools">
+        <label class="tgl" for="exTgl"><input type="checkbox" id="exTgl" role="switch"><span class="tr" aria-hidden="true"></span>예시</label>
+        <button class="icon-btn" id="copyLog" type="button" aria-label="상담용 일지 복사" title="상담용 일지 복사"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
+        <button class="icon-btn" id="clearLog" type="button" aria-label="내 기록 지우기" title="내 기록 지우기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+        <a class="btn primary next-top" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </div>
-    <div id="clearConfirm" class="callout" hidden>기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
-    <div id="jExample" class="callout" hidden><span class="tag-ex">예시</span> 지금 보이는 기록은 기능을 보여 주기 위한 <b>예시 데이터</b>입니다. STEP 1에서 분석한 결과를 저장하면 예시는 사라집니다.</div>
-    <div class="stats" id="jStats"></div>
+    <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
+    <div class="stats mini" id="jStats"></div>
     <div class="card">
-      <h2>최근 7일 · 시간대별 소음</h2><p class="cap">칸이 진할수록 소리가 많이 들린 시간입니다. 밑줄 친 칸은 야간(22~06시)입니다.</p>
+      <div class="card-h"><h2>최근 7일 · 시간대별 소음</h2><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
       <div class="heat-wrap"><div class="heat" id="heat"></div></div>
-      <div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 30%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 65%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div>
+      <p class="cap" style="margin-top:8px">밑줄 칸은 야간(22~06시)</p>
     </div>
     <div class="card">
-      <h2>기록 목록</h2><p class="cap">최근 기록부터 보여 줍니다. 최고값은 휴대폰 측정 추정값입니다.</p>
+      <h2>기록 목록</h2>
       <div class="list" id="jList" style="margin-top:6px"></div>
     </div>
-    <div class="next"><p><b>다음 단계</b> 직접 찾아가지 말고, 이 기록으로 관리사무소에 알리세요.</p><a class="btn primary" href="#report">알림서 만들기</a></div>
+    <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </section>
 
   <!-- STEP 3 -->
   <section class="view" id="v-report" aria-labelledby="h1-report" hidden>
-    <div class="hero">
-      <div><div class="eyebrow">STEP 3 · 공식 경로로 알리기</div><h1 id="h1-report">직접 찾아가지 말고, 관리사무소를 통해</h1>
-        <p>공동주택관리법 제20조에 따라 관리사무소에 피해 사실을 알리면, 관리사무소가 사실을 확인하고 소음 세대에 중단을 권고합니다. 쿵쾅이 일지로 알림서를 써 드려요.</p></div>
+    <div class="head">
+      <div><div class="eyebrow">STEP 3 · 알리기</div><h1 id="h1-report">어떻게 알릴까요?</h1>
+        <p class="cap">아래로 갈수록 공식 절차예요.<br>고르면 필요한 서류를 AI가 써 드려요.</p></div>
     </div>
-    <div class="warn-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg><p><b>직접 대면은 피하세요.</b> 찾아가 문을 두드리거나 보복 소음(우퍼 등)을 내면 갈등이 커지고 법적 책임이 생길 수 있습니다. 위협을 느끼면 바로 112에 신고하세요.</p></div>
-    <div class="grid2">
-      <div class="stack">
-        <div class="card stack">
-          <h2>알림서 정보</h2>
-          <div class="fields" style="margin-top:0">
-            <label for="apt">받는 곳<input id="apt" type="text" placeholder="예: ○○아파트 관리사무소" maxlength="40"></label>
-            <label for="myUnit">우리 집 동·호<input id="myUnit" type="text" placeholder="예: 101동 803호" maxlength="20"></label>
-            <label for="srcUnit">소리가 나는 것으로 보이는 세대<input id="srcUnit" type="text" placeholder="예: 101동 903호(윗집 추정)" maxlength="30"></label>
-          </div>
-          <div><div class="lbl" style="margin-bottom:6px">요청 사항</div>
-            <div class="checks-in">
-              <label><input type="checkbox" id="rq1" checked>사실 확인(세대 방문 등) 후 소음 중단·차단 권고</label>
-              <label><input type="checkbox" id="rq2" checked>제 동·호수와 이름은 상대 세대에 알리지 말아 주세요</label>
-              <label><input type="checkbox" id="rq3">권고 뒤에도 계속되면 층간소음관리위원회 조정 희망</label>
-            </div></div>
-          <button id="makeReport" type="button" class="primary wide">AI로 알림서 만들기</button>
-          <p class="note" id="reportSrc">입력한 동·호수는 이 화면에서만 쓰이고 어디에도 저장되지 않습니다.</p>
-        </div>
-      </div>
-      <div class="stack">
-        <div class="doc"><div class="out" id="reportOut" contenteditable="true" aria-label="알림서 내용(직접 고칠 수 있음)" spellcheck="false">'AI로 알림서 만들기'를 누르면 소음 일지로 관리사무소 제출용 알림서가 여기에 써집니다.</div></div>
-        <div class="row" style="justify-content:flex-end"><button id="copyReport" type="button">알림서 복사</button></div>
-      </div>
-    </div>
-    <div class="card">
-      <h2>그래도 계속되면</h2><p class="cap">아래 순서대로 공식 기관의 도움을 받으세요. 쿵쾅 일지는 단계마다 상황 설명 자료가 됩니다.</p>
-      <div class="ladder">
-        <div class="rung"><span class="k">1</span><b>관리사무소 사실 확인·중단 권고</b><p>공동주택관리법 제20조 제2항 · 소음 세대는 권고에 협조할 의무가 있습니다(제3항)</p></div>
-        <div class="rung"><span class="k">2</span><b>층간소음관리위원회 조정</b><p>제20조 제4항 · 700세대 이상 의무관리 단지는 위원회 구성이 의무입니다</p></div>
-        <div class="rung"><span class="k">3</span><b>층간소음 이웃사이센터 상담·측정</b><p>한국환경공단 · 전화 <span class="tel">1661-2642</span> · floor.noiseinfo.or.kr</p></div>
-        <div class="rung"><span class="k">4</span><b>분쟁조정 신청</b><p>공동주택관리 분쟁조정위원회 또는 환경분쟁조정위원회(제20조 제11항)</p></div>
-      </div>
+    <div class="warn-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg><p><b>직접 찾아가지 마세요.</b> 문 두드리기·보복 소음은 갈등을 키우고 법적 책임이 생길 수 있어요. 위협을 느끼면 112.</p></div>
+    <div class="rep">
+      <div class="opts" id="opts" role="radiogroup" aria-label="알리는 방법"></div>
+      <div class="card stack panel" id="optPanel" aria-live="polite"></div>
     </div>
   </section>
 
@@ -453,7 +476,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <p><b>측정 한계</b> 휴대폰 마이크로 잰 값은 공인 측정이 아니라 참고값입니다. 법적 판정은 이웃사이센터 등의 현장 측정으로 정해집니다. AI 분류 결과에는 'AI 추정' 표시를 붙였습니다.</p>
     <p><b>절차</b> 공동주택관리법 제20조(층간소음의 방지 등), 같은 법 시행령 제21조의2(층간소음관리위원회 구성 의무 700세대)</p>
     <p><b>기준</b> 공동주택 층간소음의 범위와 기준에 관한 규칙 · 직접충격 1분 등가 주간 39·야간 34dB, 최고 주간 57·야간 52dB(1시간 3회 이상) · 공기전달 5분 등가 주간 45·야간 40dB</p>
-    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.3 · 엘리스 AI 챌린지 출품작</p>
+    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.4 · 엘리스 AI 챌린지 출품작</p>
   </footer>
 </div>
 </main>
@@ -768,8 +791,9 @@ if (typeof module !== 'undefined') module.exports = KE;
   }
   async function fromFile(f) {
     if (!f) return;
-    if (f.lastModified) $('#when').value = localInput(new Date(f.lastModified));
-    try { toast('분석 중…'); const y = await decodeTo16k(await f.arrayBuffer()); run(y, f.name); go('result'); }
+    try { toast('분석 중…'); const y = await decodeTo16k(await f.arrayBuffer());
+      if (f.lastModified) { $('#when').value = localInput(new Date(f.lastModified - y.length / KE.SR * 1000)); $('#whenSrc').textContent = '파일 녹음 시각으로 입력됨'; }
+      run(y, f.name); go('result'); }
     catch (err) { toast('이 파일은 열 수 없습니다. m4a·mp3·wav로 올려 주세요'); }
   }
   $('#file').addEventListener('change', (e) => { closePick(); fromFile(e.target.files[0]); e.target.value = ''; });
@@ -780,7 +804,7 @@ if (typeof module !== 'undefined') module.exports = KE;
   const pressDemo = (k) => $$('[data-demo]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === k)));
   $$('[data-demo]').forEach((b) => b.addEventListener('click', () => {
     const k = b.dataset.demo; closePick(); const f = b.querySelector('.fn').textContent, when = b.querySelector('.fm').textContent.split('· ')[1];
-    const [md, hm] = [when.split(' ')[0], when.split(' ')[1]], [mo, dd] = md.replace(/\(.*\)/, '').split('/').map(Number), [hh, mi] = hm.split(':').map(Number), d = new Date(); d.setMonth(mo - 1, dd); d.setHours(hh, mi, 0, 0); $('#when').value = localInput(d);
+    const [md, hm] = [when.split(' ')[0], when.split(' ')[1]], [mo, dd] = md.replace(/\(.*\)/, '').split('/').map(Number), [hh, mi] = hm.split(':').map(Number), d = new Date(); d.setMonth(mo - 1, dd); d.setHours(hh, mi, 0, 0); $('#when').value = localInput(d); $('#whenSrc').textContent = '예시 파일 녹음 시각';
     run(KE.synth(k, 7 + Math.floor(Math.random() * 50)), f + ' (예시)'); go('result');
   }));
   $('#micBtn').addEventListener('click', async () => {
@@ -792,9 +816,9 @@ if (typeof module !== 'undefined') module.exports = KE;
     const rec = new MediaRecorder(stream), parts = [];
     rec.ondataavailable = (e) => parts.push(e.data);
     rec.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); btn.classList.remove('live'); btn.innerHTML = label;
-      $('#when').value = localInput(new Date());
+      $('#when').value = localInput(recStart); $('#whenSrc').textContent = '녹음 시작 시각으로 입력됨';
       try { const y = await decodeTo16k(await new Blob(parts).arrayBuffer()); run(y, '마이크 녹음'); go('result'); } catch (e) { toast('녹음을 분석하지 못했습니다'); } };
-    rec.start(); btn.classList.add('live'); let s = 30; const tick = () => { btn.innerHTML = `<b>${s}초</b><small>듣는 중… 누르면 멈춤</small>`; }; tick(); btn.onclick = () => { clearInterval(iv); rec.stop(); btn.onclick = null; };
+    const recStart = new Date(); rec.start(); btn.classList.add('live'); let s = 30; const tick = () => { btn.innerHTML = `<b>${s}초</b><small>듣는 중… 누르면 멈춤</small>`; }; tick(); btn.onclick = () => { clearInterval(iv); rec.stop(); btn.onclick = null; };
     const iv = setInterval(() => { s--; tick(); if (s <= 0) { clearInterval(iv); rec.stop(); btn.onclick = null; } }, 1000);
   });
 
@@ -890,7 +914,7 @@ if (typeof module !== 'undefined') module.exports = KE;
 
   /* ---------- 일지 ---------- */
   const KEY = 'kungkwang.v1';
-  let log = []; let isExample = false;
+  let log = []; let isExample = false; let exMode = null;
   try { log = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem('kunglog.v1') || '[]'); } catch (e) { log = []; }
   function exampleLog() {
     const out = [], base = new Date(); base.setHours(0, 0, 0, 0);
@@ -903,20 +927,20 @@ if (typeof module !== 'undefined') module.exports = KE;
     }
     return out;
   }
-  function entries() { if (log.length) { isExample = false; return log; } isExample = true; return exampleLog(); }
+  function entries() { if (exMode === null) exMode = !log.length; isExample = exMode; return exMode ? exampleLog() : log; }
   function addEntry(r) {
     const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : 'ok';
-    log.push({ ts: r.start.getTime(), type: r.main || 'other', count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worst, src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1) });
+    exMode = false; log.push({ cal: r.cal, ts: r.start.getTime(), type: r.main || 'other', count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worst, src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1) });
     log.sort((a, b) => a.ts - b.ts);
     try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) {}
   }
   function renderJournal() {
     const E = entries();
-    $('#jExample').hidden = !isExample;
+    $('#exTgl').checked = isExample;
     const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0);
     const over = E.filter((e) => e.over === 'over' || e.over === 'near').length;
     $('#jStats').innerHTML = [
-      [E.length, '건', '기록', ''], [total, '회', '들린 소리', ''], [total ? Math.round(nightN / total * 100) : 0, '%', '야간(22~06시) 비중', ''], [over, '건', '기준 초과·근접', over ? 'hot' : '']
+      [E.length, '건', '기록', ''], [total, '회', '들린 소리', ''], [total ? Math.round(nightN / total * 100) : 0, '%', '야간 비중', ''], [over, '건', '초과·근접', over ? 'hot' : '']
     ].map(([v, u, k, c]) => `<div class="stat ${c}"><div class="v">${v}<small>${u}</small></div><div class="k">${k}</div></div>`).join('');
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
     for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
@@ -929,88 +953,148 @@ if (typeof module !== 'undefined') module.exports = KE;
       grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; });
     });
     $('#heat').innerHTML = html;
-    $('#jList').innerHTML = [...E].reverse().slice(0, 14).map((e) => `<div class="li"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>
+    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j">아직 저장한 기록이 없습니다. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요. 오른쪽 위 \'예시\'를 켜면 예시 일지를 볼 수 있습니다.</p>'; }
+    else $('#jList').innerHTML = [...E].reverse().slice(0, 14).map((e) => `<div class="li"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>
       <div class="a">${T[e.type].name}${e.example ? ' <span class="tag-ex">예시</span>' : ''}</div><span class="pill ${e.over}">${stTxt[e.over]}</span>
       <div class="b">${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · 최고 ${e.lmax}dB</div></div>`).join('');
   }
   function logText() {
-    const E = entries(), by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
-    const lines = E.map((e) => `- ${fmt(new Date(e.ts))}${e.night ? '(야간)' : ''} ${T[e.type].name} ${e.count}회, 최고 ${e.lmax}dB(추정), ${stTxt[e.over]}`);
-    return `[층간소음 기록 일지]${isExample ? ' ※ 예시 데이터' : ''}
-기간: ${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))} / 기록 ${E.length}건
-주된 소리: ${Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${T[k].name} ${v}회`).join(', ')}
-${lines.join('\n')}
-※ 휴대폰으로 측정한 참고값이며 공인 측정값이 아닙니다. (쿵쾅)`;
-  }
-  $('#copyLog').addEventListener('click', () => copy(logText(), '상담용 일지를 복사했습니다'));
-  $('#clearLog').addEventListener('click', () => { $('#clearConfirm').hidden = false; });
-  $('#clearNo').addEventListener('click', () => { $('#clearConfirm').hidden = true; });
-  $('#clearYes').addEventListener('click', () => { log = []; try { localStorage.removeItem(KEY); localStorage.removeItem('kunglog.v1'); } catch (e) {} $('#clearConfirm').hidden = true; renderJournal(); toast('기록을 지웠습니다'); });
+    const E = entries(); if (!E.length) return '';
+    const by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
+    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0);
+    const d = new Date(), cal = E.find((e) => e.cal)?.cal ?? +$('#cal').value;
+    const lines = E.map((e, i) => `${String(i + 1).padStart(2, ' ')}. ${fmt(new Date(e.ts))}${e.night ? ' [야간]' : ' [주간]'}  ${T[e.type].name} ${e.count}회 · 최고 ${e.lmax}dB(A) · ${stTxt[e.over]}`);
+    return `층간소음 피해 기록 일지${isExample ? '  (※ 기능 설명용 예시 데이터)' : ''}
 
-  /* ---------- 알림서: Claude(sample)가 상황 요약 → 없으면 기본 문안 ---------- */
+■ 기록 개요
+  · 기록 기간: ${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}
+  · 기록 건수: ${E.length}건 / 확인된 소리 ${total}회 (야간 ${total ? Math.round(nightN / total * 100) : 0}%)
+  · 주된 소리: ${Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${T[k].name} ${v}회`).join(', ')}
+
+■ 일자별 기록
+${lines.join('\n')}
+
+■ 측정·판정 방법
+  · 측정 기기: 피해 세대 휴대폰 마이크, A특성 가중, 125ms 응답, 보정값 ${cal}dB
+  · 소리 분류: 공개 소리 인식 AI(Google YAMNet) + 층간소음 판별 규칙 (기기 안에서 처리, 녹음 원본 외부 전송 없음)
+  · 판정 기준: 「공동주택 층간소음의 범위와 기준에 관한 규칙」 직접충격 소음
+    최고소음도 주간 57dB·야간 52dB(1시간 3회 이상 초과 시) / 1분 등가 주간 39dB·야간 34dB
+
+■ 유의 사항
+  위 수치는 휴대폰으로 잰 참고 기록으로, 공인 측정 결과를 대신하지 않습니다.
+  정확한 판정을 위해 층간소음 이웃사이센터(1661-2642) 등의 현장 측정을 요청합니다.
+
+작성일 ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}. · 작성 도구: 쿵쾅(층간소음 AI 기록 서비스)`;
+  }
+  $('#copyLog').addEventListener('click', () => { const t = logText(); if (!t) { toast('복사할 기록이 없습니다'); return; } copy(t, '상담용 일지를 복사했습니다'); });
+  $('#exTgl').addEventListener('change', (e) => { exMode = e.target.checked; renderJournal(); toast(exMode ? '예시 일지를 보여 줍니다' : '내 기록을 보여 줍니다'); });
+  $('#clearLog').addEventListener('click', () => { if (!log.length) { toast('지울 내 기록이 없습니다'); return; } $('#clearConfirm').hidden = false; });
+  $('#clearNo').addEventListener('click', () => { $('#clearConfirm').hidden = true; });
+  $('#clearYes').addEventListener('click', () => { log = []; try { localStorage.removeItem(KEY); localStorage.removeItem('kunglog.v1'); } catch (e) {} $('#clearConfirm').hidden = true; exMode = null; renderJournal(); toast('기록을 지웠습니다'); });
+
+  /* ---------- STEP 3: 알리는 방법 5가지 ---------- */
   const getSample = async () => { try { return window.claude?.use ? await window.claude.use('sample') : null; } catch (e) { return null; } };
   function logSummary() {
     const E = entries(), by = {}, hours = {};
+    if (!E.length) return null;
     E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; const h = new Date(e.ts).getHours(); hours[h] = (hours[h] || 0) + e.count; });
     const total = E.reduce((s, e) => s + e.count, 0);
-    const topT = Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${T[k].name} ${v}회`);
-    const topH = Object.entries(hours).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([h]) => +h).sort((a, b) => a - b);
-    return { E, total, topT, topH, from: fmt(new Date(E[0].ts)), to: fmt(new Date(E[E.length - 1].ts)), days: new Set(E.map((e) => new Date(e.ts).toDateString())).size,
-      nightPct: Math.round(E.filter((e) => e.night).reduce((s, e) => s + e.count, 0) / Math.max(1, total) * 100), over: E.filter((e) => e.over === 'over').length, near: E.filter((e) => e.over === 'near').length };
+    return { E, total, ex: isExample, topT: Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${T[k].name} ${v}회`), topN: Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => T[k].name),
+      topH: Object.entries(hours).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([h]) => +h).sort((a, b) => a - b), from: fmt(new Date(E[0].ts)), to: fmt(new Date(E[E.length - 1].ts)),
+      days: new Set(E.map((e) => new Date(e.ts).toDateString())).size, nightPct: Math.round(E.filter((e) => e.night).reduce((s, e) => s + e.count, 0) / Math.max(1, total) * 100),
+      over: E.filter((e) => e.over === 'over').length, near: E.filter((e) => e.over === 'near').length };
   }
-  function basicSituation(s) {
-    return `${s.from}부터 ${s.to}까지 ${s.days}일 동안 ${s.E.length}차례 소음을 기록했습니다. 주로 들린 소리는 ${s.topT.join(', ')}이며, 들린 소리의 ${s.nightPct}%가 야간(22시~06시)이었습니다. 자주 들린 시각은 ${s.topH.map((h) => h + '시').join(', ')} 무렵입니다. 휴대폰 측정 참고값 기준으로 최고소음도 기준을 넘은 기록이 ${s.over}건, 기준에 가까운 기록이 ${s.near}건 있었습니다.`;
+  const situation = (s) => `${s.from}부터 ${s.to}까지 ${s.days}일 동안 ${s.E.length}차례 소음을 기록했습니다. 주로 들린 소리는 ${s.topT.join(', ')}이며, 들린 소리의 ${s.nightPct}%가 야간(22시~06시)이었습니다. 자주 들린 시각은 ${s.topH.map((h) => h + '시').join(', ')} 무렵입니다. 휴대폰 측정 참고값 기준으로 최고소음도 기준을 넘은 기록이 ${s.over}건, 기준에 가까운 기록이 ${s.near}건 있었습니다.`;
+  const F = {}; // 입력값(화면 안에서만 유지, 저장 안 함)
+  const v = (id, d) => (F[id] ?? '').trim() || d;
+  const today = () => { const d = new Date(); return `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.`; };
+  const ex = (s) => s.ex ? '  (※ 예시 데이터)' : '';
+  const field = (id, label, ph, type = 'text') => type === 'textarea' ? `<label for="f-${id}">${label}<textarea id="f-${id}" data-f="${id}" placeholder="${ph}" maxlength="300">${F[id] || ''}</textarea></label>`
+    : `<label for="f-${id}">${label}<input id="f-${id}" data-f="${id}" type="${type}" placeholder="${ph}" value="${(F[id] || '').replace(/"/g, '&quot;')}" maxlength="40"></label>`;
+  const chk = (id, label, on) => { if (F[id] === undefined) F[id] = on ? '1' : ''; return `<label><input type="checkbox" data-c="${id}" ${F[id] ? 'checked' : ''}>${label}</label>`; };
+  const APT = () => field('apt', '아파트(단지)', '예: ○○아파트'), ME = () => field('me', '우리 집 동·호', '예: 101동 803호'), SRC = () => field('src', '소리가 나는 것으로 보이는 세대', '예: 101동 903호(윗집 추정)');
+  const OPTS = [
+    { id: 'neighbor', t: '이웃에게 연락', s: '가벼운 첫 대화 · 글로 정중하게', lv: '자율',
+      law: '법적 절차 아님 · 첫 단계로 권장',
+      guide: ['<b>말 대신 글</b>로, 시간과 소리만 정중하게 전하세요.', '<b>관리사무소를 통해 전달</b>하면 보낸 사람이 드러나지 않아요.', '그대로라면 다음 단계로 넘어가세요.'],
+      safety: ['화가 난 상태에서 보내지 않기', '밤늦게 찾아가거나 문 두드리지 않기', '상대를 탓하거나 단정하는 말 쓰지 않기'],
+      form: () => `<div class="lbl">말투</div><div class="seg" id="tone">${['soft:부드럽게 · 처음', 'clear:구체적으로 · 두 번째'].map((x) => { const [k, l] = x.split(':'); return `<button type="button" data-tone="${k}" aria-pressed="${(F.tone || 'soft') === k}">${l}</button>`; }).join('')}</div>
+        <div class="fields" style="margin-top:0">${field('to', '받는 사람', '윗집 이웃분께')}
+        <label for="f-via">전달 방법<select id="f-via" data-f="via">${['관리사무소를 통해 전달 (권장)', '현관 앞 쪽지', '아파트 앱 메시지'].map((o) => `<option ${F.via === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label></div>`,
+      btn: 'AI로 메시지 쓰기',
+      ai: (s) => `너는 층간소음 갈등을 줄이는 중재 도우미야. 아래 기록 요약만 근거로, 아래층 주민이 윗집에 보낼 짧은 메시지를 한국어로 써.
+규칙: 1) 탓하거나 단정하는 말, 법·신고·소송 언급 금지 2) 언제, 어떤 소리인지만 사실대로 3) 상대가 할 수 있는 구체적 부탁 1~2개 4) 우리 집 소리도 불편하면 알려 달라는 한 줄 5) 7문장 이내 6) 첫 줄은 "${v('to', '윗집 이웃분께')}", 끝은 "아래층 드림" 7) 본문만 출력.
+말투: ${(F.tone || 'soft') === 'soft' ? '처음 말을 꺼내는 부드러운 말투' : '두 번째 이후라 조금 더 구체적이지만 정중한 말투'}
+기록 요약: 기록 ${s.days}일, 주된 소리 ${s.topN.join(', ')}, 자주 들린 시각 ${s.topH.join('시, ')}시, 야간 비중 ${s.nightPct}%`,
+      whole: true,
+      doc: (s, a) => a || ((F.tone || 'soft') === 'soft'
+        ? `${v('to', '윗집 이웃분께')}\n\n안녕하세요, 아래층에 사는 이웃입니다.\n요즘 ${s.topH.slice(-2).map((h) => h + '시').join('·')}쯤 ${s.topN.join('나 ')} 같은 소리가 자주 들려 조심스럽게 말씀드립니다.\n일부러 그러신 게 아니라는 건 잘 알고 있어요. 그 시간대에만이라도 실내화나 매트를 써 주시면 정말 감사하겠습니다.\n저희 집 소리가 불편하신 적이 있으면 편하게 알려 주세요.\n\n아래층 드림`
+        : `${v('to', '윗집 이웃분께')}\n\n안녕하세요, 아래층 이웃입니다. 지난번에 이어 한 번 더 말씀드립니다.\n최근 ${s.days}일 동안 기록해 보니 ${s.topN.join(', ')} 소리가 주로 ${s.topH.map((h) => h + '시').join(', ')} 무렵 들렸고, ${s.nightPct}%가 밤 10시 이후였습니다.\n밤 10시 이후에는 뛰거나 가구를 옮기는 일을 줄여 주시고, 매트를 깔아 주시면 큰 도움이 될 것 같습니다.\n서로 편하게 지낼 방법을 같이 찾고 싶습니다.\n\n아래층 드림`) + (F.via && !F.via.startsWith('관리') ? '' : '\n\n※ 관리사무소에 전달을 부탁할 때: "아래층에서 보낸다는 것만 알리고 동·호수는 밝히지 말아 주세요"라고 함께 요청하세요.') },
+    { id: 'office', t: '관리사무소 사실 확인·중단 권고', s: '관리사무소가 대신 확인하고 권고', lv: '법정 절차',
+      law: '공동주택관리법 제20조 제2항·제3항',
+      guide: ['관리사무소에 알리고 <b>중단 권고</b>를 요청할 수 있어요.', '관리사무소는 <b>사실 확인</b>을 하고, 소음 세대는 <b>협조할 의무</b>가 있어요.', 'STEP 2 상담용 일지를 함께 내면 좋아요.'],
+      form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}</div>
+        <div class="sub-h">요청 사항</div><div class="checks-in">${chk('o1', '사실 확인(세대 방문 등) 후 소음 중단·차단 권고', 1)}${chk('o2', '제 동·호수와 이름은 상대 세대에 알리지 말아 주세요', 1)}${chk('o3', '권고 뒤에도 계속되면 층간소음관리위원회 조정 희망', 0)}</div>`,
+      btn: 'AI로 알림서 만들기',
+      doc: (s, a) => { const rq = []; if (F.o1) rq.push('공동주택관리법 제20조 제2항에 따라 사실관계를 확인해 주시고, 소음 발생 세대에 중단·차단 조치를 권고해 주시기 바랍니다.'); if (F.o2) rq.push('신청인의 동·호수와 이름은 상대 세대에 알리지 말아 주시기 바랍니다. 이웃 간 직접 대면은 원하지 않습니다.'); if (F.o3) rq.push('권고 뒤에도 소음이 계속되면 층간소음관리위원회의 조정을 신청하고자 합니다.');
+        return `층간소음 피해 사실 알림 및 조치 요청서${ex(s)}\n\n받는 곳  ${v('apt', '○○아파트')} 관리사무소 귀중\n신청 세대  ${v('me', '○○동 ○○○호')}\n소음 발생 추정 세대  ${v('src', '○○동 ○○○호(추정)')}\n작성일  ${today()}\n\n1. 피해 상황\n${a || situation(s)}\n\n2. 요청 사항\n${rq.map((r, i) => `  ${i + 1}) ${r}`).join('\n') || '  (요청 사항을 골라 주세요)'}\n\n3. 첨부\n  · 층간소음 피해 기록 일지 1부\n\n위와 같이 층간소음 피해 사실을 알리고 조치를 요청합니다.\n\n신청인  ${v('me', '○○동 ○○○호')}  (서명)`; } },
+    { id: 'committee', t: '층간소음관리위원회 조정', s: '단지 안 중재 · 권고 뒤에도 계속될 때', lv: '단지 조정',
+      law: '공동주택관리법 제20조 제4항·제7항, 시행령 제21조의2',
+      guide: ['권고 뒤에도 계속되면 <b>단지 위원회</b>에 조정을 신청해요.', '<b>700세대 이상</b> 단지는 위원회가 의무예요. 작은 단지는 관리사무소에 물어보세요.', '위원회가 양쪽 이야기를 듣고 중재해요.'],
+      form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}${field('rec', '관리사무소에 알린 날', '', 'date')}${field('after', '권고 뒤 달라진 점', '예: 권고 뒤 1주일은 줄었다가 다시 밤 11시 무렵 뛰는 소리가 이어짐', 'textarea')}</div>`,
+      btn: 'AI로 조정 신청서 만들기',
+      doc: (s, a) => `층간소음 조정 신청서${ex(s)}\n\n받는 곳  ${v('apt', '○○아파트')} 층간소음관리위원회 귀중\n신청 세대  ${v('me', '○○동 ○○○호')}\n상대 세대(추정)  ${v('src', '○○동 ○○○호')}\n작성일  ${today()}\n\n1. 신청 취지\n  공동주택관리법 제20조 제4항에 따라 층간소음 분쟁의 조정을 신청합니다.\n\n2. 지금까지의 경과\n  · ${F.rec ? F.rec.replace(/-/g, '. ') + '.' : '○○○○. ○. ○.'} 관리사무소에 층간소음 피해 사실을 알리고 중단 권고를 요청함\n  · 권고 뒤 상황: ${v('after', '소음이 계속됨')}\n\n3. 피해 상황\n${a || situation(s)}\n\n4. 바라는 조정 내용\n  · 야간(22시~06시) 뛰거나 가구를 옮기는 행위 자제\n  · 소음 저감 매트 설치 등 생활 소음 줄이기\n  · 양측이 지킬 생활 수칙 마련\n\n5. 첨부\n  · 층간소음 피해 기록 일지 1부\n  · 관리사무소 알림서 사본 1부\n\n신청인  ${v('me', '○○동 ○○○호')}  (서명)` },
+    { id: 'center', t: '층간소음 이웃사이센터 상담·측정', s: '전문 상담 · 공인 장비 측정', lv: '전문기관',
+      law: '한국환경공단 층간소음 이웃사이센터',
+      guide: ['전화 <b>1661-2642</b> · 누리집 <b>floor.noiseinfo.or.kr</b>', '<b>전화 상담 → 방문 상담 → 소음 측정</b> 순서예요.', '측정 일정을 2회 이상 바꾸면 지원이 어려울 수 있어요.'],
+      form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${field('tried', '지금까지 해 본 일', '예: 관리사무소 알림(11/2), 위원회 없음', 'textarea')}</div>`,
+      btn: 'AI로 전화 상담 요약 만들기',
+      doc: (s, a) => `이웃사이센터 전화 상담 요약 (읽으면서 설명하세요)${ex(s)}\n\n· 거주지: ${v('apt', '○○아파트')} ${v('me', '○○동 ○○○호')}\n· 피해 기간: ${s.from} ~ ${s.to} (${s.days}일, ${s.E.length}건 기록)\n· 주된 소리: ${s.topT.join(', ')}\n· 주로 들리는 시간: ${s.topH.map((h) => h + '시').join(', ')} 무렵 (야간 비중 ${s.nightPct}%)\n· 휴대폰 측정 참고값: 최고소음도 기준 초과 ${s.over}건, 근접 ${s.near}건\n· 지금까지 해 본 일: ${v('tried', '없음')}\n\n상황 설명\n${a || situation(s)}\n\n요청\n  · 방문 상담과 공인 장비로 소음 측정을 받고 싶습니다.\n  · 측정 가능한 시간대: 평일 ${s.topH.map((h) => h + '시').join(', ')} 무렵\n\n상담 전 준비: 층간소음 피해 기록 일지, 관리사무소 알림서 사본(있으면)` },
+    { id: 'dispute', t: '분쟁조정 신청', s: '앞 단계로 해결되지 않을 때 · 공식 조정', lv: '법적 조정',
+      law: '공동주택관리법 제20조 제11항',
+      guide: ['<b>공동주택관리 분쟁조정위원회</b> 또는 <b>환경분쟁조정위원회</b>에 신청해요.', '앞 단계 기록(알림서·권고·위원회 결과)을 함께 내세요.', '최근 3년 중앙 조정 성립률은 8.8%예요. 기록이 꼼꼼할수록 유리해요.'],
+      form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}</div>
+        <div class="sub-h">지금까지 거친 단계</div><div class="checks-in">${chk('d1', '관리사무소 알림·중단 권고', 1)}${chk('d2', '층간소음관리위원회 조정', 0)}${chk('d3', '이웃사이센터 상담·측정', 0)}</div>`,
+      btn: 'AI로 분쟁 경위서 만들기',
+      doc: (s, a) => { const st = [F.d1 && '관리사무소에 피해 사실을 알리고 중단 권고를 요청함', F.d2 && '층간소음관리위원회에 조정을 신청함', F.d3 && '층간소음 이웃사이센터 상담·측정을 받음'].filter(Boolean);
+        return `층간소음 분쟁 경위서${ex(s)}\n\n신청인  ${v('apt', '○○아파트')} ${v('me', '○○동 ○○○호')}\n피신청인(추정)  ${v('src', '○○동 ○○○호')}\n작성일  ${today()}\n\n1. 분쟁의 내용\n${a || situation(s)}\n\n2. 해결을 위해 거친 절차\n${st.map((x, i) => `  ${i + 1}) ${x}`).join('\n') || '  (거친 단계를 골라 주세요)'}\n  → 위 절차에도 소음이 계속되어 공동주택관리법 제20조 제11항에 따라 조정을 신청합니다.\n\n3. 바라는 조정 내용\n  · 야간(22시~06시) 소음 유발 행위 중단\n  · 소음 저감 조치(매트 설치 등) 이행\n\n4. 증거 자료\n  · 층간소음 피해 기록 일지(${s.E.length}건)\n  · 관리사무소 알림서 및 회신, 위원회 조정 결과(있으면)\n  · 이웃사이센터 측정 결과(있으면)\n\n신청인  (서명)`; } }
+  ];
+  let cur = 'office';
+  function renderOpts() {
+    $('#opts').innerHTML = OPTS.map((o, i) => `<button type="button" class="opt" role="radio" aria-checked="${o.id === cur}" data-opt="${o.id}"><span class="k">${i + 1}</span><b>${o.t}</b><span class="lv">${o.lv}</span><small>${o.s}</small></button>`).join('');
+    $$('[data-opt]').forEach((b) => b.addEventListener('click', () => { cur = b.dataset.opt; renderOpts(); renderPanel(); if (matchMedia('(max-width:860px)').matches) $('#optPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
   }
-  function reportDoc(s, situation) {
-    const d = new Date(), apt = $('#apt').value.trim() || '○○아파트 관리사무소', me = $('#myUnit').value.trim() || '○○동 ○○○호', src = $('#srcUnit').value.trim() || '○○동 ○○○호(추정)';
-    const req = [];
-    if ($('#rq1').checked) req.push('공동주택관리법 제20조 제2항에 따라 사실관계를 확인해 주시고, 소음 발생 세대에 중단·차단 조치를 권고해 주시기 바랍니다.');
-    if ($('#rq2').checked) req.push('신청인의 동·호수와 이름은 상대 세대에 알리지 말아 주시기 바랍니다. 이웃 간 직접 대면은 원하지 않습니다.');
-    if ($('#rq3').checked) req.push('권고 뒤에도 소음이 계속되면 층간소음관리위원회의 조정을 신청하고자 합니다.');
-    return `층간소음 피해 사실 알림 및 조치 요청서${isExample ? '  ※ 예시 데이터' : ''}
-
-받는 곳  ${apt} 귀중
-신청 세대  ${me}
-소음 발생 추정 세대  ${src}
-작성일  ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.
-
-1. 피해 상황
-${situation}
-
-2. 기록 요약
-  · 기간: ${s.from} ~ ${s.to} (${s.days}일, ${s.E.length}건)
-  · 주된 소리: ${s.topT.join(', ')}
-  · 야간(22~06시) 비중: ${s.nightPct}%
-  · 최고소음도 기준 초과 ${s.over}건 / 근접 ${s.near}건 (휴대폰 측정 참고값)
-
-3. 요청 사항
-${req.map((r, i) => `  ${i + 1}) ${r}`).join('\n') || '  (요청 사항을 골라 주세요)'}
-
-4. 첨부
-  · 쿵쾅 소음 일지 1부 (STEP 2에서 '상담용 일지 복사')
-
-위와 같이 층간소음 피해 사실을 알리고 조치를 요청합니다.
-
-신청인  ${me}  (서명)
-
-※ 측정값은 휴대폰으로 잰 참고값이며, 공인 측정값이 아닙니다.`;
-  }
-  $('#makeReport').addEventListener('click', async () => {
-    const s = logSummary(), out = $('#reportOut'), btn = $('#makeReport');
-    const sample = await getSample();
-    if (!sample) { out.textContent = reportDoc(s, basicSituation(s)); $('#reportSrc').textContent = '기본 문안으로 만들었습니다 (AI 연결 없음). 직접 고칠 수 있습니다.'; return; }
-    btn.disabled = true; btn.textContent = 'AI가 정리하는 중…';
-    const prompt = `너는 층간소음 피해 세대가 관리사무소에 낼 공식 알림서의 '피해 상황' 문단을 쓰는 도우미야. 아래 기록 요약만 근거로 3~4문장의 한국어 문단을 써.
-규칙: 1) 상대 세대를 비난·단정하거나 감정적인 표현을 쓰지 말 것 2) 날짜·시간대·소리 종류·횟수 같은 사실만 담을 것 3) 측정값은 휴대폰 참고값이라고 밝힐 것 4) 법 조항·처벌·신고 언급 금지 5) 문단만 출력.
+  function renderPanel() {
+    const o = OPTS.find((x) => x.id === cur), P = $('#optPanel');
+    P.innerHTML = `<div><h2>${o.t}</h2><span class="law">${o.law}</span></div>
+      <ul class="guide">${o.guide.map((g) => `<li>${g}</li>`).join('')}</ul>
+      ${o.safety ? `<div class="safety"><b>보내기 전에</b><ul>${o.safety.map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
+      <div class="sub-h">입력</div>${o.form()}
+      ${o.id !== 'neighbor' ? '<p class="note">입력한 동·호수는 저장되지 않아요.</p>' : ''}
+      <button type="button" class="primary wide" id="genBtn">${o.btn}</button>
+      <div class="doc"><div class="out" id="docOut" contenteditable="true" aria-label="문서 내용(직접 고칠 수 있음)" spellcheck="false">${F['doc_' + o.id] ? F['doc_' + o.id].replace(/</g, '&lt;') : `'${o.btn}'를 누르면 소음 일지로 문서 초안이 여기에 써집니다.`}</div></div>
+      <div class="row" style="justify-content:space-between"><span class="note" id="genSrc"></span><button id="copyDoc" type="button">복사</button></div>`;
+    P.querySelectorAll('[data-f]').forEach((el) => el.addEventListener('input', () => { F[el.dataset.f] = el.value; }));
+    P.querySelectorAll('[data-c]').forEach((el) => el.addEventListener('change', () => { F[el.dataset.c] = el.checked ? '1' : ''; }));
+    P.querySelectorAll('[data-tone]').forEach((b) => b.addEventListener('click', () => { F.tone = b.dataset.tone; P.querySelectorAll('[data-tone]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); }));
+    $('#docOut').addEventListener('input', () => { F['doc_' + o.id] = $('#docOut').innerText; });
+    $('#copyDoc').addEventListener('click', () => copy($('#docOut').innerText, '복사했습니다'));
+    $('#genBtn').addEventListener('click', async () => {
+      const s = logSummary(); if (!s) { toast('일지가 비어 있습니다. STEP 2에서 예시를 켜거나 기록을 저장해 주세요'); return; }
+      const out = $('#docOut'), btn = $('#genBtn'), src = $('#genSrc');
+      const sample = await getSample();
+      const done = (txt, msg) => { out.textContent = txt; F['doc_' + o.id] = txt; src.textContent = msg; };
+      if (!sample) { done(o.doc(s, null), '기본 문안으로 만들었습니다 (AI 연결 없음). 직접 고칠 수 있습니다.'); return; }
+      btn.disabled = true; btn.textContent = 'AI가 쓰는 중…';
+      const prompt = o.ai ? o.ai(s) : `너는 층간소음 피해 세대가 공식 기관에 낼 문서의 '피해 상황' 문단을 쓰는 도우미야. 문서 종류: ${o.t}. 아래 기록 요약만 근거로 3~4문장의 한국어 문단을 써.
+규칙: 1) 상대 세대를 비난·단정하거나 감정적인 표현 금지 2) 날짜·시간대·소리 종류·횟수 같은 사실만 3) 측정값은 휴대폰 참고값이라고 밝힐 것 4) 법 조항·처벌 언급 금지 5) 문단만 출력.
 기록 요약: 기간 ${s.from}~${s.to}(${s.days}일, ${s.E.length}건), 주된 소리 ${s.topT.join(', ')}, 자주 들린 시각 ${s.topH.join('시, ')}시, 야간 비중 ${s.nightPct}%, 최고소음도 기준 초과 ${s.over}건·근접 ${s.near}건`;
-    try {
-      const r = await sample(prompt, { modelTier: 'quick' });
-      out.textContent = reportDoc(s, r.text.trim()); $('#reportSrc').textContent = '피해 상황 문단은 AI(Claude)가 일지로 정리했습니다. 제출 전에 직접 확인해 주세요.';
-    } catch (e) {
-      out.textContent = reportDoc(s, basicSituation(s)); $('#reportSrc').textContent = e?.code === 'rate_limited' ? 'AI 요청이 많아 기본 문안으로 만들었습니다.' : '기본 문안으로 만들었습니다.';
-    } finally { btn.disabled = false; btn.textContent = 'AI로 알림서 만들기'; }
-  });
-  $('#copyReport').addEventListener('click', () => copy($('#reportOut').innerText, '알림서를 복사했습니다'));
+      try { const r = await sample(prompt, { modelTier: 'quick' }); done(o.doc(s, r.text.trim()), o.whole ? 'AI(Claude)가 쓴 초안입니다. 보내기 전에 직접 다듬어 주세요.' : '피해 상황 문단은 AI(Claude)가 일지로 정리했습니다. 제출 전에 확인해 주세요.'); }
+      catch (e) { done(o.doc(s, null), '기본 문안으로 만들었습니다.'); }
+      finally { btn.disabled = false; btn.textContent = o.btn; }
+    });
+  }
+  renderOpts(); renderPanel();
 
   show();
   // 첫 화면: 시연용 뛰는 소리 결과를 바로 보여 줌
