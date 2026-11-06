@@ -646,6 +646,117 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   .doc{padding:20px 16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;animation:none!important}}
+
+/* ===== STEP 2 v13 · 상업 앱형 ===== */
+#v-journal .jhead{gap:12px;margin-bottom:2px}
+#v-journal .jrow{flex-wrap:nowrap}
+#v-journal .jrow h1{font-size:26px}
+.jseg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border-radius:12px;padding:3px;gap:3px;max-width:420px}
+.jseg button{min-height:38px;border:0;border-radius:9px;background:transparent;color:var(--fg2);font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:6px}
+.jseg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(33,20,45,.12)}
+.jseg .jn{font-size:11.5px;min-width:20px;padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.jseg .jn:empty{display:none}
+.dash{display:flex;flex-direction:column;gap:14px}
+.dtool{display:flex;align-items:center;gap:8px}
+.dtool .sp{flex:1}
+.pchips{display:flex;gap:6px}
+.pchips button{min-height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:700;background:transparent;border:1px solid var(--line2);color:var(--fg2);white-space:nowrap}
+.pchips button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.txtbtn.ic{display:inline-flex;align-items:center;gap:5px;padding:4px 6px;white-space:nowrap}
+.jhero{position:relative;overflow:hidden;border-radius:22px;padding:20px 20px 16px;color:#fff;background:linear-gradient(135deg,#7100EE 0%,#6020A8 55%,#3B1470 100%);box-shadow:0 10px 30px -12px rgba(96,32,168,.55)}
+.jhero::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);pointer-events:none}
+.jhero .h-top{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;opacity:.85;font-weight:700}
+.jhero .h-t{font-size:28px;font-weight:900;letter-spacing:-.03em;margin-top:6px;line-height:1.25}
+.jhero .h-t em{font-style:normal;color:#FFD6E0}
+.jhero .h-s{font-size:14px;line-height:1.55;margin-top:4px;opacity:.92;word-break:keep-all}
+.jhero .h-s b{font-weight:900}
+.jhero .h-st{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2)}
+.jhero .hs{display:flex;flex-direction:column;gap:2px;padding:0 10px;border-left:1px solid rgba(255,255,255,.18)}
+.jhero .hs:first-child{padding-left:0;border-left:0}
+.jhero .hs b{font-size:21px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.2}
+.jhero .hs b small{font-size:11.5px;font-weight:700;margin-left:2px;opacity:.85}
+.jhero .hs span{font-size:11.5px;opacity:.8;white-space:nowrap}
+.dcols{gap:14px}
+.dcard2{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;position:relative;z-index:0;min-width:0}
+.dc-h{display:flex;justify-content:space-between;align-items:center;min-height:30px}
+.dc-h h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.dc-h .txtbtn{padding:2px 4px;min-height:28px}
+.dcard2 .utabs{margin-top:2px}
+.rlist{display:flex;flex-direction:column}
+.rlist .gr{border-bottom:1px solid var(--line)}
+.rlist .gr:last-child{border-bottom:0}
+.rlist .ga{padding-inline:0}
+/* 기록 리스트 */
+.gr{display:flex;align-items:stretch;background:var(--surface)}
+.gr.on{background:var(--accent-soft)}
+.gr .ck{width:44px;flex:none}
+.ga{flex:1;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 14px 12px 0;color:var(--fg);text-decoration:none;min-height:60px}
+.rlist .ga{padding:12px 0}
+.ga:hover .gm b{color:var(--accent)}
+.gt{display:flex;flex-direction:column;min-width:48px}
+.gt b{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.gt small{font-size:11.5px;color:var(--fg2)}
+.gm{display:flex;flex-direction:column;gap:2px;min-width:0}
+.gm b{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gm .sw{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.gm small{font-size:12.5px;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ga .chev{color:var(--fg3)}
+.gh{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 6px;font-size:13px;font-weight:800;color:var(--fg)}
+.gh small{font-size:12px;color:var(--fg2);font-weight:600}
+.gg{margin:0 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.gg .gr+.gr{border-top:1px solid var(--line)}
+.glist{padding-bottom:6px}
+#jBoard{background:transparent;border:0;box-shadow:none}
+#jBoard .bsearch{border-radius:0;border-bottom:0;padding:10px 0 8px;background:var(--bg)}
+.qchips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 6px}
+.qchips::-webkit-scrollbar{display:none}
+.qc{flex:none;min-height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:700;background:var(--surface);border:1px solid var(--line2);color:var(--fg2);white-space:nowrap}
+.qc[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+#jBoard .rhead{padding:6px 2px 0;gap:8px}
+.ckall{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--fg2);cursor:pointer;min-height:36px;padding-left:12px}
+.ckall input{width:18px;height:18px;accent-color:var(--accent)}
+#jBoard .rhead .note{font-size:12.5px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:4px 2px 0}
+.rtags span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.rtags .txtbtn{min-height:26px;font-size:12px;color:var(--fg2)}
+#jBoard .glist{padding-inline:0}
+#jBoard .gh{padding-inline:4px}
+#jBoard .gg{margin:0}
+.pager .more{width:100%;min-height:46px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);font-size:14px;font-weight:700;color:var(--fg)}
+.pager .more span{color:var(--fg2);font-weight:600;margin-left:4px}
+.pager{padding:12px 0}
+.pager .end{text-align:center;width:100%;font-size:12.5px}
+#jBoard .nores{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:10px}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:44px 20px;background:var(--surface);border:1px dashed var(--line2);border-radius:20px;margin-top:6px}
+.empty .em-ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);margin-bottom:4px}
+.empty b{font-size:17px;font-weight:800}
+.empty p{font-size:13.5px;color:var(--fg2);word-break:keep-all}
+.empty .em-a{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+@media (max-width:680px){
+  #v-journal .jrow h1{font-size:22px}
+  .jseg{max-width:none}
+  .jhero{padding:18px 16px 14px;border-radius:20px}
+  .jhero .h-t{font-size:24px}
+  .jhero .h-s{font-size:13.5px}
+  .jhero .h-st{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .jhero .hs{padding:0 6px}
+  .jhero .hs b{font-size:17px}
+  .jhero .hs b small{font-size:10.5px}
+  .jhero .hs span{font-size:10.5px}
+  .dcard2{padding:14px 14px;border-radius:16px}
+  .pchips button{padding:0 12px;font-size:12.5px}
+  .ga{gap:10px;padding-right:10px}
+  .gr .ck{width:40px}
+  .ga .chev{display:none}
+  .gm b{font-size:14.5px}
+  .gm small{font-size:12px}
+}
+@media (max-width:360px){.txtbtn.ic svg{display:none}.jhero .hs span{font-size:10px}}
+.jhero .h-s,.jhero .h-top,.jhero .h-t,.jhero .hs span,.jhero .hs b{color:#fff}
+.jhero .h-s{color:rgba(255,255,255,.9)}
+.jhero .h-top{display:flex}
+.rlist .gr a.ga{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;border:0;padding:12px 0}
+.rlist .gr a.ga:first-child{border-top:0}
 </style>
 
 <header class="bar gut">
@@ -702,15 +813,13 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   <!-- STEP 2 -->
   <section class="view" id="v-journal" aria-labelledby="h1-journal" hidden>
     <div class="jhead">
-      <div class="eyebrow">STEP 2 · 소음 일지</div>
       <div class="jrow">
         <h1 id="h1-journal">내 소음 기록</h1>
-        <button class="mini" id="exBtn" type="button" aria-pressed="false" title="예시 일지 보기/끄기">예시</button>
         <span class="sp"></span>
-        <div class="seg jtabs" role="tablist" aria-label="보기 방식"><button type="button" role="tab" data-jt="dash" aria-pressed="true">대시보드</button><button type="button" role="tab" data-jt="board" aria-pressed="false">게시판</button></div>
+        <button class="mini" id="exBtn" type="button" aria-pressed="false" title="예시 일지 보기/끄기">예시</button>
         <a class="btn primary next-top" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <div class="jsub"><p class="jsum num" id="jSum"></p><button type="button" class="txtbtn" id="copyLog">상담용 일지 복사</button></div>
+      <div class="jseg" role="tablist" aria-label="보기 방식"><button type="button" role="tab" data-jt="dash" aria-pressed="true">요약</button><button type="button" role="tab" data-jt="board" aria-pressed="false">기록 <span class="jn num" id="jN"></span></button></div>
     </div>
     <div id="jDash" class="dash"></div>
     <div class="card board" id="jBoard" hidden>
@@ -728,8 +837,10 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <div class="adv-row"><span class="adv-k">최고 소음</span><div class="adv-v"><input type="number" id="minDb" min="0" max="120" step="1" placeholder="예: 55" aria-label="최고 소음 최소값"><span>dB 이상</span></div></div>
         <div class="adv-row end"><button type="button" id="advReset">조건 초기화</button><button type="button" class="primary" id="advApply">이 조건으로 검색</button></div>
       </div>
-      <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span><span class="sp"></span><button type="button" class="txtbtn" id="copyAll">목록 전체 일지 복사</button></div>
-      <div class="bt" id="jList" role="list"></div>
+      <div class="qchips" id="qChips"><button type="button" class="qc" data-q="all" aria-pressed="true">전체</button><button type="button" class="qc" data-q="over" aria-pressed="false">기준 초과</button><button type="button" class="qc" data-q="night" aria-pressed="false">야간</button><button type="button" class="qc" data-q="day" aria-pressed="false">주간</button></div>
+      <div class="rhead"><label class="ckall"><input type="checkbox" id="ckAll"><span>전체 선택</span></label><span class="sp"></span><span id="rCount" class="note num"></span><button type="button" class="txtbtn" id="copyAll">일지 복사</button></div>
+      <div class="rtags" id="rChips"></div>
+      <div class="glist" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
     </div>
     <div class="seldock" id="selBar" hidden>
@@ -1246,25 +1357,27 @@ if (typeof module !== 'undefined') module.exports = KE;
     log.sort((a, b) => a.ts - b.ts);
     try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { toast('저장 공간이 부족해 그래프 없이 저장했습니다'); log[log.length - 1].res = null; try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e2) {} }
   }
-  let jtab = 'dash', dmenu = 'heat';
+  let jtab = 'dash', dmenu = 'heat', dper = 7;
   const SF = { field: 'all', q: '', from: '', to: '', types: new Set(), tz: 'all', vd: new Set(), minDb: '' };
   const svgEl = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
-  function dashboard(E) {
+  function dashboard(E0) {
+    const cut = dper === 'all' ? 0 : Date.now() - dper * 864e5, E = E0.filter((e) => e.ts >= cut);
     const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0), over = E.filter((e) => e.over === 'over').length, near = E.filter((e) => e.over === 'near').length;
     const avgMax = E.length ? E.reduce((s, e) => s + e.lmax, 0) / E.length : 0, peak = E.reduce((m, e) => e.lmax > m.lmax ? e : m, E[0] || { lmax: 0 });
     const hours = new Array(24).fill(0); E.forEach((e) => { hours[new Date(e.ts).getHours()] += e.count; }); const ph = hours.indexOf(Math.max(...hours));
     const kpi = (v, u, k, s2, c = '') => `<div class="kpi ${c}"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div><div class="s">${s2}</div></div>`;
     // 일별
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
-    for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
+    const ND = dper === 'all' ? Math.min(30, Math.max(7, E.length ? Math.ceil((today - new Date(E[0].ts)) / 864e5) + 1 : 7)) : +dper;
+    for (let i = ND - 1; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
     const dn = days.map(() => ({ d: 0, n: 0 }));
     E.forEach((e) => { const d = new Date(e.ts), di = days.findIndex((x) => x.getTime() === new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()); if (di >= 0) dn[di][e.night ? 'n' : 'd'] += e.count; });
-    const W = 520, H = 190, pl = 28, pb = 24, pt = 10, bw = (W - pl - 10) / 7, mx = Math.max(10, ...dn.map((x) => x.d + x.n)), sc = (v) => (H - pb - pt) * v / mx;
+    const W = 520, H = 190, pl = 28, pb = 24, pt = 10, bw = (W - pl - 10) / ND, mx = Math.max(10, ...dn.map((x) => x.d + x.n)), sc = (v) => (H - pb - pt) * v / mx;
     let g = ''; for (let t = 0; t <= 2; t++) { const v = Math.round(mx * t / 2), y = H - pb - sc(v); g += `<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pl - 6}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--fg2)">${v}</text>`; }
     dn.forEach((x, i) => { const cx = pl + bw * i + bw * 0.2, w = bw * 0.6, yN = H - pb - sc(x.n), yD = yN - sc(x.d);
       g += `<rect x="${cx}" y="${yN}" width="${w}" height="${sc(x.n)}" rx="3" fill="var(--accent)"/><rect x="${cx}" y="${yD}" width="${w}" height="${sc(x.d)}" rx="3" fill="color-mix(in srgb,var(--accent) 35%,var(--sunk))"/>`;
-      if (x.d + x.n) g += `<text x="${cx + w / 2}" y="${yD - 4}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--fg)">${x.d + x.n}</text>`;
-      g += `<text x="${cx + w / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--fg2)">${days[i].getMonth() + 1}/${days[i].getDate()}</text>`; });
+      if (x.d + x.n && ND <= 14) g += `<text x="${cx + w / 2}" y="${yD - 4}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--fg)">${x.d + x.n}</text>`;
+      if (ND <= 7 || (ND - 1 - i) % 5 === 0) g += `<text x="${cx + w / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--fg2)">${days[i].getMonth() + 1}/${days[i].getDate()}</text>`; });
     // 종류
     const by = {}; E.forEach((e) => Object.entries(e.counts || { [e.type]: e.count }).forEach(([k, c]) => { by[k] = (by[k] || 0) + c; }));
     const bys = Object.entries(by).sort((a, b) => b[1] - a[1]), bmx = Math.max(1, ...bys.map((x) => x[1]));
@@ -1287,25 +1400,49 @@ if (typeof module !== 'undefined') module.exports = KE;
     const tabs = [['heat', '시간대'], ['daily', '날짜별'], ['type', '소리 종류'], ['peak', '최고 소음']];
     const panel = {
       heat: `<p class="cap">몇 시에 많이 들렸나 · 진한 막대가 야간(22~06시)</p>${svgEl(W3, H3, g3)}`,
-      daily: `<p class="cap">최근 7일 · 진한 막대가 야간</p>${svgEl(W, H, g)}`,
+      daily: `<p class="cap">최근 ${ND}일 · 진한 막대가 야간</p>${svgEl(W, H, g)}`,
       type: `<p class="cap">AI가 분류한 소리 종류별 횟수</p><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>`,
       peak: `<p class="cap">기록별 최고 소음 · 점선은 야간 52 · 주간 57dB 기준 · 빨강 초과</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}`
     };
     if (!panel[dmenu]) dmenu = 'heat';
-    const stat = (v, u, k, c = '') => `<div class="st ${c}"><b>${v}<small>${u}</small></b><span>${k}</span></div>`;
-    return `<section class="dsum">
-        <p class="in-t">${E.length ? `들린 소리의 <b>${npct}%</b>가 밤 10시 이후, 가장 잦은 시각은 <b>${ph}시</b>, 주로 <b>${topType}</b>였어요.` : '아직 기록이 없어요.'}</p>
-        <div class="sts">${stat(E.length, '건', '기록')}${stat(total, '회', '들린 소리')}${stat(avgMax.toFixed(1), 'dB', '평균 최고')}${stat(over, '건', '기준 초과', over ? 'hot' : '')}</div>
+    const stat = (v, u, k) => `<div class="hs"><b>${v}<small>${u}</small></b><span>${k}</span></div>`;
+    const lbl = { 7: '최근 7일', 30: '최근 30일', all: '전체 기간' }[dper];
+    const head = over ? `기준 초과 <em>${over}건</em>` : near ? `기준 근접 <em>${near}건</em>` : E.length ? '기준 이내' : '기록 없음';
+    const sub = E.length ? `소리의 <b>${npct}%</b>가 밤 10시 이후 · 가장 잦은 시각 <b>${ph}시</b> · 주로 <b>${topType}</b>` : '이 기간에 저장한 기록이 없어요.';
+    const per = `<div class="pchips" role="group" aria-label="기간">${[['7', '7일'], ['30', '30일'], ['all', '전체']].map(([k, l]) => `<button type="button" data-per="${k}" aria-pressed="${String(dper) === k}">${l}</button>`).join('')}</div>`;
+    return `<div class="dtool">${per}<span class="sp"></span><button type="button" class="txtbtn ic" id="copyLog"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>상담용 일지 복사</button></div>
+      <section class="jhero ${over ? 'hot' : ''}">
+        <div class="h-top"><span class="h-l">${lbl}${isExample ? ' · 예시' : ''}</span><span class="h-r num">${E.length ? `${fmtD(E[0].ts)} ~ ${fmtD(E[E.length - 1].ts)}` : ''}</span></div>
+        <h2 class="h-t">${head}</h2>
+        <p class="h-s">${sub}</p>
+        <div class="h-st">${stat(E.length, '건', '기록')}${stat(total, '회', '들린 소리')}${stat(E.length ? avgMax.toFixed(1) : '-', E.length ? 'dB' : '', '평균 최고')}${stat(E.length ? peak.lmax : '-', E.length ? 'dB' : '', '가장 컸던 때')}</div>
       </section>
-      <div class="dcols">      <section class="dsec">
-        <div class="utabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dm="${k}" aria-selected="${dmenu === k}">${l}</button>`).join('')}</div>
-        <div class="cp-body">${panel[dmenu]}</div>
-      </section>
-<section class="dsec">
-        <div class="dsec-h"><h3>최근 기록</h3><button type="button" class="txtbtn" id="toBoard">전체 보기 ›</button></div>
-        <div class="rlist">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span class="rl-t"><b>${T[e.type].name}</b><small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</small></span><span class="rl-s st-${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>
-      </section></div>`;
+      <div class="dcols">
+        <section class="dcard2">
+          <div class="dc-h"><h3>소음 패턴</h3></div>
+          <div class="utabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dm="${k}" aria-selected="${dmenu === k}">${l}</button>`).join('')}</div>
+          <div class="cp-body">${E.length ? panel[dmenu] : '<p class="note">기록이 쌓이면 그래프가 보여요.</p>'}</div>
+        </section>
+        <section class="dcard2">
+          <div class="dc-h"><h3>최근 기록</h3><button type="button" class="txtbtn" id="toBoard">전체 보기 ›</button></div>
+          <div class="rlist">${R3.map((e) => rowHTML(e, false)).join('') || '<p class="note">기록이 없어요.</p>'}</div>
+        </section>
+      </div>`;
   }
+  const fmtD = (t) => { const d = new Date(t); return `${d.getMonth() + 1}/${d.getDate()}`; };
+  function rowHTML(e, sel) {
+    const d = new Date(e.ts), on = pick.has(e.ts);
+    return `<div class="gr${on ? ' on' : ''}" role="listitem">${sel ? `<label class="ck" aria-label="${fmt(d)} 선택"><input type="checkbox" data-sel="${e.ts}" ${on ? 'checked' : ''}></label>` : ''}<a class="ga" href="#log-${e.ts}">
+      <span class="gt num"><b>${pad(d.getHours())}:${pad(d.getMinutes())}</b>${sel ? '' : `<small>${d.getMonth() + 1}/${d.getDate()}(${wk[d.getDay()]})</small>`}</span>
+      <span class="gm"><b><i class="sw" style="background:var(--t-${T[e.type].color})"></i>${T[e.type].name}</b><small class="num">${e.count}회 · 최고 ${e.lmax}dB${e.night ? ' · 야간' : ''}</small></span>
+      <span class="pill ${e.over}">${stTxt[e.over]}</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>`;
+  }
+  function dayLabel(t) {
+    const d = new Date(t); d.setHours(0, 0, 0, 0); const t0 = new Date(); t0.setHours(0, 0, 0, 0); const k = Math.round((t0 - d) / 864e5);
+    const base = `${d.getMonth() + 1}월 ${d.getDate()}일 (${wk[d.getDay()]})`;
+    return k === 0 ? `오늘 · ${base}` : k === 1 ? `어제 · ${base}` : base;
+  }
+  const emptyHTML = () => `<div class="empty"><div class="em-ic" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M8 7v6M16 7v6M4 10v2M20 10v2"/><path d="M5 20h14"/></svg></div><b>아직 저장한 기록이 없어요</b><p>소리를 분석한 뒤 '일지에 저장'을 누르면 여기에 쌓여요.</p><div class="em-a"><a class="btn primary" href="#analyze">소리 분석하러 가기</a><button type="button" class="btn" data-ex="1">예시로 둘러보기</button></div></div>`;
   function heatHTML(E) {
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
     for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
@@ -1347,32 +1484,47 @@ if (typeof module !== 'undefined') module.exports = KE;
     $('#exBtn').setAttribute('aria-pressed', String(isExample));
     $('#jDash').hidden = jtab !== 'dash'; $('#jBoard').hidden = jtab !== 'board';
     $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
-    const total = E.reduce((s, e) => s + e.count, 0);
-    $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
-    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E);   $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    $('#jN').textContent = E.length || '';
+    if (jtab === 'dash') {
+      $('#jDash').innerHTML = E.length ? dashboard(E) : emptyHTML();
+      $$('#jDash [data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); }));
+      $$('#jDash [data-per]').forEach((b) => b.addEventListener('click', () => { dper = b.dataset.per === 'all' ? 'all' : +b.dataset.per; renderJournal(); }));
+      $('#toBoard') && $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); scrollTo(0, 0); });
+      $('#copyLog') && $('#copyLog').addEventListener('click', () => { const cut = dper === 'all' ? 0 : Date.now() - dper * 864e5, L = entries().filter((e) => e.ts >= cut); if (!L.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(L), `기록 ${L.length}건을 상담용 일지로 복사했습니다`); });
+      bindEmpty(); renderSel(); return;
+    }
     const All = [...E].reverse(), R = All.filter(matches);
-    [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
+    [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); });
+    const qk = SF.vd.size === 1 && SF.vd.has('over') && SF.tz === 'all' ? 'over' : !SF.vd.size && SF.tz !== 'all' ? SF.tz : !SF.vd.size && SF.tz === 'all' ? 'all' : '';
+    $$('#qChips [data-q]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === qk)));
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
-    SF.types.forEach((t) => tags.push(T[t].name)); if (SF.tz !== 'all') tags.push(SF.tz === 'day' ? '주간' : '야간'); SF.vd.forEach((v) => tags.push(stTxt[v])); if (SF.minDb) tags.push(`${SF.minDb}dB 이상`);
-    $('#rCount').textContent = tags.length ? `검색 결과 ${R.length}건 / 전체 ${All.length}건` : `전체 ${All.length}건 · 최신순`;
-    $('#rChips').innerHTML = tags.map((t) => `<span>${t}</span>`).join('');
-    if (!All.length) { $('#jList').innerHTML = '<p class="nores">저장한 기록이 없어요. \'예시\'를 누르면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
-    const PER = 8, pages = Math.max(1, Math.ceil(R.length / PER)); if (page >= pages) page = pages - 1;
-    if (!R.length) { $('#jList').innerHTML = '<p class="nores">조건에 맞는 기록이 없어요. 검색어나 상세 조건을 바꿔 보세요.</p>'; $('#pager').innerHTML = ''; return; }
-    const latest = All[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
-    const pageRows = R.slice(page * PER, page * PER + PER), allOn = pageRows.length && pageRows.every((e) => pick.has(e.ts));
-    const head = `<div class="brow th"><label class="ck" aria-label="이 페이지 모두 선택"><input type="checkbox" id="ckAll" ${allOn ? 'checked' : ''}></label><label class="thm" for="ckAll">이 페이지 전체 선택</label><div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div></div>`;
-    $('#jList').innerHTML = head + pageRows.map((e) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
-      return `<div class="brow${pick.has(e.ts) ? ' on' : ''}"><label class="ck" aria-label="${no}번 선택"><input type="checkbox" data-sel="${e.ts}" ${pick.has(e.ts) ? 'checked' : ''}></label><a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
-        <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
-        <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span><span class="go" aria-hidden="true">›</span>
-        <span class="meta">${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}${e.night ? ' 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></a></div>`; }).join('');
-    $$('[data-sel]').forEach((c) => c.addEventListener('change', () => { const t = +c.dataset.sel; c.checked ? pick.add(t) : pick.delete(t); renderJournal(); }));
-    $('#ckAll') && $('#ckAll').addEventListener('change', (ev) => { pageRows.forEach((e) => ev.target.checked ? pick.add(e.ts) : pick.delete(e.ts)); renderJournal(); });
+    SF.types.forEach((t) => tags.push(T[t].name)); if (SF.minDb) tags.push(`${SF.minDb}dB 이상`);
+    if (!qk) { if (SF.tz !== 'all') tags.push(SF.tz === 'day' ? '주간' : '야간'); SF.vd.forEach((v) => tags.push(stTxt[v])); }
+    $('#rCount').textContent = R.length === All.length ? `${All.length}건` : `${R.length} / ${All.length}건`;
+    $('#rChips').innerHTML = tags.length ? tags.map((t) => `<span>${t}</span>`).join('') + '<button type="button" class="txtbtn" id="tagReset">조건 지우기</button>' : '';
+    $('#rChips').hidden = !tags.length;
+    $('#tagReset') && $('#tagReset').addEventListener('click', () => { $('#q').value = ''; SF.q = ''; $('#advReset').click(); });
+    $('#jBoard .rhead').hidden = !All.length; $('#qChips').hidden = !All.length; $('#sForm').hidden = !All.length; if (!All.length) $('#adv').hidden = true;
+    if (!All.length) { $('#jList').innerHTML = emptyHTML(); $('#pager').innerHTML = ''; bindEmpty(); renderSel(); return; }
+    if (!R.length) { $('#jList').innerHTML = '<p class="nores">조건에 맞는 기록이 없어요. 검색어나 조건을 바꿔 보세요.</p>'; $('#pager').innerHTML = ''; renderSel(); return; }
+    const PER = 15, shown = R.slice(0, (page + 1) * PER), allOn = R.every((e) => pick.has(e.ts));
+    $('#ckAll').checked = allOn; $('#ckAll').indeterminate = !allOn && R.some((e) => pick.has(e.ts));
+    let html = '', cur = '';
+    shown.forEach((e) => { const dl = dayLabel(e.ts); if (dl !== cur) { if (cur) html += '</div>'; cur = dl; const n = R.filter((x) => dayLabel(x.ts) === dl).length; html += `<div class="gh"><span>${dl}</span><small class="num">${n}건</small></div><div class="gg">`; } html += rowHTML(e, true); });
+    $('#jList').innerHTML = html + '</div>';
+    $$('#jList [data-sel]').forEach((c) => c.addEventListener('change', () => { const t = +c.dataset.sel; c.checked ? pick.add(t) : pick.delete(t); renderJournal(); }));
     renderSel();
-    $('#pager').innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) => `<button type="button" data-pg="${i}" ${i === page ? 'aria-current="page"' : ''}>${i + 1}</button>`).join('') : '';
-    $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
+    $('#pager').innerHTML = R.length > shown.length ? `<button type="button" class="more" id="moreBtn">더 보기 <span class="num">${R.length - shown.length}건</span></button>` : (R.length > PER ? '<p class="note end">마지막 기록이에요</p>' : '');
+    $('#moreBtn') && $('#moreBtn').addEventListener('click', () => { page++; renderJournal(); });
   }
+  function bindEmpty() { $$('#v-journal [data-ex]').forEach((b) => b.addEventListener('click', () => { exMode = true; pick.clear(); renderJournal(); })); }
+  $('#exBtn').addEventListener('click', () => { exMode = !isExample; if (!exMode && !log.length) toast('저장한 기록이 아직 없어요'); pick.clear(); page = 0; renderJournal(); });
+  $('#ckAll').addEventListener('change', (ev) => { const R = [...entries()].reverse().filter(matches); R.forEach((e) => ev.target.checked ? pick.add(e.ts) : pick.delete(e.ts)); renderJournal(); });
+  $$('#qChips [data-q]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.q; SF.vd.clear(); SF.tz = 'all';
+    if (k === 'over') SF.vd.add('over'); if (k === 'night' || k === 'day') SF.tz = k;
+    $$('#adv [data-vd]').forEach((x) => x.setAttribute('aria-pressed', String(SF.vd.has(x.dataset.vd)))); $$('#adv [data-tz]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tz === SF.tz)));
+    page = 0; renderJournal(); }));
   $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
   $('#selGo').addEventListener('click', () => { toast(`선택한 ${pick.size}건으로 서류를 만들어요`); go('report'); });
   $('#selCopy').addEventListener('click', () => copy(logText(chosen()), `선택한 ${pick.size}건 일지를 복사했습니다`));
@@ -1417,7 +1569,6 @@ ${lines.join('\n')}
 
 작성일 ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}. · 작성 도구: 쿵쾅(층간소음 AI 기록 서비스)`;
   }
-  $('#copyLog').addEventListener('click', () => { const E = entries(); if (!E.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`); });
   $('#copyAll').addEventListener('click', () => { const R = [...entries()].reverse().filter(matches).reverse(); if (!R.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(R), `기록 ${R.length}건을 상담용 일지로 복사했습니다`); });
 
   /* ---------- STEP 3: 알리는 방법 5가지 ---------- */
