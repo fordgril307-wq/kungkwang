@@ -353,6 +353,19 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .sd-no{min-height:38px;padding:0 12px;background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
 .cta-bar.off{display:none!important}
 @media (max-width:680px){.seldock{bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateZ(0)}}
+/* 대시보드 소메뉴·히트맵 */
+.dmenu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barH,60px));z-index:12;background:var(--bg);padding-block:8px}
+.dmenu::-webkit-scrollbar{display:none}
+.dmenu button{flex:none;min-height:36px;padding:4px 14px;border-radius:999px;font-size:13px;background:var(--surface);border:1px solid var(--line2);color:var(--fg2)}
+.dmenu button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg);font-weight:700}
+.dgrid.one{grid-template-columns:minmax(0,1fr)}
+#jDash .heat-wrap{overflow:visible}
+#jDash .heat{grid-template-columns:44px repeat(24,minmax(0,1fr));gap:2px;min-width:0;font-size:11px}
+#jDash .heat .c{height:22px;border-radius:3px}
+#jDash .heat .hl{text-align:left;white-space:nowrap;overflow:visible;font-size:10.5px}
+#jDash .heat .dl{display:flex;flex-direction:column;justify-content:center;line-height:1.1;position:sticky;left:0;background:var(--surface)}
+#jDash .heat .dl b{font-size:11.5px;color:var(--fg)}#jDash .heat .dl small{font-size:10px}
+@media (max-width:680px){#jDash .heat{grid-template-columns:36px repeat(24,minmax(0,1fr));gap:1.5px}#jDash .heat .c{height:20px;border-radius:2px}#jDash .heat .night{box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--accent) 30%,transparent)}}
 /* 대시보드 */
 .dash{display:flex;flex-direction:column;gap:14px}
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
@@ -498,7 +511,6 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 @media (max-width:680px){
   .next-top{display:none}
   .cta-bar{display:block;position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));z-index:24;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
-  #v-journal{padding-bottom:70px}
   .head h1{font-size:24px}
   .stats.mini{grid-template-columns:repeat(4,minmax(0,1fr))}
   .stats.mini .v{font-size:18px}
@@ -660,7 +672,6 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
     </div>
-    <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
     <div class="seldock" id="selBar" hidden>
       <div class="sd-main" id="sdMain"><button type="button" class="sd-x" id="selClear" aria-label="선택 해제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><span class="selc num" id="selC"></span><span class="sp"></span>
         <button type="button" class="primary sd-go" id="selGo">알리기</button><button type="button" class="sd-ic" id="selCopy" aria-label="선택한 기록 일지 복사" title="일지 복사"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button><button type="button" class="sd-ic sd-del" id="selDel" aria-label="선택한 기록 삭제" title="삭제"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
@@ -694,7 +705,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <p><b>측정 한계</b> 휴대폰 마이크로 잰 값은 공인 측정이 아니라 참고값입니다. 법적 판정은 이웃사이센터 등의 현장 측정으로 정해집니다. AI 분류 결과에는 'AI 추정' 표시를 붙였습니다.</p>
     <p><b>절차</b> 공동주택관리법 제20조(층간소음의 방지 등), 같은 법 시행령 제21조의2(층간소음관리위원회 구성 의무 700세대)</p>
     <p><b>기준</b> 공동주택 층간소음의 범위와 기준에 관한 규칙 · 직접충격 1분 등가 주간 39·야간 34dB, 최고 주간 57·야간 52dB(1시간 3회 이상) · 공기전달 5분 등가 주간 45·야간 40dB</p>
-    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.6 · 엘리스 AI 챌린지 출품작</p>
+    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.9 · 엘리스 AI 챌린지 출품작</p>
   </footer>
 </div>
 </main>
@@ -1177,7 +1188,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     log.sort((a, b) => a.ts - b.ts);
     try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { toast('저장 공간이 부족해 그래프 없이 저장했습니다'); log[log.length - 1].res = null; try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e2) {} }
   }
-  let jtab = 'dash';
+  let jtab = 'dash', dmenu = 'all';
   const SF = { field: 'all', q: '', from: '', to: '', types: new Set(), tz: 'all', vd: new Set(), minDb: '' };
   const svgEl = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
   function dashboard(E) {
@@ -1209,12 +1220,13 @@ if (typeof module !== 'undefined') module.exports = KE;
     const R3 = [...E].reverse().slice(0, 3);
     return `<div class="kpis">${kpi(E.length, '건', '기록', '최근 저장')}${kpi(total, '회', '들린 소리', 'AI가 찾은 소리')}${kpi(total ? Math.round(nightN / total * 100) : 0, '%', '야간 비중', '22~06시')}
       ${kpi(over, '건', '기준 초과', `근접 ${near}건`, over ? 'hot' : '')}${kpi(avgMax.toFixed(1), 'dB', '평균 최고 소음', `최대 ${peak.lmax}dB`)}${kpi(E.length ? ph : '-', E.length ? '시' : '', '가장 잦은 시각', E.length ? `${hours[ph]}회` : '')}</div>
-      <div class="dgrid">
-        <div class="dcard"><h3>일별 소리 횟수</h3><div class="leg2"><span><i style="background:var(--accent)"></i>야간</span><span><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i>주간</span></div>${svgEl(W, H, g)}</div>
-        <div class="dcard"><h3>어떤 소리였나</h3><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div></div>
-        <div class="dcard"><h3>최고 소음 추이</h3><p class="cap">최근 ${L.length}건 · 점 색은 판정(빨강 초과, 주황 근접, 초록 이내)</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}</div>
-        <div class="dcard"><h3>최근 기록</h3><div class="recent3">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span><b>${T[e.type].name}</b> ${e.count}회<small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.lmax}dB</small></span><span class="pill ${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div><button type="button" class="more" id="toBoard">게시판 전체 보기 ›</button></div>
-        <div class="dcard wide"><div class="card-h"><div><h3>언제 시끄러웠나</h3><p class="cap" style="margin-top:2px">최근 7일 시간대별 횟수 · 밑줄 칸은 야간</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div><div class="heat-wrap"><div class="heat" id="heat"></div></div></div>
+      <nav class="dmenu" aria-label="볼 그래프 고르기">${[['all', '전체'], ['daily', '일별 횟수'], ['type', '소리 종류'], ['peak', '최고 소음'], ['heat', '시간대'], ['recent', '최근 기록']].map(([k, l]) => `<button type="button" data-dm="${k}" aria-pressed="${dmenu === k}">${l}</button>`).join('')}</nav>
+      <div class="dgrid${dmenu !== 'all' ? ' one' : ''}">
+        <div class="dcard" data-dk="daily"><h3>일별 소리 횟수</h3><div class="leg2"><span><i style="background:var(--accent)"></i>야간</span><span><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i>주간</span></div>${svgEl(W, H, g)}</div>
+        <div class="dcard" data-dk="type"><h3>어떤 소리였나</h3><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div></div>
+        <div class="dcard" data-dk="peak"><h3>최고 소음 추이</h3><p class="cap">최근 ${L.length}건 · 점 색은 판정(빨강 초과, 주황 근접, 초록 이내)</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}</div>
+        <div class="dcard" data-dk="recent"><h3>최근 기록</h3><div class="recent3">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span><b>${T[e.type].name}</b> ${e.count}회<small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.lmax}dB</small></span><span class="pill ${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div><button type="button" class="more" id="toBoard">게시판 전체 보기 ›</button></div>
+        <div class="dcard wide" data-dk="heat"><div class="card-h"><div><h3>언제 시끄러웠나</h3><p class="cap" style="margin-top:2px">최근 7일 시간대별 횟수 · 밑줄 칸은 야간</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div><div class="heat-wrap"><div class="heat" id="heat"></div></div></div>
       </div>`;
   }
   function heatHTML(E) {
@@ -1223,8 +1235,8 @@ if (typeof module !== 'undefined') module.exports = KE;
     const grid = days.map(() => new Array(24).fill(0));
     E.forEach((e) => { const d = new Date(e.ts), di = days.findIndex((x) => x.getTime() === new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()); if (di >= 0) grid[di][d.getHours()] += e.count; });
     const mx = Math.max(1, ...grid.flat());
-    let html = '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="hl">${h % 3 === 0 ? h : ''}</div>`).join('');
-    days.forEach((d, di) => { html += `<div class="dl">${d.getMonth() + 1}/${d.getDate()} (${wk[d.getDay()]})</div>`;
+    let html = '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="hl">${h % 6 === 0 ? h + '시' : ''}</div>`).join('');
+    days.forEach((d, di) => { html += `<div class="dl"><b>${d.getMonth() + 1}/${d.getDate()}</b><small>${wk[d.getDay()]}</small></div>`;
       grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; }); });
     return html;
   }
@@ -1243,8 +1255,7 @@ if (typeof module !== 'undefined') module.exports = KE;
   }
   const pick = new Set();
   function renderSel() {
-    const n = pick.size, onJ = !$('#v-journal').hidden; $('#selBar').hidden = !n || !onJ; $('#selC').textContent = `${n}건 선택`; if (!n) { $('#selConf').hidden = true; $('#sdMain').hidden = false; }
-    $('#v-journal .cta-bar').classList.toggle('off', n > 0); $('#toTop').style.bottom = n ? '' : '';
+    const n = pick.size, onJ = !$('#v-journal').hidden; $('#selBar').hidden = !n || !onJ; $('#selC').textContent = `${n}건 선택`; if (!n) { $('#selConf').hidden = true; $('#sdMain').hidden = false; } $('#toTop').style.bottom = n ? '' : '';
   }
   function delEntries(ts) {
     const S2 = new Set(ts);
@@ -1261,7 +1272,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
     const total = E.reduce((s, e) => s + e.count, 0);
     $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
-    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#heat').innerHTML = heatHTML(E); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#heat').innerHTML = heatHTML(E); $$('#jDash [data-dk]').forEach((c) => { c.hidden = dmenu !== 'all' && c.dataset.dk !== dmenu; }); $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); const sel = $('[data-dm][aria-pressed="true"]'); sel && sel.scrollIntoView({ block: 'nearest', inline: 'center' }); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
     const All = [...E].reverse(), R = All.filter(matches);
     [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
