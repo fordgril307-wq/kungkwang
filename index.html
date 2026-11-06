@@ -339,6 +339,20 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .pickban b{color:var(--accent)}
 .pickban button{min-height:30px;padding:2px 10px;font-size:12.5px}
 @media (max-width:680px){.thm{display:flex;align-items:center;font-size:12.5px;color:var(--fg2);font-weight:700;cursor:pointer;min-height:40px}.brow{grid-template-columns:36px minmax(0,1fr)}.selbtns{margin-left:0;width:100%}.selbtns button{flex:1 1 auto}}
+/* 선택 도크 */
+.seldock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:35;width:min(520px,calc(100% - 32px));background:var(--fg);color:var(--bg);border-radius:16px;padding:6px 8px 6px 6px;box-shadow:0 12px 32px -10px rgba(17,10,24,.5)}
+.sd-main,.sd-conf{display:flex;align-items:center;gap:6px;min-height:44px}
+.sd-main .sp{flex:1}
+.selc{font-weight:900;font-size:15px;color:var(--bg)}
+.sd-x,.sd-ic{width:40px;height:40px;min-height:40px;padding:0;border-radius:10px;background:transparent;border:1px solid transparent;color:var(--bg)}
+.sd-x:hover,.sd-ic:hover{border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
+.sd-del{color:#FF8A8A}
+.sd-go{min-height:40px;padding:0 16px}
+.sd-conf span{flex:1;font-size:13.5px;padding-left:8px}
+.sd-yes{min-height:38px;padding:0 14px;background:var(--bad);color:#fff;border-color:var(--bad)}
+.sd-no{min-height:38px;padding:0 12px;background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
+.cta-bar.off{display:none!important}
+@media (max-width:680px){.seldock{bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateZ(0)}}
 /* 대시보드 */
 .dash{display:flex;flex-direction:column;gap:14px}
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
@@ -642,16 +656,16 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <div class="adv-row"><span class="adv-k">최고 소음</span><div class="adv-v"><input type="number" id="minDb" min="0" max="120" step="1" placeholder="예: 55" aria-label="최고 소음 최소값"><span>dB 이상</span></div></div>
         <div class="adv-row end"><button type="button" id="advReset">조건 초기화</button><button type="button" class="primary" id="advApply">이 조건으로 검색</button></div>
       </div>
-      <div class="selbar" id="selBar" hidden>
-        <span class="selc num" id="selC"></span>
-        <div class="selbtns"><button type="button" class="primary" id="selGo">이 기록으로 알리기</button><button type="button" id="selCopy">일지 복사</button><button type="button" class="danger" id="selDel">삭제</button><button type="button" class="linkish" id="selClear">선택 해제</button></div>
-        <div class="selconf" id="selConf" hidden><span id="selConfT"></span><button type="button" class="danger" id="selDelYes">지우기</button><button type="button" id="selDelNo">취소</button></div>
-      </div>
       <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span></div>
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
     </div>
     <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    <div class="seldock" id="selBar" hidden>
+      <div class="sd-main" id="sdMain"><button type="button" class="sd-x" id="selClear" aria-label="선택 해제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><span class="selc num" id="selC"></span><span class="sp"></span>
+        <button type="button" class="primary sd-go" id="selGo">알리기</button><button type="button" class="sd-ic" id="selCopy" aria-label="선택한 기록 일지 복사" title="일지 복사"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button><button type="button" class="sd-ic sd-del" id="selDel" aria-label="선택한 기록 삭제" title="삭제"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
+      <div class="sd-conf" id="selConf" hidden><span id="selConfT"></span><button type="button" class="sd-yes" id="selDelYes">지우기</button><button type="button" class="sd-no" id="selDelNo">취소</button></div>
+    </div>
   </section>
 
   <!-- STEP 3 -->
@@ -937,7 +951,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
     const tabv = v === 'result' ? (le ? 'journal' : 'analyze') : v === 'rdetail' ? 'report' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     $('footer').hidden = v === 'analyze' || v === 'result';
-    if (v === 'journal') renderJournal();
+    if (v === 'journal') renderJournal(); else $('#selBar').hidden = true;
     if (v === 'result' && (shown || lastRes)) { const rr = shown || lastRes; requestAnimationFrame(() => drawChart(rr)); }
     if (v === 'result' && !lastRes) { location.replace('#analyze'); return; }
     window.scrollTo({ top: 0 });
@@ -1229,7 +1243,8 @@ if (typeof module !== 'undefined') module.exports = KE;
   }
   const pick = new Set();
   function renderSel() {
-    const n = pick.size; $('#selBar').hidden = !n; $('#selC').textContent = `${n}건 선택`; if (!n) $('#selConf').hidden = true;
+    const n = pick.size, onJ = !$('#v-journal').hidden; $('#selBar').hidden = !n || !onJ; $('#selC').textContent = `${n}건 선택`; if (!n) { $('#selConf').hidden = true; $('#sdMain').hidden = false; }
+    $('#v-journal .cta-bar').classList.toggle('off', n > 0); $('#toTop').style.bottom = n ? '' : '';
   }
   function delEntries(ts) {
     const S2 = new Set(ts);
@@ -1273,8 +1288,8 @@ if (typeof module !== 'undefined') module.exports = KE;
   $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
   $('#selGo').addEventListener('click', () => { toast(`선택한 ${pick.size}건으로 서류를 만들어요`); go('report'); });
   $('#selCopy').addEventListener('click', () => copy(logText(chosen()), `선택한 ${pick.size}건 일지를 복사했습니다`));
-  $('#selDel').addEventListener('click', () => { $('#selConfT').textContent = `선택한 ${pick.size}건을 지울까요? 되돌릴 수 없어요.`; $('#selConf').hidden = false; });
-  $('#selDelNo').addEventListener('click', () => { $('#selConf').hidden = true; });
+  $('#selDel').addEventListener('click', () => { $('#selConfT').textContent = `${pick.size}건을 지울까요?`; $('#selConf').hidden = false; $('#sdMain').hidden = true; });
+  $('#selDelNo').addEventListener('click', () => { $('#selConf').hidden = true; $('#sdMain').hidden = false; });
   $('#selDelYes').addEventListener('click', () => { delEntries([...pick]); renderJournal(); });
   $('#selClear').addEventListener('click', () => { pick.clear(); renderJournal(); });
   const doSearch = () => { SF.field = $('#qField').value; SF.q = $('#q').value; page = 0; renderJournal(); };
