@@ -1,5 +1,6 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="층간소음 녹음을 AI로 분류해 법정 기준과 비교하고, 소음 일지와 이웃 쪽지를 만드는 서비스"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Crect width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%236020A8%22/%3E%3Cpath d=%22M3.5 13.5h2.2l2-4.5 3 9 2.6-7 2.2 4.6 1.7-2.1H20.5%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E"><style>html{color-scheme:light}body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style></head><body><title>쿵쾅</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="층간소음 녹음을 AI로 분류해 법정 기준과 비교하고, 소음 일지와 이웃 쪽지를 만드는 서비스"><style>html{color-scheme:light}body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#6020A8"><meta name="apple-mobile-web-app-title" content="쿵쾅"><meta name="apple-mobile-web-app-capable" content="yes"></head><body><title>쿵쾅</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237100EE'/%3E%3Cstop offset='.6' stop-color='%236020A8'/%3E%3Cstop offset='1' stop-color='%233E1270'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Crect x='4' y='4.5' width='16' height='2.6' rx='1.2' fill='white'/%3E%3Cpath d='M4.5 13.5h2l1.8-4 2.6 7.6 2.3-6 1.9 3.9 1.5-1.9H19.5' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
@@ -275,6 +276,17 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .jsum .hot{color:var(--bad)}
 .jtabs{max-width:360px}
 .br .go{color:var(--fg3);font-size:18px;text-align:right}
+/* 게시판 검색 */
+.bsearch{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.sbox{flex:1 1 240px;display:flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:10px;padding:0 12px;background:var(--surface);color:var(--fg2);min-height:42px}
+.sbox:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.sbox input{border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--fg);width:100%;min-height:40px}
+.fchips{display:flex;gap:6px}
+.fc{min-height:34px;padding:4px 12px;border-radius:999px;font-size:12.5px;background:var(--sunk);border-color:transparent;color:var(--fg2)}
+.fc[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.nores{padding:22px 20px;color:var(--fg2);font-size:13.5px}
+/* STEP 3 상세 메뉴 고정 */
+#v-rdetail .stickyhd{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barH,60px));z-index:15;background:var(--bg);display:flex;flex-direction:column;gap:8px;padding:6px 0 10px;margin-top:-6px;border-bottom:1px solid var(--line)}
 /* STEP 2 게시판 */
 .head .tools{margin-left:auto}
 .desc{color:var(--fg2);font-size:14.5px;margin-top:6px;line-height:1.55}
@@ -286,7 +298,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 #v-journal .heat{font-size:12px}
 .board{padding:0;overflow:hidden}
 .board-h{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 12px}
-.bt{border-top:2px solid var(--fg)}
+.bt{border-top:0}
 .br{display:grid;grid-template-columns:44px 150px minmax(0,1fr) 70px 90px 96px 20px;text-decoration:none;color:var(--fg);align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px;width:100%;text-align:left;background:var(--surface);border-radius:0;border-left:0;border-right:0;border-top:0;min-height:52px;cursor:pointer}
 .br:hover{background:var(--sunk)}
 .br.th{font-size:12.5px;color:var(--fg2);font-weight:700;min-height:0;padding-block:9px;background:var(--sunk);cursor:default}
@@ -527,6 +539,10 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
     <div class="seg jtabs" role="tablist"><button type="button" role="tab" data-jt="board" aria-pressed="true">기록 게시판</button><button type="button" role="tab" data-jt="pattern" aria-pressed="false">시간대 패턴</button></div>
     <div class="card board" id="jBoard">
+      <div class="bsearch">
+        <label class="sbox" for="q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="소리·날짜·판정으로 검색 (예: 뛰는, 11/5, 초과)" autocomplete="off"></label>
+        <div class="fchips" role="group" aria-label="빠른 필터"><button type="button" class="fc" data-fc="night" aria-pressed="false">야간만</button><button type="button" class="fc" data-fc="over" aria-pressed="false">기준 초과만</button></div>
+      </div>
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
     </div>
@@ -550,8 +566,10 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   <!-- STEP 3 상세 -->
   <section class="view" id="v-rdetail" aria-label="알리는 방법 상세" hidden>
     <div class="res">
+      <div class="stickyhd">
       <div class="res-top"><a class="back" href="#report"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>알리는 방법</a><span class="eyebrow">STEP 3 · 알리기</span></div>
       <nav class="optnav" id="optNav" aria-label="다른 방법 고르기"></nav>
+      </div>
       <div class="card stack panel" id="optPanel" aria-live="polite"></div>
       <div class="pn" id="optPN"></div>
     </div>
@@ -1034,7 +1052,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     log.sort((a, b) => a.ts - b.ts);
     try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { toast('저장 공간이 부족해 그래프 없이 저장했습니다'); log[log.length - 1].res = null; try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e2) {} }
   }
-  let jtab = 'board';
+  let jtab = 'board'; const fc = { night: false, over: false };
   function renderJournal() {
     const E = entries();
     $('#exBtn').setAttribute('aria-pressed', String(isExample));
@@ -1054,10 +1072,15 @@ if (typeof module !== 'undefined') module.exports = KE;
     $('#heat').innerHTML = html;
     // 게시판
     if (!E.length) { $('#jList').innerHTML = '<p class="empty-j" style="padding:18px 20px">아직 저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.<br>\'예시\'를 누르면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
-    const R = [...E].reverse(), PER = 8, pages = Math.ceil(R.length / PER); if (page >= pages) page = pages - 1;
-    const latest = R[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
+    const q = ($('#q').value || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const hay = (e) => { const d = new Date(e.ts); return [T[e.type].name, fmt(d), `${d.getMonth() + 1}/${d.getDate()}`, `${d.getMonth() + 1}월 ${d.getDate()}일`, e.night ? '야간 밤' : '주간 낮', stTxt[e.over], e.src || '', Object.keys(e.counts || {}).map((k) => T[k].name).join(' ')].join(' ').toLowerCase(); };
+    const All = [...E].reverse();
+    const R = All.filter((e) => q.every((w) => hay(e).includes(w)) && (!fc.night || e.night) && (!fc.over || e.over === 'over'));
+    const PER = 8, pages = Math.max(1, Math.ceil(R.length / PER)); if (page >= pages) page = pages - 1;
+    if (!R.length) { $('#jList').innerHTML = `<p class="nores">'${$('#q').value || '필터'}' 조건에 맞는 기록이 없어요.</p>`; $('#pager').innerHTML = ''; return; }
+    const latest = All[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
     const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div>`;
-    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const no = R.length - (page * PER + k), d = new Date(e.ts);
+    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
       return `<a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
         <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
         <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span><span class="go" aria-hidden="true">›</span>
@@ -1066,6 +1089,8 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
   }
   $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
+  $('#q').addEventListener('input', () => { page = 0; renderJournal(); });
+  $$('[data-fc]').forEach((b) => b.addEventListener('click', () => { fc[b.dataset.fc] = !fc[b.dataset.fc]; b.setAttribute('aria-pressed', String(fc[b.dataset.fc])); page = 0; renderJournal(); }));
   function logText() {
     const E = entries(); if (!E.length) return '';
     const by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
@@ -1209,6 +1234,7 @@ ${lines.join('\n')}
   }
   renderOpts();
 
+  const setBar = () => document.documentElement.style.setProperty('--barH', $('.bar').offsetHeight + 'px'); setBar(); window.addEventListener('resize', setBar);
   show();
   // 첫 화면: 시연용 뛰는 소리 결과를 바로 보여 줌
   run(KE.synth('run', 11), '예시_뛰는소리.wav (예시)');
