@@ -129,7 +129,7 @@ details.set[open] summary::after{content:"－"}
 .tp b{font-variant-numeric:tabular-nums}
 .tp .note{font-size:11.5px}
 .chart{background:var(--sunk);border-radius:12px;padding:10px 8px 6px}
-canvas{display:block;width:100%;height:210px}
+canvas{display:block;width:100%;height:180px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--fg2);padding:4px 6px 0}
 .legend i{display:inline-block;width:16px;height:0;border-top:2px dashed var(--bad);vertical-align:middle;margin-right:5px}
 .checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -241,6 +241,39 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .res-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .back{color:var(--fg);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:4px;padding:8px 10px 8px 4px;border-radius:8px}
 .back:hover{background:var(--sunk)}
+/* 결과 화면 */
+.resbody{gap:22px}
+.sum{display:flex;flex-direction:column;gap:6px}
+.sum-meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--fg2)}
+.sum-t{font-size:34px;font-weight:900;letter-spacing:-.035em;line-height:1.15}
+.sum-lead{display:flex;align-items:center;gap:8px;font-size:16px;color:var(--fg)}
+.sum-lead b{font-weight:900}
+.sdot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--fg3)}
+.st-over .sdot{background:var(--bad)} .st-over b{color:var(--bad)}
+.st-near .sdot{background:var(--warn)} .st-ok .sdot{background:var(--ok)}
+.resbody .chart{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 10px 6px}
+.blk{display:flex;flex-direction:column;gap:10px}
+.blk h2{font-size:15px;font-weight:700;display:flex;gap:8px;align-items:baseline}
+.cmp{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.cmp-r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:14px 16px}
+.cmp-r+.cmp-r{border-top:1px solid var(--line)}
+.cmp-k{font-weight:700;font-size:14px}
+.cmp-s{font-size:12px;color:var(--fg2)}
+.cmp-v{text-align:right;white-space:nowrap}
+.cmp-v b{font-size:20px;font-weight:900;letter-spacing:-.02em}
+.cmp-v span{font-size:12px;color:var(--fg2);margin-left:4px}
+.stackbar{display:flex;height:10px;border-radius:999px;overflow:hidden;gap:2px;background:var(--sunk)}
+.stackbar i{display:block;min-width:6px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--fg2)}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.leg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.leg b{color:var(--fg)}
+.savebar{padding-top:4px}
+@media (max-width:680px){
+  .savebar{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));z-index:24;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+  #v-result{padding-bottom:70px}
+  .sum-t{font-size:30px}
+}
 /* 파일 고르기 시트 */
 .sheet-bg{position:fixed;inset:0;background:rgba(17,10,24,.45);z-index:50}
 .sheet{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);z-index:51;background:var(--surface);border-radius:22px 22px 0 0;border:1px solid var(--line);box-shadow:0 -12px 40px -12px rgba(17,10,24,.35);
@@ -348,7 +381,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   <section class="view" id="v-result" aria-label="분석 결과" hidden>
     <div class="res">
       <div class="res-top"><a class="back" href="#analyze"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>다시 분석</a><span class="eyebrow">STEP 1 · 분석 결과</span></div>
-      <div class="card stack" id="result" aria-live="polite"><div class="empty">분석할 소리를 고르면 결과가 여기에 나옵니다.</div></div>
+      <div class="stack resbody" id="result" aria-live="polite"><div class="empty">분석할 소리를 고르면 결과가 여기에 나옵니다.</div></div>
     </div>
   </section>
 
@@ -671,6 +704,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'analyze';
     VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
     const tabv = v === 'result' ? 'analyze' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+    $('footer').hidden = v === 'analyze' || v === 'result';
     if (v === 'journal') renderJournal();
     if (v === 'result' && lastRes) requestAnimationFrame(() => drawChart(lastRes));
     if (v === 'result' && !lastRes) { location.replace('#analyze'); return; }
@@ -800,31 +834,33 @@ if (typeof module !== 'undefined') module.exports = KE;
     const main = r.main ? T[r.main].name : '뚜렷한 소리 없음';
     const n = Object.values(r.counts).reduce((a, b) => a + b, 0);
     const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : r.checks.every((c) => c.st === 'na') ? 'na' : 'ok';
-    const types = Object.entries(r.counts).sort((a, b) => b[1] - a[1]).map(([k, c]) => {
-      const evs = r.ev.filter((e) => e.type === k), conf = evs.length ? evs.reduce((s, e) => s + e.conf, 0) / evs.length : (r.sustained?.score || 0.5);
-      return `<div class="tp"><span class="sw" style="background:var(--t-${T[k].color})"></span>${T[k].name} <b>${c}회</b><span class="note">확신 ${Math.round(conf * 100)}%</span></div>`;
-    }).join('');
-    const ymTop = r.ym ? [...new Set(r.ym.chunks.flatMap((c) => c.top))].slice(0, 5).join(', ') : null;
-    const short = { '직접충격 1분 등가소음도': '1분 평균 (직접충격)', '직접충격 최고소음도': '최고 소음 (직접충격)', '공기전달 5분 등가소음도': '5분 평균 (음악·TV 등)' };
+    const per = r.night ? '야간' : '주간';
+    const lead = worst === 'over' ? `${per} 기준을 넘는 소리가 <b>${r.overLmax || n}번</b> 들렸어요` : worst === 'near' ? `${per} 기준에 가까운 소리가 들렸어요` : worst === 'ok' ? `${per} 기준 안쪽이에요` : '기준에 걸릴 만한 소리를 찾지 못했어요';
+    const d = r.start, when = `${d.getMonth() + 1}/${d.getDate()}(${wk[d.getDay()]}) ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    const rows = r.checks.filter((c) => c.st !== 'na');
+    const label = { '직접충격 1분 등가소음도': '1분 평균', '직접충격 최고소음도': '최고 소음', '공기전달 5분 등가소음도': '5분 평균 (음악·TV)' };
+    const sub = { '직접충격 1분 등가소음도': (c) => c.note.startsWith('녹음이') ? '녹음 전체 평균' : '1분 창 최댓값', '직접충격 최고소음도': () => `기준 넘은 횟수 ${r.overLmax}회 (3회↑ 초과)`, '공기전달 5분 등가소음도': () => '녹음 전체 평균' };
+    const comp = Object.entries(r.counts).sort((a, b) => b[1] - a[1]);
     el.innerHTML = `
-      <div class="verdict">
-        <div><div class="k">주된 소리</div><div class="main">${main}<span class="ai-tag">AI 추정</span></div></div>
-        <div class="seal ${worst}"><b>${stTxt[worst]}</b><span>${r.night ? '야간' : '주간'} 기준</span></div>
-        <div class="meta num">${r.label} · ${r.durSec.toFixed(1)}초 · 소리 ${n}회 찾음</div>
+      <div class="sum">
+        <div class="sum-meta"><span class="ai-tag">AI 추정</span><span class="num">${when} · ${r.durSec.toFixed(0)}초 녹음</span></div>
+        <h1 class="sum-t">${main}</h1>
+        <p class="sum-lead st-${worst}"><span class="sdot"></span><span>${lead}</span></p>
       </div>
-      <div class="types">${types || '<span class="note">기준에 걸릴 만한 소리를 찾지 못했습니다.</span>'}</div>
-      <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas>
-        <div class="legend"><span><i></i>최고소음도 기준 ${KE.STD.impact[r.period].lmax}dB</span><span>점 = AI가 찾은 소리(색은 종류)</span><span>세로축 dB(A) 추정</span></div></div>
-      <div class="checks">${r.checks.map((c) => `<div class="chk"><div class="t">${short[c.k] || c.k}</div>
-        <div class="v">${c.v.toFixed(1)}<small>dB</small></div>${gauge(c.v, c.lim, c.st)}
-        <div class="foot"><span>기준 ${c.lim}dB</span><span class="pill ${c.st}">${stTxt[c.st]}</span></div>
-        <div class="note">${c.st === 'na' ? '이 종류의 소리가 없어 판정하지 않음' : c.note}</div></div>`).join('')}</div>
-      <details class="why"><summary>AI가 이렇게 판단한 이유 · 소리 ${r.ev.length}개</summary>
+      <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas></div>
+      ${rows.length ? `<div class="blk"><h2>기준과 비교</h2><div class="cmp">${rows.map((c) => `
+        <div class="cmp-r"><div><div class="cmp-k">${label[c.k]}</div><div class="cmp-s">${sub[c.k](c)}</div></div>
+          <div class="cmp-v num"><b>${c.v.toFixed(1)}</b><span>/ ${c.lim} dB</span></div><span class="pill ${c.st}">${stTxt[c.st]}</span></div>`).join('')}</div></div>` : ''}
+      ${comp.length ? `<div class="blk"><h2>들린 소리 <span class="note">${n}회</span></h2>
+        <div class="stackbar" aria-hidden="true">${comp.map(([k, c]) => `<i style="flex:${c};background:var(--t-${T[k].color})"></i>`).join('')}</div>
+        <div class="leg">${comp.map(([k, c]) => `<span><i style="background:var(--t-${T[k].color})"></i>${T[k].name} <b class="num">${c}</b></span>`).join('')}</div></div>` : ''}
+      <details class="why"><summary>AI가 이렇게 판단한 이유</summary>
         <div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th>시점</th><th>종류</th><th>최고</th><th>근거</th></tr></thead><tbody>
-        ${r.ev.slice(0, 20).map((e) => `<tr><td class="n">${e.t.toFixed(1)}초</td><td><span class="sw" style="background:var(--t-${T[e.type].color});margin-right:6px"></span>${T[e.type].name}</td><td class="n">${e.peak.toFixed(1)} dB</td><td class="note">${e.why}${e.yHint ? ' · AI 인식 ' + T[e.yHint].name : ''}</td></tr>`).join('')}
+        ${r.ev.slice(0, 20).map((e) => `<tr><td class="n">${e.t.toFixed(1)}초</td><td>${T[e.type].name}</td><td class="n">${e.peak.toFixed(1)} dB</td><td class="note">${e.why}</td></tr>`).join('')}
         </tbody></table></div>
-        <p class="note" style="margin-top:6px">${ymTop ? '1단 AI(YAMNet)가 들은 소리: ' + ymTop + ' → 2단 층간소음 판별로 보정' : '1단 AI 모델 없이 2단 판별 규칙만으로 분석했습니다.'}</p></details>
-      <div class="next"><p><b>일지에 저장</b>하면 STEP 2 일지와 STEP 3 쪽지에 반영됩니다.</p><button class="primary" id="save" type="button">일지에 저장</button></div>`;
+        <p class="note" style="margin-top:6px">${r.ym ? '1단 AI(YAMNet)가 들은 소리: ' + [...new Set(r.ym.chunks.flatMap((c) => c.top))].slice(0, 5).join(', ') + ' → 2단 층간소음 판별로 보정' : '2단 판별 규칙만으로 분석했습니다.'}</p></details>
+      <p class="note">휴대폰 측정 참고값입니다. 법적 판정은 공인 측정으로 정해집니다.</p>
+      <div class="savebar"><button class="primary wide" id="save" type="button">일지에 저장</button></div>`;
     requestAnimationFrame(() => drawChart(r));
     $('#save').addEventListener('click', () => { addEntry(r); toast('일지에 저장했습니다'); go('journal'); });
   }
@@ -847,7 +883,8 @@ if (typeof module !== 'undefined') module.exports = KE;
     g.strokeStyle = css('--accent'); g.lineWidth = 1.6; g.beginPath();
     r.Lf.forEach((v, i) => { const x = xOf(i * r.hop), yy = yOf(v); i ? g.lineTo(x, yy) : g.moveTo(x, yy); }); g.stroke();
     const lim = KE.STD.impact[r.period].lmax; g.strokeStyle = css('--bad'); g.setLineDash([5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(padL, yOf(lim)); g.lineTo(padL + w, yOf(lim)); g.stroke(); g.setLineDash([]);
-    r.ev.forEach((e) => { const x = xOf(e.t + Math.min(e.span, 0.2) / 2), yy = yOf(e.peak) - 8; g.fillStyle = css('--surface'); g.beginPath(); g.arc(x, yy, 5.5, 0, Math.PI * 2); g.fill(); g.fillStyle = css('--t-' + T[e.type].color); g.beginPath(); g.arc(x, yy, 4, 0, Math.PI * 2); g.fill(); });
+    g.fillStyle = css('--bad'); g.textAlign = 'right'; g.font = '600 11px ' + css('--font'); g.fillText(`기준 ${lim}dB`, padL + w, yOf(lim) - 5); g.textAlign = 'left';
+    r.ev.forEach((e) => { const x = xOf(e.t + Math.min(e.span, 0.2) / 2), yy = yOf(e.peak) - 8; g.fillStyle = css('--t-' + T[e.type].color); g.beginPath(); g.arc(x, yy, 3, 0, Math.PI * 2); g.fill(); });
   }
   window.addEventListener('resize', () => { if (lastRes) drawChart(lastRes); });
 
