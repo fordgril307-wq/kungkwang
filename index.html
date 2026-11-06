@@ -769,6 +769,25 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .micmsg p{font-size:13px;color:var(--fg2);margin-top:3px;word-break:keep-all;line-height:1.5}
 .micmsg .mm-a{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .micmsg .btn{min-height:38px;font-size:13px;padding:0 14px}
+.aload{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:alIn .18s ease-out}
+.al-card{width:min(320px,100%);background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px 22px 22px;box-shadow:0 20px 50px -20px rgba(33,20,45,.35);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.al-wave{display:flex;align-items:center;gap:5px;height:56px}
+.al-wave i{display:block;width:6px;height:100%;border-radius:4px;background:linear-gradient(180deg,#7100EE,#6020A8);transform-origin:center;animation:alWave 1s ease-in-out infinite}
+.al-wave i:nth-child(1){animation-delay:-.9s}.al-wave i:nth-child(2){animation-delay:-.75s}.al-wave i:nth-child(3){animation-delay:-.6s}.al-wave i:nth-child(4){animation-delay:-.45s}.al-wave i:nth-child(5){animation-delay:-.3s}.al-wave i:nth-child(6){animation-delay:-.45s}.al-wave i:nth-child(7){animation-delay:-.6s}.al-wave i:nth-child(8){animation-delay:-.75s}.al-wave i:nth-child(9){animation-delay:-.9s}
+.al-t{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.al-s{list-style:none;display:flex;flex-direction:column;gap:7px;width:100%;padding:0;margin:0}
+.al-s li{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--fg3);transition:color .2s}
+.al-s li::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid var(--line2);flex:none;box-sizing:border-box;transition:all .2s}
+.al-s li.on{color:var(--fg);font-weight:700}
+.al-s li.on::before{border-color:var(--accent);border-top-color:transparent;animation:alSpin .7s linear infinite}
+.al-s li.done{color:var(--fg2)}
+.al-s li.done::before{background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/11px no-repeat;border-color:var(--accent)}
+.al-bar{width:100%;height:4px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.al-bar i{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#7100EE,#A15BE8)}
+@keyframes alWave{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@keyframes alSpin{to{transform:rotate(360deg)}}
+@keyframes alIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.al-wave i{animation:none;transform:scaleY(.6)}.al-s li.on::before{animation:none}}
 </style>
 
 <header class="bar gut">
@@ -911,6 +930,12 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
           <li><button type="button" class="fi" data-demo="mix:c"><span class="fic mixic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 15v-2M12 17v-6M15 15v-2"/></svg></span><span class="fn">예시_밤사이_4가지.wav</span><span class="fm num">23초 · 11/6(금) 00:10</span></button></li>
   </ul>
 </div>
+<div class="aload" id="aLoad" hidden role="status" aria-live="polite"><div class="al-card">
+  <div class="al-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <b class="al-t" id="alT">소리를 분석하고 있어요</b>
+  <ol class="al-s" id="alS"><li>소리 구간 나누기</li><li>AI가 소리 종류 구분</li><li>법정 기준과 비교</li></ol>
+  <div class="al-bar"><i id="alBar"></i></div>
+</div></div>
 <button type="button" class="totop" id="toTop" aria-label="맨 위로" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1220,9 +1245,9 @@ if (typeof module !== 'undefined') module.exports = KE;
   }
   async function fromFile(f) {
     if (!f) return;
-    try { toast('분석 중…'); const y = await decodeTo16k(await f.arrayBuffer());
+    try { const y = await decodeTo16k(await f.arrayBuffer());
       if (f.lastModified) { $('#when').value = localInput(new Date(f.lastModified - y.length / KE.SR * 1000)); $('#whenSrc').textContent = '파일 녹음 시각으로 입력됨'; }
-      run(y, f.name); go('result'); }
+      analyzeWithLoading(y, f.name); }
     catch (err) { toast('이 파일은 열 수 없습니다. m4a·mp3·wav로 올려 주세요'); }
   }
   $('#file').addEventListener('change', (e) => { closePick(); fromFile(e.target.files[0]); e.target.value = ''; });
@@ -1235,7 +1260,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     const k = b.dataset.demo; closePick(); const f = b.querySelector('.fn').textContent, when = b.querySelector('.fm').textContent.split('· ')[1];
     const [md, hm] = [when.split(' ')[0], when.split(' ')[1]], [mo, dd] = md.replace(/\(.*\)/, '').split('/').map(Number), [hh, mi] = hm.split(':').map(Number), d = new Date(); d.setMonth(mo - 1, dd); d.setHours(hh, mi, 0, 0); $('#when').value = localInput(d); $('#whenSrc').textContent = '예시 파일 녹음 시각';
     const MXD = { 'mix:a': [['run', 0], ['drag', 4.5], ['walk', 9.5]], 'mix:b': [['hammer', 0], ['walk', 1.2, -3]], 'mix:c': [['walk', 0], ['drag', 6], ['run', 12], ['walk', 18, -4]] }, sd = 7 + Math.floor(Math.random() * 50);
-    run(MXD[k] ? KE.mix(MXD[k], sd) : KE.synth(k, sd), f + ' (예시)'); go('result');
+    analyzeWithLoading(MXD[k] ? KE.mix(MXD[k], sd) : KE.synth(k, sd), f + ' (예시)');
   }));
   const PUB = 'https://fordgril307-wq.github.io/kungkwang/';
   function micFail(e) {
@@ -1262,10 +1287,26 @@ if (typeof module !== 'undefined') module.exports = KE;
     rec.ondataavailable = (e) => parts.push(e.data);
     rec.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); btn.classList.remove('live'); btn.innerHTML = label;
       $('#when').value = localInput(recStart); $('#whenSrc').textContent = '녹음 시작 시각으로 입력됨';
-      try { const y = await decodeTo16k(await new Blob(parts).arrayBuffer()); run(y, '마이크 녹음'); go('result'); } catch (e) { toast('녹음을 분석하지 못했습니다'); } };
+      try { const y = await decodeTo16k(await new Blob(parts).arrayBuffer()); analyzeWithLoading(y, '마이크 녹음', '녹음한 소리를 분석하고 있어요'); } catch (e) { toast('녹음을 분석하지 못했습니다'); } };
     const recStart = new Date(); rec.start(); btn.classList.add('live'); let s = 30; const tick = () => { btn.innerHTML = `<b>${s}초</b><small>듣는 중… 누르면 멈춤</small>`; }; tick(); btn.onclick = () => { clearInterval(iv); rec.stop(); btn.onclick = null; };
     const iv = setInterval(() => { s--; tick(); if (s <= 0) { clearInterval(iv); rec.stop(); btn.onclick = null; } }, 1000);
   });
+
+  /* ---------- 분석 로딩 ---------- */
+  function analyzeWithLoading(y, label, title) {
+    const L = $('#aLoad'), steps = $$('#alS li'), bar = $('#alBar'), T0 = performance.now(), MIN = 1700;
+    $('#alT').textContent = title || '소리를 분석하고 있어요';
+    steps.forEach((li) => li.className = ''); bar.style.transition = 'none'; bar.style.width = '0%';
+    L.hidden = false; document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => { bar.style.transition = `width ${MIN}ms cubic-bezier(.3,.6,.4,1)`; bar.style.width = '100%'; });
+    const at = [0, 550, 1100]; const tm = at.map((t, i) => setTimeout(() => { steps.forEach((li, j) => li.className = j < i ? 'done' : j === i ? 'on' : ''); }, t));
+    setTimeout(() => {
+      let ok = true; try { run(y, label); } catch (e) { ok = false; }
+      const wait = Math.max(0, MIN - (performance.now() - T0));
+      setTimeout(() => { tm.forEach(clearTimeout); steps.forEach((li) => li.className = 'done');
+        setTimeout(() => { L.hidden = true; document.body.style.overflow = ''; if (ok) go('result'); else toast('분석하지 못했습니다'); }, 220); }, wait);
+    }, 60);
+  }
 
   /* ---------- 분석 + 표시 ---------- */
   let lastRes = null;
