@@ -764,6 +764,11 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .fi{grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;row-gap:1px;column-gap:12px;padding:9px 14px}
 .fi .fic{grid-row:span 2}
 .fi .fm{grid-column:2}
+.micmsg{margin:4px auto 0;max-width:420px;text-align:left;background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:14px;padding:12px 14px}
+.micmsg b{font-size:14px;font-weight:800;color:var(--fg)}
+.micmsg p{font-size:13px;color:var(--fg2);margin-top:3px;word-break:keep-all;line-height:1.5}
+.micmsg .mm-a{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.micmsg .btn{min-height:38px;font-size:13px;padding:0 14px}
 </style>
 
 <header class="bar gut">
@@ -801,6 +806,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       <div class="stage" id="drop">
         <button class="rec" id="micBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><b>녹음 시작</b><small>30초 동안 들어요</small></button>
         <p class="sub">휴대폰을 바닥이나 식탁에 두고 눌러 주세요</p>
+        <div class="micmsg" id="micMsg" role="alert" hidden></div>
         <button class="link-btn" id="openPick" type="button" aria-haspopup="dialog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>또는 녹음 파일 올리기</button>
       </div>
       <button class="recent" id="recent" type="button" hidden></button>
@@ -1231,12 +1237,27 @@ if (typeof module !== 'undefined') module.exports = KE;
     const MXD = { 'mix:a': [['run', 0], ['drag', 4.5], ['walk', 9.5]], 'mix:b': [['hammer', 0], ['walk', 1.2, -3]], 'mix:c': [['walk', 0], ['drag', 6], ['run', 12], ['walk', 18, -4]] }, sd = 7 + Math.floor(Math.random() * 50);
     run(MXD[k] ? KE.mix(MXD[k], sd) : KE.synth(k, sd), f + ' (예시)'); go('result');
   }));
+  const PUB = 'https://fordgril307-wq.github.io/kungkwang/';
+  function micFail(e) {
+    const framed = (() => { try { return window.self !== window.top; } catch (x) { return true; } })(), n = e && e.name;
+    const noApi = !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia;
+    let t, d, link = false;
+    if (framed && n !== 'NotFoundError') { t = '이 미리보기 화면에서는 녹음이 막혀 있어요'; d = '보안상 다른 페이지 안에 띄운 화면은 마이크를 쓸 수 없어요. 앱 주소에서 열면 바로 녹음돼요.'; link = location.href.indexOf(PUB) !== 0; }
+    else if (noApi) { t = '이 브라우저는 녹음을 지원하지 않아요'; d = '크롬·사파리·삼성 인터넷 최신 버전에서 열어 주세요. 이미 녹음한 파일은 올릴 수 있어요.'; }
+    else if (n === 'NotAllowedError' || n === 'SecurityError') { t = '마이크 권한이 꺼져 있어요'; d = '주소창 왼쪽 자물쇠(사이트 설정) → 마이크 → 허용으로 바꾼 뒤 다시 눌러 주세요.'; }
+    else if (n === 'NotFoundError') { t = '마이크를 찾지 못했어요'; d = '마이크가 있는 기기(휴대폰)에서 열거나, 아래에서 녹음 파일을 올려 주세요.'; }
+    else if (n === 'NotReadableError') { t = '다른 앱이 마이크를 쓰고 있어요'; d = '통화·녹음 앱을 닫고 다시 눌러 주세요.'; }
+    else { t = '마이크를 켜지 못했어요'; d = '잠시 뒤 다시 눌러 주세요. 녹음 파일을 올려도 돼요.'; }
+    const m = $('#micMsg'); m.hidden = false;
+    m.innerHTML = `<b>${t}</b><p>${d}</p>${link ? `<div class="mm-a"><a class="btn primary" href="${PUB}" target="_blank" rel="noopener">앱 주소에서 녹음하기</a></div>` : ''}`;
+  }
   $('#micBtn').addEventListener('click', async () => {
     const btn = $('#micBtn'), label = btn.innerHTML;
     if (btn.classList.contains('live')) return;
     let stream;
     try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }); }
-    catch (e) { toast('이 화면에서는 마이크를 쓸 수 없어 파일 고르기를 엽니다'); openPick(); return; }
+    catch (e) { micFail(e); return; }
+    $('#micMsg').hidden = true;
     const rec = new MediaRecorder(stream), parts = [];
     rec.ondataavailable = (e) => parts.push(e.data);
     rec.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); btn.classList.remove('live'); btn.innerHTML = label;
