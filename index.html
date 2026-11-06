@@ -369,6 +369,9 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .rhead .sp{flex:1}
 @media (max-width:680px){.jrow{gap:6px}.jrow .jtabs button{padding:0 10px;font-size:12.5px;min-height:32px}.jrow h1{font-size:22px}}
 /* 대시보드 v3: 상자 최소화 */
+.jsub{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 10px}
+.jsub .txtbtn{padding:2px 4px;min-height:28px}
+.dash .dcols .dsec:first-child{padding-top:0}
 .dsum{display:flex;flex-direction:column;gap:14px;background:linear-gradient(140deg,var(--accent-soft),transparent 75%);border-radius:18px;padding:18px 18px 14px}
 .dsum .in-t{font-size:16px;line-height:1.6}
 .sts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -394,8 +397,8 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .utabs button{flex:none;background:none;border:0;border-radius:0;min-height:40px;padding:0 2px;font-size:14px;color:var(--fg2);border-bottom:2px solid transparent;margin-bottom:-1px}
 .utabs button[aria-selected="true"]{color:var(--fg);font-weight:700;border-bottom-color:var(--fg)}
 .dash .cp-body{min-height:0;padding-top:6px}
-@media (max-width:680px){.st{padding:0 8px}.st b{font-size:19px}.st span{font-size:11px}.dsum{padding:16px 14px 12px}.dsum .in-t{font-size:14.5px}}
-.dcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:start}
+@media (max-width:680px){.dsum{gap:10px}.dash{gap:10px}.dash .cp-body .cap{font-size:12px}.st{padding:0 8px}.st b{font-size:19px}.st span{font-size:11px}.dsum{padding:16px 14px 12px}.dsum .in-t{font-size:14.5px}}
+.dcols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
 .dash .cp-body svg{max-height:300px}
 @media (max-width:860px){.dcols{grid-template-columns:minmax(0,1fr);gap:14px}}
 /* 대시보드 v2 */
@@ -707,7 +710,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <div class="seg jtabs" role="tablist" aria-label="보기 방식"><button type="button" role="tab" data-jt="dash" aria-pressed="true">대시보드</button><button type="button" role="tab" data-jt="board" aria-pressed="false">게시판</button></div>
         <a class="btn primary next-top" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <p class="jsum num" id="jSum"></p>
+      <div class="jsub"><p class="jsum num" id="jSum"></p><button type="button" class="txtbtn" id="copyLog">상담용 일지 복사</button></div>
     </div>
     <div id="jDash" class="dash"></div>
     <div class="card board" id="jBoard" hidden>
@@ -1293,15 +1296,14 @@ if (typeof module !== 'undefined') module.exports = KE;
     return `<section class="dsum">
         <p class="in-t">${E.length ? `들린 소리의 <b>${npct}%</b>가 밤 10시 이후, 가장 잦은 시각은 <b>${ph}시</b>, 주로 <b>${topType}</b>였어요.` : '아직 기록이 없어요.'}</p>
         <div class="sts">${stat(E.length, '건', '기록')}${stat(total, '회', '들린 소리')}${stat(avgMax.toFixed(1), 'dB', '평균 최고')}${stat(over, '건', '기준 초과', over ? 'hot' : '')}</div>
-        ${E.length ? '<button type="button" class="txtbtn" id="copyLog">상담용 일지 복사 ›</button>' : ''}
       </section>
-      <div class="dcols"><section class="dsec">
-        <div class="dsec-h"><h3>최근 기록</h3><button type="button" class="txtbtn" id="toBoard">전체 보기 ›</button></div>
-        <div class="rlist">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span class="rl-t"><b>${T[e.type].name}</b><small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</small></span><span class="rl-s st-${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>
-      </section>
-      <section class="dsec">
+      <div class="dcols">      <section class="dsec">
         <div class="utabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dm="${k}" aria-selected="${dmenu === k}">${l}</button>`).join('')}</div>
         <div class="cp-body">${panel[dmenu]}</div>
+      </section>
+<section class="dsec">
+        <div class="dsec-h"><h3>최근 기록</h3><button type="button" class="txtbtn" id="toBoard">전체 보기 ›</button></div>
+        <div class="rlist">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span class="rl-t"><b>${T[e.type].name}</b><small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</small></span><span class="rl-s st-${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>
       </section></div>`;
   }
   function heatHTML(E) {
@@ -1347,7 +1349,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
     const total = E.reduce((s, e) => s + e.count, 0);
     $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
-    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#copyLog') && $('#copyLog').addEventListener('click', () => copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`));  $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E);   $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
     const All = [...E].reverse(), R = All.filter(matches);
     [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
@@ -1415,6 +1417,7 @@ ${lines.join('\n')}
 
 작성일 ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}. · 작성 도구: 쿵쾅(층간소음 AI 기록 서비스)`;
   }
+  $('#copyLog').addEventListener('click', () => { const E = entries(); if (!E.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`); });
   $('#copyAll').addEventListener('click', () => { const R = [...entries()].reverse().filter(matches).reverse(); if (!R.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(R), `기록 ${R.length}건을 상담용 일지로 복사했습니다`); });
 
   /* ---------- STEP 3: 알리는 방법 5가지 ---------- */
