@@ -262,6 +262,49 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .card-h .scale{margin-top:0}
 .cta-bar{display:none}
 .empty-j{padding:18px 4px;color:var(--fg2);font-size:13px}
+/* STEP 2 게시판 */
+.head .tools{margin-left:auto}
+.desc{color:var(--fg2);font-size:14.5px;margin-top:6px;line-height:1.55}
+.sec-t h2{font-size:17px;font-weight:700}
+#v-journal .card h2{font-size:17px}
+#v-journal .cap{font-size:13px}
+#v-journal .stats.mini .v{font-size:26px}
+#v-journal .stats.mini .k{font-size:13px}
+#v-journal .heat{font-size:12px}
+.board{padding:0;overflow:hidden}
+.board-h{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 12px}
+.bt{border-top:2px solid var(--fg)}
+.br{display:grid;grid-template-columns:44px 150px minmax(0,1fr) 70px 90px 96px;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px;width:100%;text-align:left;background:var(--surface);border-radius:0;border-left:0;border-right:0;border-top:0;min-height:52px;cursor:pointer}
+.br:hover{background:var(--sunk)}
+.br.th{font-size:12.5px;color:var(--fg2);font-weight:700;min-height:0;padding-block:9px;background:var(--sunk);cursor:default}
+.br .no{color:var(--fg2);font-variant-numeric:tabular-nums;text-align:center}
+.br .dt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.br .ttl{font-weight:700;display:flex;align-items:center;gap:8px;min-width:0}
+.br .ttl .sw{width:10px;height:10px;border-radius:3px}
+.br .n2{font-variant-numeric:tabular-nums;text-align:right}
+.br .nt{font-size:11px;color:var(--accent);font-weight:700}
+.new{font-size:10px;font-weight:900;color:#fff;background:var(--bad);border-radius:4px;padding:1px 5px;letter-spacing:.04em}
+.br .meta{display:none}
+.br .pill{justify-self:start}
+.heat .c{aspect-ratio:auto;height:20px}
+.bd{padding:10px 20px 14px 72px;background:var(--sunk);border-bottom:1px solid var(--line);font-size:13px;color:var(--fg2);display:flex;flex-wrap:wrap;gap:6px 18px}
+.bd b{color:var(--fg)}
+.pager{display:flex;justify-content:center;gap:4px;padding:12px}
+.pager button{min-height:34px;min-width:34px;padding:4px 10px;border-radius:8px;font-size:13px;border-color:transparent;background:transparent}
+.pager button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
+@media (max-width:680px){
+  .br.th{display:none}
+  .br{grid-template-columns:30px minmax(0,1fr) auto;grid-template-rows:auto auto;gap:2px 10px;padding:12px 16px}
+  .br .no{grid-row:span 2;align-self:start;padding-top:2px}
+  .br .dt,.br .n2{display:none}
+  .br .ttl{font-size:15px}
+  .br .pill{grid-row:span 2}
+  .br .meta{display:block;grid-column:2;font-size:12.5px;color:var(--fg2);font-variant-numeric:tabular-nums}
+  .bd{padding-left:56px}
+  .board-h{padding:16px 16px 10px}
+  #v-journal .stats.mini .v{font-size:20px}
+  #v-journal .stats.mini .k{font-size:11.5px}
+}
 /* STEP 3 선택지 */
 .rep{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:18px;align-items:start}
 .opts{display:flex;flex-direction:column;gap:8px}
@@ -437,7 +480,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
   <!-- STEP 2 -->
   <section class="view" id="v-journal" aria-labelledby="h1-journal" hidden>
     <div class="head">
-      <div><div class="eyebrow">STEP 2 · 소음 일지</div><h1 id="h1-journal">언제, 무엇이, 얼마나</h1></div>
+      <div><div class="eyebrow">STEP 2 · 소음 일지</div><h1 id="h1-journal">내 소음 기록</h1><p class="desc">분석해 저장한 기록이 여기 쌓여요.<br>관리사무소·이웃사이센터에 그대로 낼 수 있어요.</p></div>
       <div class="tools">
         <label class="tgl" for="exTgl"><input type="checkbox" id="exTgl" role="switch"><span class="tr" aria-hidden="true"></span>예시</label>
         <button class="icon-btn" id="copyLog" type="button" aria-label="상담용 일지 복사" title="상담용 일지 복사"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
@@ -446,15 +489,17 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       </div>
     </div>
     <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
+    <div class="sec-t"><h2>한눈에 보기</h2></div>
     <div class="stats mini" id="jStats"></div>
     <div class="card">
-      <div class="card-h"><h2>최근 7일 · 시간대별 소음</h2><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
+      <div class="card-h"><div><h2>언제 시끄러웠나</h2><p class="cap">최근 7일, 시간대별로 들린 횟수예요. 진할수록 많이 들렸어요.</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
       <div class="heat-wrap"><div class="heat" id="heat"></div></div>
-      <p class="cap" style="margin-top:8px">밑줄 칸은 야간(22~06시)</p>
+      <p class="cap" style="margin-top:8px">밑줄 칸 = 야간(22~06시)</p>
     </div>
-    <div class="card">
-      <h2>기록 목록</h2>
-      <div class="list" id="jList" style="margin-top:6px"></div>
+    <div class="card board">
+      <div class="board-h"><h2>기록 게시판</h2><span class="note num" id="bCount"></span></div>
+      <div class="bt" id="jList" role="list"></div>
+      <div class="pager" id="pager"></div>
     </div>
     <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </section>
@@ -914,7 +959,7 @@ if (typeof module !== 'undefined') module.exports = KE;
 
   /* ---------- 일지 ---------- */
   const KEY = 'kungkwang.v1';
-  let log = []; let isExample = false; let exMode = null;
+  let log = []; let isExample = false; let exMode = null; let page = 0, openRow = null;
   try { log = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem('kunglog.v1') || '[]'); } catch (e) { log = []; }
   function exampleLog() {
     const out = [], base = new Date(); base.setHours(0, 0, 0, 0);
@@ -953,10 +998,21 @@ if (typeof module !== 'undefined') module.exports = KE;
       grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; });
     });
     $('#heat').innerHTML = html;
-    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j">아직 저장한 기록이 없습니다. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요. 오른쪽 위 \'예시\'를 켜면 예시 일지를 볼 수 있습니다.</p>'; }
-    else $('#jList').innerHTML = [...E].reverse().slice(0, 14).map((e) => `<div class="li"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>
-      <div class="a">${T[e.type].name}${e.example ? ' <span class="tag-ex">예시</span>' : ''}</div><span class="pill ${e.over}">${stTxt[e.over]}</span>
-      <div class="b">${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · 최고 ${e.lmax}dB</div></div>`).join('');
+    $('#bCount').textContent = E.length ? `${isExample ? '예시 · ' : ''}전체 ${E.length}건 · 최신순` : '';
+    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j" style="padding:18px 20px">아직 저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.<br>오른쪽 위 \'예시\'를 켜면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
+    const R = [...E].reverse(), PER = 8, pages = Math.ceil(R.length / PER); if (page >= pages) page = pages - 1;
+    const latest = R[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
+    const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span></div>`;
+    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const idx = page * PER + k, no = R.length - idx, d = new Date(e.ts);
+      const det = e.counts ? Object.entries(e.counts).map(([t, c]) => `${T[t].name} <b>${c}회</b>`).join(' · ') : `${T[e.type].name} <b>${e.count}회</b>`;
+      return `<button type="button" class="br" role="listitem" aria-expanded="${openRow === e.ts}" data-ts="${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
+        <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
+        <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span>
+        <span class="meta">${fmt(d)}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</span></button>
+        ${openRow === e.ts ? `<div class="bd"><span>들린 소리 ${det}</span>${e.leq1 ? `<span>1분 평균 <b>${e.leq1}dB</b></span>` : ''}<span>최고 <b>${e.lmax}dB(A)</b></span><span>출처 <b>${e.src || '-'}</b></span></div>` : ''}`; }).join('');
+    $$('#jList .br[data-ts]').forEach((b) => b.addEventListener('click', () => { const t = +b.dataset.ts; openRow = openRow === t ? null : t; renderJournal(); }));
+    $('#pager').innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) => `<button type="button" data-pg="${i}" ${i === page ? 'aria-current="page"' : ''}>${i + 1}</button>`).join('') : '';
+    $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
   }
   function logText() {
     const E = entries(); if (!E.length) return '';
