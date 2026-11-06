@@ -307,7 +307,22 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 }
 /* STEP 3 선택지 */
 .rep{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:18px;align-items:start}
-.opts{display:flex;flex-direction:column;gap:8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:10px;width:100%}
+.opt{text-decoration:none;color:var(--fg)}
+.opt .go{grid-row:span 2;color:var(--fg3);font-size:20px;margin-left:4px}
+.opt:hover{border-color:var(--accent)}
+.optnav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.optnav::-webkit-scrollbar{display:none}
+.optnav a{flex:none;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--fg2);font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.optnav a b{font-size:11px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--sunk)}
+.optnav a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.optnav a[aria-current="page"] b{background:rgba(255,255,255,.25);color:inherit}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pn a{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-decoration:none;color:var(--fg);min-width:0}
+.pn a:hover{border-color:var(--accent)}
+.pn a small{font-size:11.5px;color:var(--fg2)}
+.pn a b{font-size:14px}
+.pn .nx{text-align:right;grid-column:2}
 .opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);min-height:0}
 .opt .k{grid-row:span 2;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;background:var(--sunk);color:var(--fg2)}
 .opt b{font-size:14.5px}
@@ -406,7 +421,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .rung b{font-size:14px}
 .rung p{font-size:12.5px;color:var(--fg2)}
 .rung .tel{font-weight:700;color:var(--fg);user-select:all}
-@media (max-width:860px){.grid2,.rep{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:680px){
   .bar{backdrop-filter:none;background:var(--surface)}
   .tabs{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-right,0px));z-index:25;justify-content:space-around}
@@ -511,9 +526,16 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <p class="cap">아래로 갈수록 공식 절차예요.<br>고르면 필요한 서류를 AI가 써 드려요.</p></div>
     </div>
     <div class="warn-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg><p><b>직접 찾아가지 마세요.</b> 문 두드리기·보복 소음은 갈등을 키우고 법적 책임이 생길 수 있어요. 위협을 느끼면 112.</p></div>
-    <div class="rep">
-      <div class="opts" id="opts" role="radiogroup" aria-label="알리는 방법"></div>
+    <nav class="opts" id="opts" aria-label="알리는 방법"></nav>
+  </section>
+
+  <!-- STEP 3 상세 -->
+  <section class="view" id="v-rdetail" aria-label="알리는 방법 상세" hidden>
+    <div class="res">
+      <div class="res-top"><a class="back" href="#report"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>알리는 방법</a><span class="eyebrow">STEP 3 · 알리기</span></div>
+      <nav class="optnav" id="optNav" aria-label="다른 방법 고르기"></nav>
       <div class="card stack panel" id="optPanel" aria-live="polite"></div>
+      <div class="pn" id="optPN"></div>
     </div>
   </section>
 
@@ -767,11 +789,13 @@ if (typeof module !== 'undefined') module.exports = KE;
   const stTxt = { over: '기준 초과', near: '기준 근접', ok: '기준 이내', na: '해당 없음' };
 
   /* ---------- 메뉴(해시) ---------- */
-  const VIEWS = ['analyze', 'result', 'journal', 'report'];
+  const VIEWS = ['analyze', 'result', 'journal', 'report', 'rdetail'];
   function show() {
-    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'analyze';
+    const h = location.hash.slice(1), rid = h.startsWith('r-') && OPTS.some((o) => o.id === h.slice(2)) ? h.slice(2) : null;
+    const v = rid ? 'rdetail' : VIEWS.includes(h) ? h : 'analyze';
+    if (rid) { cur = rid; renderNav(); renderPanel(); }
     VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
-    const tabv = v === 'result' ? 'analyze' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+    const tabv = v === 'result' ? 'analyze' : v === 'rdetail' ? 'report' : v; $$('.tab').forEach((a) => a.dataset.view === tabv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     $('footer').hidden = v === 'analyze' || v === 'result';
     if (v === 'journal') renderJournal();
     if (v === 'result' && lastRes) requestAnimationFrame(() => drawChart(lastRes));
@@ -1070,7 +1094,7 @@ ${lines.join('\n')}
   const chk = (id, label, on) => { if (F[id] === undefined) F[id] = on ? '1' : ''; return `<label><input type="checkbox" data-c="${id}" ${F[id] ? 'checked' : ''}>${label}</label>`; };
   const APT = () => field('apt', '아파트(단지)', '예: ○○아파트'), ME = () => field('me', '우리 집 동·호', '예: 101동 803호'), SRC = () => field('src', '소리가 나는 것으로 보이는 세대', '예: 101동 903호(윗집 추정)');
   const OPTS = [
-    { id: 'neighbor', t: '이웃에게 연락', s: '가벼운 첫 대화 · 글로 정중하게', lv: '자율',
+    { id: 'neighbor', sh: '이웃 연락', t: '이웃에게 연락', s: '가벼운 첫 대화 · 글로 정중하게', lv: '자율',
       law: '법적 절차 아님 · 첫 단계로 권장',
       guide: ['<b>말 대신 글</b>로, 시간과 소리만 정중하게 전하세요.', '<b>관리사무소를 통해 전달</b>하면 보낸 사람이 드러나지 않아요.', '그대로라면 다음 단계로 넘어가세요.'],
       safety: ['화가 난 상태에서 보내지 않기', '밤늦게 찾아가거나 문 두드리지 않기', '상대를 탓하거나 단정하는 말 쓰지 않기'],
@@ -1086,7 +1110,7 @@ ${lines.join('\n')}
       doc: (s, a) => a || ((F.tone || 'soft') === 'soft'
         ? `${v('to', '윗집 이웃분께')}\n\n안녕하세요, 아래층에 사는 이웃입니다.\n요즘 ${s.topH.slice(-2).map((h) => h + '시').join('·')}쯤 ${s.topN.join('나 ')} 같은 소리가 자주 들려 조심스럽게 말씀드립니다.\n일부러 그러신 게 아니라는 건 잘 알고 있어요. 그 시간대에만이라도 실내화나 매트를 써 주시면 정말 감사하겠습니다.\n저희 집 소리가 불편하신 적이 있으면 편하게 알려 주세요.\n\n아래층 드림`
         : `${v('to', '윗집 이웃분께')}\n\n안녕하세요, 아래층 이웃입니다. 지난번에 이어 한 번 더 말씀드립니다.\n최근 ${s.days}일 동안 기록해 보니 ${s.topN.join(', ')} 소리가 주로 ${s.topH.map((h) => h + '시').join(', ')} 무렵 들렸고, ${s.nightPct}%가 밤 10시 이후였습니다.\n밤 10시 이후에는 뛰거나 가구를 옮기는 일을 줄여 주시고, 매트를 깔아 주시면 큰 도움이 될 것 같습니다.\n서로 편하게 지낼 방법을 같이 찾고 싶습니다.\n\n아래층 드림`) + (F.via && !F.via.startsWith('관리') ? '' : '\n\n※ 관리사무소에 전달을 부탁할 때: "아래층에서 보낸다는 것만 알리고 동·호수는 밝히지 말아 주세요"라고 함께 요청하세요.') },
-    { id: 'office', t: '관리사무소 사실 확인·중단 권고', s: '관리사무소가 대신 확인하고 권고', lv: '법정 절차',
+    { id: 'office', sh: '관리사무소', t: '관리사무소 사실 확인·중단 권고', s: '관리사무소가 대신 확인하고 권고', lv: '법정 절차',
       law: '공동주택관리법 제20조 제2항·제3항',
       guide: ['관리사무소에 알리고 <b>중단 권고</b>를 요청할 수 있어요.', '관리사무소는 <b>사실 확인</b>을 하고, 소음 세대는 <b>협조할 의무</b>가 있어요.', 'STEP 2 상담용 일지를 함께 내면 좋아요.'],
       form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}</div>
@@ -1094,19 +1118,19 @@ ${lines.join('\n')}
       btn: 'AI로 알림서 만들기',
       doc: (s, a) => { const rq = []; if (F.o1) rq.push('공동주택관리법 제20조 제2항에 따라 사실관계를 확인해 주시고, 소음 발생 세대에 중단·차단 조치를 권고해 주시기 바랍니다.'); if (F.o2) rq.push('신청인의 동·호수와 이름은 상대 세대에 알리지 말아 주시기 바랍니다. 이웃 간 직접 대면은 원하지 않습니다.'); if (F.o3) rq.push('권고 뒤에도 소음이 계속되면 층간소음관리위원회의 조정을 신청하고자 합니다.');
         return `층간소음 피해 사실 알림 및 조치 요청서${ex(s)}\n\n받는 곳  ${v('apt', '○○아파트')} 관리사무소 귀중\n신청 세대  ${v('me', '○○동 ○○○호')}\n소음 발생 추정 세대  ${v('src', '○○동 ○○○호(추정)')}\n작성일  ${today()}\n\n1. 피해 상황\n${a || situation(s)}\n\n2. 요청 사항\n${rq.map((r, i) => `  ${i + 1}) ${r}`).join('\n') || '  (요청 사항을 골라 주세요)'}\n\n3. 첨부\n  · 층간소음 피해 기록 일지 1부\n\n위와 같이 층간소음 피해 사실을 알리고 조치를 요청합니다.\n\n신청인  ${v('me', '○○동 ○○○호')}  (서명)`; } },
-    { id: 'committee', t: '층간소음관리위원회 조정', s: '단지 안 중재 · 권고 뒤에도 계속될 때', lv: '단지 조정',
+    { id: 'committee', sh: '위원회 조정', t: '층간소음관리위원회 조정', s: '단지 안 중재 · 권고 뒤에도 계속될 때', lv: '단지 조정',
       law: '공동주택관리법 제20조 제4항·제7항, 시행령 제21조의2',
       guide: ['권고 뒤에도 계속되면 <b>단지 위원회</b>에 조정을 신청해요.', '<b>700세대 이상</b> 단지는 위원회가 의무예요. 작은 단지는 관리사무소에 물어보세요.', '위원회가 양쪽 이야기를 듣고 중재해요.'],
       form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}${field('rec', '관리사무소에 알린 날', '', 'date')}${field('after', '권고 뒤 달라진 점', '예: 권고 뒤 1주일은 줄었다가 다시 밤 11시 무렵 뛰는 소리가 이어짐', 'textarea')}</div>`,
       btn: 'AI로 조정 신청서 만들기',
       doc: (s, a) => `층간소음 조정 신청서${ex(s)}\n\n받는 곳  ${v('apt', '○○아파트')} 층간소음관리위원회 귀중\n신청 세대  ${v('me', '○○동 ○○○호')}\n상대 세대(추정)  ${v('src', '○○동 ○○○호')}\n작성일  ${today()}\n\n1. 신청 취지\n  공동주택관리법 제20조 제4항에 따라 층간소음 분쟁의 조정을 신청합니다.\n\n2. 지금까지의 경과\n  · ${F.rec ? F.rec.replace(/-/g, '. ') + '.' : '○○○○. ○. ○.'} 관리사무소에 층간소음 피해 사실을 알리고 중단 권고를 요청함\n  · 권고 뒤 상황: ${v('after', '소음이 계속됨')}\n\n3. 피해 상황\n${a || situation(s)}\n\n4. 바라는 조정 내용\n  · 야간(22시~06시) 뛰거나 가구를 옮기는 행위 자제\n  · 소음 저감 매트 설치 등 생활 소음 줄이기\n  · 양측이 지킬 생활 수칙 마련\n\n5. 첨부\n  · 층간소음 피해 기록 일지 1부\n  · 관리사무소 알림서 사본 1부\n\n신청인  ${v('me', '○○동 ○○○호')}  (서명)` },
-    { id: 'center', t: '층간소음 이웃사이센터 상담·측정', s: '전문 상담 · 공인 장비 측정', lv: '전문기관',
+    { id: 'center', sh: '이웃사이센터', t: '층간소음 이웃사이센터 상담·측정', s: '전문 상담 · 공인 장비 측정', lv: '전문기관',
       law: '한국환경공단 층간소음 이웃사이센터',
       guide: ['전화 <b>1661-2642</b> · 누리집 <b>floor.noiseinfo.or.kr</b>', '<b>전화 상담 → 방문 상담 → 소음 측정</b> 순서예요.', '측정 일정을 2회 이상 바꾸면 지원이 어려울 수 있어요.'],
       form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${field('tried', '지금까지 해 본 일', '예: 관리사무소 알림(11/2), 위원회 없음', 'textarea')}</div>`,
       btn: 'AI로 전화 상담 요약 만들기',
       doc: (s, a) => `이웃사이센터 전화 상담 요약 (읽으면서 설명하세요)${ex(s)}\n\n· 거주지: ${v('apt', '○○아파트')} ${v('me', '○○동 ○○○호')}\n· 피해 기간: ${s.from} ~ ${s.to} (${s.days}일, ${s.E.length}건 기록)\n· 주된 소리: ${s.topT.join(', ')}\n· 주로 들리는 시간: ${s.topH.map((h) => h + '시').join(', ')} 무렵 (야간 비중 ${s.nightPct}%)\n· 휴대폰 측정 참고값: 최고소음도 기준 초과 ${s.over}건, 근접 ${s.near}건\n· 지금까지 해 본 일: ${v('tried', '없음')}\n\n상황 설명\n${a || situation(s)}\n\n요청\n  · 방문 상담과 공인 장비로 소음 측정을 받고 싶습니다.\n  · 측정 가능한 시간대: 평일 ${s.topH.map((h) => h + '시').join(', ')} 무렵\n\n상담 전 준비: 층간소음 피해 기록 일지, 관리사무소 알림서 사본(있으면)` },
-    { id: 'dispute', t: '분쟁조정 신청', s: '앞 단계로 해결되지 않을 때 · 공식 조정', lv: '법적 조정',
+    { id: 'dispute', sh: '분쟁조정', t: '분쟁조정 신청', s: '앞 단계로 해결되지 않을 때 · 공식 조정', lv: '법적 조정',
       law: '공동주택관리법 제20조 제11항',
       guide: ['<b>공동주택관리 분쟁조정위원회</b> 또는 <b>환경분쟁조정위원회</b>에 신청해요.', '앞 단계 기록(알림서·권고·위원회 결과)을 함께 내세요.', '최근 3년 중앙 조정 성립률은 8.8%예요. 기록이 꼼꼼할수록 유리해요.'],
       form: () => `<div class="fields" style="margin-top:0">${APT()}${ME()}${SRC()}</div>
@@ -1117,8 +1141,13 @@ ${lines.join('\n')}
   ];
   let cur = 'office';
   function renderOpts() {
-    $('#opts').innerHTML = OPTS.map((o, i) => `<button type="button" class="opt" role="radio" aria-checked="${o.id === cur}" data-opt="${o.id}"><span class="k">${i + 1}</span><b>${o.t}</b><span class="lv">${o.lv}</span><small>${o.s}</small></button>`).join('');
-    $$('[data-opt]').forEach((b) => b.addEventListener('click', () => { cur = b.dataset.opt; renderOpts(); renderPanel(); if (matchMedia('(max-width:860px)').matches) $('#optPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+    $('#opts').innerHTML = OPTS.map((o, i) => `<a class="opt" href="#r-${o.id}"><span class="k">${i + 1}</span><b>${o.t}</b><span class="lv">${o.lv}</span><small>${o.s}</small></a>`).join('');
+  }
+  function renderNav() {
+    const i = OPTS.findIndex((o) => o.id === cur), pv = OPTS[i - 1], nx = OPTS[i + 1];
+    $('#optNav').innerHTML = OPTS.map((o, k) => `<a href="#r-${o.id}" ${o.id === cur ? 'aria-current="page"' : ''}><b>${k + 1}</b>${o.sh}</a>`).join('');
+    $('#optPN').innerHTML = (pv ? `<a href="#r-${pv.id}"><small>‹ 이전 단계</small><b>${pv.t}</b></a>` : '') + (nx ? `<a class="nx" href="#r-${nx.id}"><small>다음 단계 ›</small><b>${nx.t}</b></a>` : '');
+    const a = $('#optNav [aria-current]'); a && a.scrollIntoView({ block: 'nearest', inline: 'center' });
   }
   function renderPanel() {
     const o = OPTS.find((x) => x.id === cur), P = $('#optPanel');
@@ -1150,7 +1179,7 @@ ${lines.join('\n')}
       finally { btn.disabled = false; btn.textContent = o.btn; }
     });
   }
-  renderOpts(); renderPanel();
+  renderOpts();
 
   show();
   // 첫 화면: 시연용 뛰는 소리 결과를 바로 보여 줌
