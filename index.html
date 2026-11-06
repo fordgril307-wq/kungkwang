@@ -353,6 +353,15 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .sd-no{min-height:38px;padding:0 12px;background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
 .cta-bar.off{display:none!important}
 @media (max-width:680px){.seldock{bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateZ(0)}}
+/* STEP 2 머리 v3 */
+.jrow .jtabs{max-width:none;flex:none;padding:3px}
+.jrow .jtabs{display:inline-flex;width:auto}.jrow .jtabs button{flex:none;white-space:nowrap;overflow-wrap:normal;min-height:34px;padding:0 14px;font-size:13px}
+.txtbtn{min-height:34px;padding:4px 10px;font-size:13px;font-weight:700;color:var(--accent);background:transparent;border:1px solid transparent;border-radius:8px}
+.txtbtn:hover{background:var(--accent-soft)}
+.txtbtn.strong{background:var(--surface);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.in-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rhead .sp{flex:1}
+@media (max-width:680px){.jrow{gap:6px}.jrow .jtabs button{padding:0 10px;font-size:12.5px;min-height:32px}.jrow h1{font-size:22px}}
 /* 대시보드 v2 */
 .dash{gap:12px}
 .insight{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;background:linear-gradient(135deg,var(--accent-soft),var(--surface));border:1px solid var(--line);border-radius:16px;padding:16px 18px}
@@ -657,16 +666,13 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       <div class="eyebrow">STEP 2 · 소음 일지</div>
       <div class="jrow">
         <h1 id="h1-journal">내 소음 기록</h1>
-        <button class="mini" id="exBtn" type="button" aria-pressed="false">예시</button>
+        <button class="mini" id="exBtn" type="button" aria-pressed="false" title="예시 일지 보기/끄기">예시</button>
         <span class="sp"></span>
-        <button class="mini ic" id="copyLog" type="button" aria-label="상담용 일지 복사" title="상담용 일지 복사"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
-        <button class="mini ic" id="clearLog" type="button" aria-label="내 기록 지우기" title="내 기록 지우기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+        <div class="seg jtabs" role="tablist" aria-label="보기 방식"><button type="button" role="tab" data-jt="dash" aria-pressed="true">대시보드</button><button type="button" role="tab" data-jt="board" aria-pressed="false">게시판</button></div>
         <a class="btn primary next-top" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
       <p class="jsum num" id="jSum"></p>
     </div>
-    <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
-    <div class="seg jtabs" role="tablist"><button type="button" role="tab" data-jt="dash" aria-pressed="true">대시보드</button><button type="button" role="tab" data-jt="board" aria-pressed="false">기록 게시판</button></div>
     <div id="jDash" class="dash"></div>
     <div class="card board" id="jBoard" hidden>
       <form class="bsearch" id="sForm" role="search">
@@ -683,7 +689,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
         <div class="adv-row"><span class="adv-k">최고 소음</span><div class="adv-v"><input type="number" id="minDb" min="0" max="120" step="1" placeholder="예: 55" aria-label="최고 소음 최소값"><span>dB 이상</span></div></div>
         <div class="adv-row end"><button type="button" id="advReset">조건 초기화</button><button type="button" class="primary" id="advApply">이 조건으로 검색</button></div>
       </div>
-      <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span></div>
+      <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span><span class="sp"></span><button type="button" class="txtbtn" id="copyAll">목록 전체 일지 복사</button></div>
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
     </div>
@@ -1244,7 +1250,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     if (!panel[dmenu]) dmenu = 'heat';
     return `<div class="insight">
         <p class="in-t">${E.length ? `들린 소리의 <b>${npct}%</b>가 밤 10시 이후였고,<br>가장 잦은 시각은 <b>${ph}시</b>, 주로 <b>${topType}</b>였어요.` : '아직 기록이 없어요.'}</p>
-        ${over ? `<span class="pill over">기준 초과 ${over}건</span>` : ''}
+        <div class="in-act">${over ? `<span class="pill over">기준 초과 ${over}건</span>` : ''}${E.length ? '<button type="button" class="txtbtn strong" id="copyLog">상담용 일지 복사</button>' : ''}</div>
       </div>
       <div class="kpis">${kpi(E.length, '건', '기록', '')}${kpi(total, '회', '들린 소리', '')}${kpi(avgMax.toFixed(1), 'dB', '평균 최고', '')}${kpi(over + near, '건', '초과·근접', '', over ? 'hot' : '')}</div>
       <section class="chartpane">
@@ -1299,7 +1305,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
     const total = E.reduce((s, e) => s + e.count, 0);
     $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
-    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); const hm = $('#heat'); if (hm) hm.innerHTML = heatHTML(E); $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#copyLog') && $('#copyLog').addEventListener('click', () => copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`)); const hm = $('#heat'); if (hm) hm.innerHTML = heatHTML(E); $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
     const All = [...E].reverse(), R = All.filter(matches);
     [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
@@ -1367,11 +1373,7 @@ ${lines.join('\n')}
 
 작성일 ${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}. · 작성 도구: 쿵쾅(층간소음 AI 기록 서비스)`;
   }
-  $('#copyLog').addEventListener('click', () => { const t = logText(); if (!t) { toast('복사할 기록이 없습니다'); return; } copy(t, '상담용 일지를 복사했습니다'); });
-  $('#exBtn').addEventListener('click', () => { exMode = !isExample; page = 0; renderJournal(); toast(exMode ? '예시 일지를 보여 줍니다' : '내 기록을 보여 줍니다'); });
-  $('#clearLog').addEventListener('click', () => { if (!log.length) { toast('지울 내 기록이 없습니다'); return; } $('#clearConfirm').hidden = false; });
-  $('#clearNo').addEventListener('click', () => { $('#clearConfirm').hidden = true; });
-  $('#clearYes').addEventListener('click', () => { log = []; try { localStorage.removeItem(KEY); localStorage.removeItem('kunglog.v1'); } catch (e) {} $('#clearConfirm').hidden = true; exMode = null; renderJournal(); toast('기록을 지웠습니다'); });
+  $('#copyAll').addEventListener('click', () => { const R = [...entries()].reverse().filter(matches).reverse(); if (!R.length) { toast('복사할 기록이 없습니다'); return; } copy(logText(R), `기록 ${R.length}건을 상담용 일지로 복사했습니다`); });
 
   /* ---------- STEP 3: 알리는 방법 5가지 ---------- */
   const getSample = async () => { try { return window.claude?.use ? await window.claude.use('sample') : null; } catch (e) { return null; } };
