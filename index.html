@@ -1,0 +1,845 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="층간소음 녹음을 AI로 분류해 법정 기준과 비교하고, 소음 일지와 이웃 쪽지를 만드는 서비스"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Crect width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%236020A8%22/%3E%3Cpath d=%22M3.5 13.5h2.2l2-4.5 3 9 2.6-7 2.2 4.6 1.7-2.1H20.5%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E"><style>html{color-scheme:light}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style></head><body><title>쿵쾅</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* 레이아웃: 상단 앱바 + STEP 3단 메뉴(휴대폰은 하단 탭바), 화면마다 한 가지 일. 강조색은 주최(엘리스) 보라 */
+:root{
+  --bg:#F7F4FA; --surface:#FFFFFF; --sunk:#F1EBF7; --line:#E6DCEF; --line2:#D5C6E3;
+  --fg:#21142D; --fg2:#6C6373; --fg3:#9A91A1;
+  --accent:#6020A8; --accent2:#7100EE; --accent-ink:#FFFFFF; --accent-soft:#F3E9FD; --accent-deep:#3E1270;
+  --ok:#15803D; --ok-soft:#E5F5EA; --warn:#B45309; --warn-soft:#FCF0DC; --bad:#C0262D; --bad-soft:#FBE7E8;
+  --t-walk:#6020A8; --t-run:#A15BE8; --t-hammer:#C2410C; --t-drag:#0F766E; --t-door:#A16207;
+  --t-music:#2563EB; --t-speech:#64748B; --t-appl:#0E7490; --t-other:#A39BAA;
+  --paper:#FFFDF8; --paper-line:#EFE6D8;
+  --shadow:0 1px 2px rgba(33,20,45,.06),0 8px 24px -12px rgba(62,18,112,.18);
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --r:16px; --r-s:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#110D16; --surface:#1B1522; --sunk:#241D2D; --line:#332A3E; --line2:#46395A;
+  --fg:#EFE9F4; --fg2:#B3A9BC; --fg3:#7F7589;
+  --accent:#B48CF0; --accent2:#C9A6FF; --accent-ink:#1A0F28; --accent-soft:#2A1F3D; --accent-deep:#E4D3FF;
+  --ok:#4ADE80; --ok-soft:#13301F; --warn:#FBBF24; --warn-soft:#33270F; --bad:#F87171; --bad-soft:#3A1717;
+  --t-walk:#B48CF0; --t-run:#DDBEFF; --t-hammer:#FB923C; --t-drag:#2DD4BF; --t-door:#FACC15;
+  --t-music:#60A5FA; --t-speech:#94A3B8; --t-appl:#22D3EE; --t-other:#6B6275;
+  --paper:#221B29; --paper-line:#30273A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#110D16; --surface:#1B1522; --sunk:#241D2D; --line:#332A3E; --line2:#46395A;
+  --fg:#EFE9F4; --fg2:#B3A9BC; --fg3:#7F7589;
+  --accent:#B48CF0; --accent2:#C9A6FF; --accent-ink:#1A0F28; --accent-soft:#2A1F3D; --accent-deep:#E4D3FF;
+  --ok:#4ADE80; --ok-soft:#13301F; --warn:#FBBF24; --warn-soft:#33270F; --bad:#F87171; --bad-soft:#3A1717;
+  --t-walk:#B48CF0; --t-run:#DDBEFF; --t-hammer:#FB923C; --t-drag:#2DD4BF; --t-door:#FACC15;
+  --t-music:#60A5FA; --t-speech:#94A3B8; --t-appl:#22D3EE; --t-other:#6B6275;
+  --paper:#221B29; --paper-line:#30273A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:80px}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.inner{max-width:1040px;margin:0 auto}
+
+/* 앱바 */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.bar .inner{display:flex;align-items:center;gap:16px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none}
+.mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(140deg,var(--accent2),var(--accent) 60%,var(--accent-deep));display:grid;place-items:center;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--accent) 60%,transparent)}
+.mark svg{width:24px;height:24px}
+.brand b{font-size:21px;font-weight:900;letter-spacing:-.03em}
+.brand small{display:block;font-size:11px;color:var(--fg2);font-weight:500;margin-top:-3px}
+.tabs{display:flex;gap:4px;background:var(--sunk);border-radius:12px;padding:4px;margin-left:auto}
+.tab{display:flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--fg2);font:inherit;font-size:14px;font-weight:500;padding:7px 14px;border-radius:9px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.tab .n{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:var(--line);color:var(--fg2)}
+.tab svg{display:none;width:22px;height:22px}
+.tab[aria-current="page"]{background:var(--surface);color:var(--fg);font-weight:700;box-shadow:0 1px 3px rgba(33,20,45,.12)}
+.tab[aria-current="page"] .n{background:var(--accent);color:var(--accent-ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* 화면 */
+main{padding-block:24px 56px}
+.view{display:flex;flex-direction:column;gap:18px}
+.hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:4px 6px}
+.hero .eyebrow{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.hero h1{font-size:30px;font-weight:900;letter-spacing:-.03em;margin-top:2px}
+.hero p{color:var(--fg2);max-width:60ch;margin-top:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:16px;font-weight:700}
+.card .cap{font-size:13px;color:var(--fg2);margin-top:2px}
+.grid2{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lbl{font-size:12px;color:var(--fg2);font-weight:500;letter-spacing:.02em}
+
+button,.btn{font:inherit;font-size:14px;font-weight:500;border-radius:var(--r-s);border:1px solid var(--line2);background:var(--surface);color:var(--fg);padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;text-decoration:none;transition:border-color .15s,background .15s,transform .05s}
+button:hover,.btn:hover{border-color:var(--accent)}
+button:active{transform:translateY(1px)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.drop:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent)!important;color:var(--accent-ink)!important;border-color:var(--accent)!important;font-weight:700!important}
+.primary:hover{filter:brightness(1.08)}
+button[disabled]{opacity:.55;cursor:not-allowed}
+.wide{width:100%}
+
+/* 입력 */
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:1.5px dashed var(--line2);border-radius:14px;padding:22px 14px;background:var(--sunk);cursor:pointer;transition:border-color .15s,background .15s}
+.drop:hover,.drop.drag{border-color:var(--accent);background:var(--accent-soft)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.drop .ic{width:44px;height:44px;border-radius:12px;background:var(--surface);display:grid;place-items:center;border:1px solid var(--line)}
+.drop b{font-size:15px}
+.drop span{font-size:12px;color:var(--fg2)}
+.demos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.demo{justify-content:flex-start;gap:10px;padding:8px 10px;min-height:46px;background:var(--surface)}
+.demo .sw{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900}
+.demo[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+details.set{border-top:1px solid var(--line);padding-top:12px}
+details.set summary{cursor:pointer;font-size:13px;color:var(--fg2);font-weight:500;list-style:none;display:flex;justify-content:space-between}
+details.set summary::-webkit-details-marker{display:none}
+details.set summary::after{content:"＋";color:var(--fg3)}
+details.set[open] summary::after{content:"－"}
+.fields{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.fields label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--fg2);min-width:0}
+.fields input,.fields select{font:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;width:100%}
+.fields input[type=range]{padding:0;border:0;background:transparent;accent-color:var(--accent)}
+.status{font-size:12.5px;color:var(--fg2);display:flex;align-items:flex-start;gap:8px;background:var(--sunk);border-radius:var(--r-s);padding:9px 12px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--fg3);flex:none;margin-top:6px}
+.dot.on{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)} .dot.busy{background:var(--warn)}
+
+/* 결과 */
+.verdict{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:start}
+.verdict .k{font-size:12px;color:var(--fg2);font-weight:500}
+.verdict .main{font-size:32px;font-weight:900;letter-spacing:-.03em;line-height:1.15;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ai-tag{font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:3px 8px;letter-spacing:.02em}
+.verdict .meta{grid-column:1/-1;color:var(--fg2);font-size:13px}
+.seal{border-radius:14px;padding:10px 14px;text-align:center;min-width:104px}
+.seal b{display:block;font-size:17px;font-weight:900}
+.seal span{font-size:11px}
+.seal.over{background:var(--bad-soft);color:var(--bad)} .seal.near{background:var(--warn-soft);color:var(--warn)} .seal.ok{background:var(--ok-soft);color:var(--ok)} .seal.na{background:var(--sunk);color:var(--fg2)}
+.types{display:flex;flex-wrap:wrap;gap:8px}
+.tp{display:flex;align-items:center;gap:8px;background:var(--sunk);border-radius:999px;padding:5px 12px 5px 6px;font-size:13px}
+.sw{width:12px;height:12px;border-radius:4px;flex:none;display:inline-block}
+.tp .sw{width:20px;height:20px;border-radius:50%}
+.tp b{font-variant-numeric:tabular-nums}
+.tp .note{font-size:11.5px}
+.chart{background:var(--sunk);border-radius:12px;padding:10px 8px 6px}
+canvas{display:block;width:100%;height:210px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--fg2);padding:4px 6px 0}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px dashed var(--bad);vertical-align:middle;margin-right:5px}
+.checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.chk{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.chk .t{font-size:12px;color:var(--fg2);font-weight:500}
+.chk .v{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.chk .v small{font-size:12px;font-weight:500;color:var(--fg2);margin-left:3px}
+.gauge{position:relative;height:6px;border-radius:999px;background:var(--sunk);overflow:visible}
+.gauge .f{position:absolute;inset:0 auto 0 0;border-radius:999px}
+.gauge .m{position:absolute;top:-4px;width:2px;height:14px;background:var(--fg);border-radius:1px}
+.chk .foot{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11.5px;color:var(--fg2)}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.pill.over{color:var(--bad);background:var(--bad-soft)} .pill.near{color:var(--warn);background:var(--warn-soft)}
+.pill.ok{color:var(--ok);background:var(--ok-soft)} .pill.na{color:var(--fg2);background:var(--sunk)}
+.note{font-size:12px;color:var(--fg2)}
+details.why summary{cursor:pointer;font-size:13px;color:var(--fg2);font-weight:500}
+.tbl-wrap{overflow-x:auto;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:460px}
+th{font-weight:500;color:var(--fg2);text-align:left;font-size:12px;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.next{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;background:var(--accent-soft);border-radius:14px;padding:12px 14px}
+.next p{font-size:13px;color:var(--fg2)}
+.next p b{color:var(--fg)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;color:var(--fg2);padding:40px 16px}
+
+/* 일지 */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.stat .v{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1.2}
+.stat .v small{font-size:14px;font-weight:700;margin-left:2px}
+.stat .k{font-size:12px;color:var(--fg2)}
+.stat.hot .v{color:var(--bad)}
+.heat-wrap{overflow-x:auto;margin-top:12px}
+.heat{display:grid;grid-template-columns:62px repeat(24,minmax(14px,1fr));gap:3px;min-width:460px;font-size:11px;color:var(--fg2)}
+.heat .c{aspect-ratio:1;border-radius:4px;background:var(--sunk);max-width:100%}
+.heat .night{box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--accent) 22%,transparent)}
+.heat .hl{text-align:center;font-variant-numeric:tabular-nums}
+.heat .dl{display:flex;align-items:center;font-variant-numeric:tabular-nums}
+.scale{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--fg2);margin-top:10px}
+.scale i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .sw{width:34px;height:34px;border-radius:10px;grid-row:span 2}
+.li .a{font-weight:700;font-size:14px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.li .b{font-size:12px;color:var(--fg2);font-variant-numeric:tabular-nums}
+.li .pill{grid-row:span 2}
+.tag-ex{font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:5px;padding:1px 6px;font-weight:700}
+.callout{font-size:13px;color:var(--fg2);background:var(--warn-soft);border-radius:12px;padding:10px 14px}
+.callout b{color:var(--fg)}
+
+/* 쪽지 */
+.paper{position:relative;background:var(--paper);border:1px solid var(--paper-line);border-radius:6px 6px 14px 14px;padding:22px 22px 20px;box-shadow:var(--shadow);
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--paper-line) 31px,var(--paper-line) 32px);background-position:0 16px}
+.paper::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-2deg);width:92px;height:20px;background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:3px}
+.paper .out{white-space:pre-wrap;font-size:15px;line-height:32px;min-height:220px;outline:none}
+.paper .out:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:4px}
+.help{display:flex;flex-direction:column;gap:10px}
+.help ol{margin:0;padding-left:18px;font-size:13.5px;color:var(--fg2);display:flex;flex-direction:column;gap:4px}
+.help ol b{color:var(--fg)}
+.contact{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;background:var(--sunk);border-radius:10px;padding:10px 12px}
+.contact dt{color:var(--fg2)} .contact dd{margin:0;font-weight:700;user-select:all;font-variant-numeric:tabular-nums;word-break:break-all}
+.seg{display:flex;background:var(--sunk);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;min-height:36px;border:0;background:transparent;font-size:13px;color:var(--fg2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);font-weight:700;box-shadow:0 1px 3px rgba(33,20,45,.12)}
+
+footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6px;padding-block:8px 24px;border-top:1px solid var(--line);margin-top:8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(8px);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);font-size:13px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:40;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:680px){
+  .bar{backdrop-filter:none;background:var(--surface)}
+  .tabs{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-right,0px));z-index:25;justify-content:space-around}
+  .tab{flex-direction:column;gap:2px;font-size:11px;padding:6px 4px;flex:1}
+  .tab .n{display:none}
+  .tab svg{display:block}
+  .tab[aria-current="page"]{box-shadow:none;background:var(--accent-soft);color:var(--accent)}
+  main{padding-bottom:110px}
+  .hero h1{font-size:25px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .checks{grid-template-columns:minmax(0,1fr)}
+  .verdict .main{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="bar gut">
+  <div class="inner">
+    <a class="brand" href="#analyze" aria-label="쿵쾅 처음으로">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="3" width="19" height="3.2" rx="1.4" fill="#fff"/><path d="M3.5 13.5h2.2l2-4.5 3 9 2.6-7 2.2 4.6 1.7-2.1H20.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span><b>쿵쾅</b><small>층간소음, 감정 대신 기록으로</small></span>
+    </a>
+    <nav class="tabs" aria-label="단계 메뉴">
+      <a class="tab" href="#analyze" data-view="analyze"><span class="n">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12h2l2-5 3 10 3-8 2 3h4"/></svg>소리 분석</a>
+      <a class="tab" href="#journal" data-view="journal"><span class="n">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9h16M9 4v16"/></svg>소음 일지</a>
+      <a class="tab" href="#note" data-view="note"><span class="n">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h4"/></svg>이웃 쪽지</a>
+    </nav>
+  </div>
+</header>
+
+<main class="gut">
+<div class="inner">
+
+  <!-- STEP 1 -->
+  <section class="view" id="v-analyze" aria-labelledby="h1-analyze">
+    <div class="hero">
+      <div><div class="eyebrow">STEP 1</div><h1 id="h1-analyze">어떤 소리였는지 AI가 가려 드려요</h1>
+        <p>휴대폰으로 녹음한 파일을 올리면 소리 종류를 찾고, 법정 층간소음 기준과 비교합니다. 녹음 원본은 이 기기 밖으로 나가지 않습니다.</p></div>
+    </div>
+    <div class="grid2">
+      <div class="card stack">
+        <label class="drop" id="drop" for="file">
+          <span class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
+          <b>녹음 파일 올리기</b><span>m4a · mp3 · wav · 최대 10분</span>
+          <input id="file" type="file" accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.webm">
+        </label>
+        <button id="micBtn" type="button" class="wide"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>마이크로 30초 녹음</button>
+        <div>
+          <div class="lbl" style="margin-bottom:8px">녹음이 없으면 시연용 소리로</div>
+          <div class="demos" id="demoRow">
+            <button class="demo" data-demo="walk" type="button" aria-pressed="false"><span class="sw" style="background:var(--t-walk)">걷</span>걷는 소리</button>
+            <button class="demo" data-demo="run" type="button" aria-pressed="false"><span class="sw" style="background:var(--t-run)">뛰</span>뛰는 소리</button>
+            <button class="demo" data-demo="hammer" type="button" aria-pressed="false"><span class="sw" style="background:var(--t-hammer)">망</span>망치질</button>
+            <button class="demo" data-demo="drag" type="button" aria-pressed="false"><span class="sw" style="background:var(--t-drag)">끌</span>가구 끌기</button>
+          </div>
+        </div>
+        <details class="set" open>
+          <summary>측정 설정</summary>
+          <div class="fields">
+            <label for="when">녹음 시각 · 주간(06~22시)과 야간 기준이 다릅니다<input id="when" type="datetime-local"></label>
+            <label for="cal">보정값 <span class="num" id="calV" style="color:var(--fg);font-weight:700">100</span> dB · 소음측정기 값에 맞춰 조정<input id="cal" type="range" min="80" max="120" step="1" value="100"></label>
+          </div>
+        </details>
+        <div class="status" id="aiStatus"><span class="dot busy"></span><span>AI 소리 인식 모델을 불러오는 중…</span></div>
+      </div>
+
+      <div class="card stack" id="result" aria-live="polite">
+        <div class="empty">분석할 소리를 고르면 결과가 여기에 나옵니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="view" id="v-journal" aria-labelledby="h1-journal" hidden>
+    <div class="hero">
+      <div><div class="eyebrow">STEP 2</div><h1 id="h1-journal">언제, 무엇이, 얼마나 컸는지</h1>
+        <p>분석 결과가 쌓이면 소음 패턴이 보입니다. 이웃사이센터 상담 때 그대로 내밀 수 있는 일지로 정리됩니다.</p></div>
+      <div class="row"><button id="copyLog" type="button" class="primary">상담용 일지 복사</button><button id="clearLog" type="button">기록 지우기</button></div>
+    </div>
+    <div id="clearConfirm" class="callout" hidden>기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
+    <div id="jExample" class="callout" hidden><span class="tag-ex">예시</span> 지금 보이는 기록은 기능을 보여 주기 위한 <b>예시 데이터</b>입니다. STEP 1에서 분석한 결과를 저장하면 예시는 사라집니다.</div>
+    <div class="stats" id="jStats"></div>
+    <div class="card">
+      <h2>최근 7일 · 시간대별 소음</h2><p class="cap">칸이 진할수록 소리가 많이 들린 시간입니다. 밑줄 친 칸은 야간(22~06시)입니다.</p>
+      <div class="heat-wrap"><div class="heat" id="heat"></div></div>
+      <div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 30%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 65%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div>
+    </div>
+    <div class="card">
+      <h2>기록 목록</h2><p class="cap">최근 기록부터 보여 줍니다. 최고값은 휴대폰 측정 추정값입니다.</p>
+      <div class="list" id="jList" style="margin-top:6px"></div>
+    </div>
+    <div class="next"><p><b>다음 단계</b> 이 기록으로 이웃에게 보낼 쪽지를 만들어 보세요.</p><a class="btn primary" href="#note">쪽지 쓰러 가기</a></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="view" id="v-note" aria-labelledby="h1-note" hidden>
+    <div class="hero">
+      <div><div class="eyebrow">STEP 3</div><h1 id="h1-note">탓하는 말 대신, 시간과 소리만</h1>
+        <p>일지를 바탕으로 AI가 감정을 덜어 낸 쪽지를 씁니다. 대화의 문을 여는 것이 목표입니다.</p></div>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <div class="card stack">
+          <div><div class="lbl" style="margin-bottom:6px">말투</div>
+            <div class="seg" id="tone"><button type="button" data-tone="soft" aria-pressed="true">부드럽게 · 처음</button><button type="button" data-tone="clear" aria-pressed="false">구체적으로 · 두 번째</button></div></div>
+          <div class="fields" style="margin-top:0"><label for="who">받는 사람<input id="who" type="text" value="윗집 이웃분께" maxlength="20"></label></div>
+          <button id="writeNote" type="button" class="primary wide">AI로 쪽지 쓰기</button>
+          <p class="note" id="noteSrc">일지 내용만 근거로 씁니다. 다 쓴 뒤 직접 고칠 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="paper"><div class="out" id="noteOut" contenteditable="true" aria-label="쪽지 내용(직접 고칠 수 있음)" spellcheck="false">'AI로 쪽지 쓰기'를 누르면 일지 내용으로 쪽지 초안이 여기에 써집니다.</div></div>
+        <div class="row" style="justify-content:flex-end"><button id="copyNote" type="button">쪽지 복사</button></div>
+      </div>
+    </div>
+        <div class="card help">
+          <h2>대화로 풀리지 않으면</h2>
+          <ol>
+            <li><b>이웃사이센터 전화 상담</b> · 쿵쾅 일지를 보며 상황 설명</li>
+            <li><b>방문 상담</b> · 위아래층 양쪽 의견 청취</li>
+            <li><b>소음 측정</b> · 공인 장비로 기준 초과 여부 판정</li>
+          </ol>
+          <dl class="contact"><dt>전화</dt><dd>1661-2642</dd><dt>누리집</dt><dd>floor.noiseinfo.or.kr</dd></dl>
+        </div>
+  </section>
+
+  <footer>
+    <p><b>측정 한계</b> 휴대폰 마이크로 잰 값은 공인 측정이 아니라 참고값입니다. 법적 판정은 이웃사이센터 등의 현장 측정으로 정해집니다. AI 분류 결과에는 'AI 추정' 표시를 붙였습니다.</p>
+    <p><b>기준</b> 공동주택 층간소음의 범위와 기준에 관한 규칙 · 직접충격 1분 등가 주간 39·야간 34dB, 최고 주간 57·야간 52dB(1시간 3회 이상) · 공기전달 5분 등가 주간 45·야간 40dB</p>
+    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.2 · 엘리스 AI 챌린지 출품작</p>
+  </footer>
+</div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* 쿵기록 분석 엔진 — 기기 안에서만 동작 (녹음 원본은 밖으로 보내지 않음) */
+const KE = (() => {
+  const SR = 16000, N = 512, H = 256;
+
+  /* ---------- 법정 기준: 공동주택 층간소음의 범위와 기준에 관한 규칙 ---------- */
+  const STD = {
+    impact: { day: { leq: 39, lmax: 57 }, night: { leq: 34, lmax: 52 } },   // 직접충격: 1분 등가, 최고소음도(1시간 3회 이상)
+    air:    { day: { leq: 45 },          night: { leq: 40 } }                // 공기전달: 5분 등가
+  };
+  const isNight = (d) => { const h = d.getHours(); return h >= 22 || h < 6; };
+
+  /* ---------- 소리 종류 ---------- */
+  const TYPES = {
+    walk:   { name: '걷는 소리(쿵쿵)', group: 'impact', color: 'walk' },
+    run:    { name: '뛰는 소리',       group: 'impact', color: 'run' },
+    hammer: { name: '망치질',          group: 'impact', color: 'hammer' },
+    drag:   { name: '가구 끌기',       group: 'impact', color: 'drag' },
+    door:   { name: '문 여닫기',       group: 'impact', color: 'door' },
+    music:  { name: '음악·악기',       group: 'air',    color: 'music' },
+    speech: { name: '말소리·TV',       group: 'air',    color: 'speech' },
+    appl:   { name: '가전(청소기·세탁기)', group: 'air', color: 'appl' },
+    other:  { name: '기타 충격음',      group: 'impact', color: 'other' }
+  };
+
+  /* YAMNet 521종 → 쿵기록 분류 */
+  const YMAP = [
+    [/^Walk, footsteps$|^Run$|^Shuffle$|^Thump, thud$/, 'walk'],
+    [/^Hammer$|^Knock$|^Tap$|^Chop$|^Wood$|^Whack, thwack$/, 'hammer'],
+    [/^Scrape$|^Squeak$|^Creak$|^Rub$/, 'drag'],
+    [/^Door$|^Slam$|^Sliding door$|^Cupboard open or close$|^Drawer open or close$/, 'door'],
+    [/Music|Musical instrument|Piano|Guitar|Drum|Singing|Song/i, 'music'],
+    [/^Speech$|Child speech|Conversation|Shout|Yell|Television|Radio|Laughter|Baby cry/i, 'speech'],
+    [/Vacuum cleaner|Washing machine|Blender|Hair dryer|Mechanical fan|Air conditioning|Dishes/i, 'appl']
+  ];
+  const ymapOf = (label) => { for (const [re, k] of YMAP) if (re.test(label)) return k; return null; };
+
+  /* ---------- 신호처리 ---------- */
+  function fftPow(re) { // in-place radix-2, returns power spectrum (N/2+1)
+    const n = re.length, im = new Float64Array(n);
+    for (let i = 1, j = 0; i < n; i++) {
+      let bit = n >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit;
+      if (i < j) { const t = re[i]; re[i] = re[j]; re[j] = t; }
+    }
+    for (let len = 2; len <= n; len <<= 1) {
+      const ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+      for (let i = 0; i < n; i += len) {
+        let cr = 1, ci = 0;
+        for (let k = 0; k < len / 2; k++) {
+          const a = i + k, b = a + len / 2;
+          const tr = re[b] * cr - im[b] * ci, ti = re[b] * ci + im[b] * cr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti; re[a] += tr; im[a] += ti;
+          const ncr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = ncr;
+        }
+      }
+    }
+    const out = new Float64Array(n / 2 + 1);
+    for (let k = 0; k <= n / 2; k++) out[k] = re[k] * re[k] + im[k] * im[k];
+    return out;
+  }
+  const freqs = Array.from({ length: N / 2 + 1 }, (_, k) => k * SR / N);
+  const aW = (() => { // A-특성 가중치 (전력)
+    const ra = (f) => { const f2 = f * f; return (12194 ** 2 * f2 * f2) / ((f2 + 20.6 ** 2) * Math.sqrt((f2 + 107.7 ** 2) * (f2 + 737.9 ** 2)) * (f2 + 12194 ** 2)); };
+    const ref = ra(1000);
+    return freqs.map((f) => { const v = ra(Math.max(f, 1)) / ref; return v * v; });
+  })();
+  const hann = Float64Array.from({ length: N }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (N - 1)));
+
+  function frames(y) {
+    const out = [];
+    for (let i = 0; i + N <= y.length; i += H) {
+      const buf = new Float64Array(N);
+      for (let k = 0; k < N; k++) buf[k] = y[i + k] * hann[k];
+      const P = fftPow(buf);
+      let tot = 1e-12, aw = 1e-12, low = 0, cen = 0;
+      for (let k = 1; k < P.length; k++) { tot += P[k]; aw += P[k] * aW[k]; cen += P[k] * freqs[k]; if (freqs[k] < 200) low += P[k]; }
+      out.push({ L: 10 * Math.log10(aw), low: low / tot, cen: cen / tot });
+    }
+    return out;
+  }
+  const pct = (arr, p) => { const s = [...arr].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
+
+  /* ---------- 2단 분류: 1단 공개 AI(YAMNet) + 2단 층간소음 판별 규칙 ---------- */
+  function detectEvents(fr) {
+    const L = fr.map((f) => f.L), floor = pct(L, 0.2), on = L.map((v) => v > floor + 12), ev = [];
+    for (let i = 0; i < on.length;) {
+      if (!on[i]) { i++; continue; }
+      let j = i;
+      while (j < on.length && (on[j] || on.slice(j, j + 4).some(Boolean))) j++;
+      let pk = -Infinity, w = 0, lowS = 0, cenS = 0;
+      for (let k = i; k < j; k++) pk = Math.max(pk, L[k]);
+      let above = 0;
+      for (let k = i; k < j; k++) { const p = 10 ** (L[k] / 10); w += p; lowS += fr[k].low * p; cenS += fr[k].cen * p; if (L[k] > pk - 10) above++; }
+      ev.push({ t: i * H / SR, span: (j - i) * H / SR, dur: above * H / SR, peakFS: pk, low: lowS / w, cen: cenS / w });
+      i = j;
+    }
+    return { floor, ev };
+  }
+
+  function ruleType(e, yHint) {
+    if (e.span >= 0.5 && e.dur >= 0.35) {
+      if (yHint === 'music' || yHint === 'speech' || yHint === 'appl') return { type: yHint, conf: 0.7, why: '길게 이어지는 소리 + AI 인식 결과' };
+      const ok = e.low < 0.45 && e.cen > 200 && e.cen < 1600;
+      return { type: 'drag', conf: ok ? 0.78 : 0.55, why: `1회 ${e.span.toFixed(1)}초 지속, 중저음 마찰음(중심 ${Math.round(e.cen)}Hz)` };
+    }
+    if (e.dur < 0.3) {
+      if (yHint === 'door') return { type: 'door', conf: 0.72, why: '단발 충격 + AI가 문 소리로 인식' };
+      if (e.low >= 0.5) return { type: 'walk', conf: 0.6 + 0.3 * Math.min(1, (e.low - 0.5) / 0.4), why: `저음 비중 ${Math.round(e.low * 100)}%의 둔탁한 충격(바닥 충격음 특징)` };
+      if (e.low < 0.3 && e.cen > 400) return { type: 'hammer', conf: 0.55 + 0.3 * Math.min(1, (e.cen - 400) / 600), why: `짧고 날카로운 타격음(중심 ${Math.round(e.cen)}Hz)` };
+    }
+    return { type: 'other', conf: 0.4, why: '특징이 뚜렷하지 않은 충격음' };
+  }
+
+  function refineRhythm(ev) { // 발걸음 간격으로 걷기/뛰기 구분, 반복 리듬으로 신뢰도 보정
+    const steps = ev.filter((e) => e.type === 'walk');
+    for (let i = 1; i < steps.length; i++) {
+      const gap = steps[i].t - steps[i - 1].t;
+      if (gap < 0.38) { steps[i].type = 'run'; steps[i].why += ', 간격 ' + gap.toFixed(2) + '초(빠른 걸음·뛰기)'; }
+    }
+    const hm = ev.filter((e) => e.type === 'hammer');
+    if (hm.length >= 4) {
+      const gaps = hm.slice(1).map((e, i) => e.t - hm[i].t), m = gaps.reduce((a, b) => a + b) / gaps.length;
+      const sd = Math.sqrt(gaps.reduce((a, b) => a + (b - m) ** 2, 0) / gaps.length);
+      if (sd / m < 0.2) hm.forEach((e) => { e.conf = Math.min(0.95, e.conf + 0.1); e.why += ', 일정한 반복 리듬'; });
+    }
+  }
+
+  /* ---------- 메인 분석 ---------- */
+  function analyze(y16, opts) {
+    const { cal = 95, start = new Date(), yamnet = null } = opts || {};
+    const fr = frames(y16);
+    // 빠른 응답(125ms) 레벨
+    const a = Math.exp(-(H / SR) / 0.125); let acc = 10 ** (fr[0].L / 10);
+    const Lf = fr.map((f) => { acc = a * acc + (1 - a) * 10 ** (f.L / 10); return 10 * Math.log10(acc) + cal; });
+    const { floor, ev } = detectEvents(fr);
+    ev.forEach((e) => {
+      const hint = yamnet ? yamnet.hintAt(e.t, e.span) : null;
+      Object.assign(e, ruleType(e, hint), { yHint: hint });
+      e.peak = e.peakFS + cal;
+    });
+    refineRhythm(ev);
+    const durSec = y16.length / SR;
+    // 지속음(이벤트 없이 깔린 소리): AI 결과로만 판정
+    let sustained = null;
+    if (yamnet && yamnet.dominant && ['music', 'speech', 'appl'].includes(yamnet.dominant.type) && yamnet.dominant.score > 0.3 && ev.filter((e) => TYPES[e.type].group === 'impact').length < 3) sustained = yamnet.dominant;
+
+    const meanP = fr.reduce((s, f) => s + 10 ** (f.L / 10), 0) / fr.length;
+    const leq = 10 * Math.log10(meanP) + cal;
+    let leq1 = leq; // 1분 등가: 60초 이상이면 1분 창 최댓값
+    const per = Math.floor(60 * SR / H);
+    if (fr.length >= per) {
+      leq1 = -Infinity;
+      for (let i = 0; i + per <= fr.length; i += Math.floor(per / 6)) {
+        let s = 0; for (let k = i; k < i + per; k++) s += 10 ** (fr[k].L / 10);
+        leq1 = Math.max(leq1, 10 * Math.log10(s / per) + cal);
+      }
+    }
+    const lmax = Math.max(...Lf);
+    const night = isNight(start), period = night ? 'night' : 'day';
+    const si = STD.impact[period], sa = STD.air[period];
+    const overLmax = ev.filter((e) => TYPES[e.type].group === 'impact' && e.peak > si.lmax).length;
+    const impactEv = ev.filter((e) => TYPES[e.type].group === 'impact');
+    const counts = {}; ev.forEach((e) => { counts[e.type] = (counts[e.type] || 0) + 1; });
+    if (sustained) counts[sustained.type] = (counts[sustained.type] || 0) + 1;
+    const main = Object.entries(counts).sort((p, q) => q[1] - p[1])[0];
+    const judge = (v, lim) => v > lim ? 'over' : v > lim - 3 ? 'near' : 'ok';
+    return {
+      durSec, start, night, period, cal, floor: floor + cal, Lf, hop: H / SR, ev, counts, sustained,
+      main: main ? main[0] : null,
+      leq, leq1, lmax, overLmax,
+      checks: [
+        { k: '직접충격 1분 등가소음도', v: leq1, lim: si.leq, st: impactEv.length ? judge(leq1, si.leq) : 'na', note: durSec < 60 ? '녹음이 1분보다 짧아 전체 구간 평균으로 계산' : '1분 창 중 가장 큰 값' },
+        { k: '직접충격 최고소음도', v: lmax, lim: si.lmax, st: impactEv.length ? (overLmax >= 3 ? 'over' : judge(lmax, si.lmax) === 'ok' ? 'ok' : 'near') : 'na', note: `기준 초과 ${overLmax}회 (1시간에 3회 이상이면 기준 초과)` },
+        { k: '공기전달 5분 등가소음도', v: leq, lim: sa.leq, st: sustained ? judge(leq, sa.leq) : 'na', note: durSec < 300 ? '녹음이 5분보다 짧아 전체 구간 평균으로 계산' : '' }
+      ]
+    };
+  }
+
+  /* ---------- 시연용 합성음 (실제 녹음이 없을 때) ---------- */
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function synth(kind, seed = 7) {
+    const r = rng(seed), gauss = () => { const u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+    const len = 5 * SR, y = new Float32Array(len);
+    const lp = (x, fc) => { const a = Math.exp(-2 * Math.PI * fc / SR); let s1 = 0, s2 = 0; for (let i = 0; i < x.length; i++) { s1 = (1 - a) * x[i] + a * s1; s2 = (1 - a) * s1 + a * s2; x[i] = s2; } return x; };
+    const hp = (x, fc) => { const a = Math.exp(-2 * Math.PI * fc / SR); let s = 0, pr = 0; for (let i = 0; i < x.length; i++) { s = a * (s + x[i] - pr); pr = x[i]; x[i] = s; } return x; };
+    const add = (t0, s) => { const i0 = Math.floor(t0 * SR); for (let i = 0; i < s.length && i0 + i < len; i++) y[i0 + i] += s[i]; };
+    const env = (n, att, dec) => Float32Array.from({ length: n }, (_, i) => Math.min(i / SR / att, 1) * Math.exp(-i / SR / dec));
+    const thud = (f0, g) => { const n = Math.floor(0.35 * SR), e = env(n, 0.004, 0.07), e2 = env(n, 0.002, 0.025); let ph = 0; const nz = lp(Float32Array.from({ length: n }, gauss), 400); const s = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const f = f0 * (1 + 0.8 * Math.exp(-i / SR / 0.02)); ph += 2 * Math.PI * f / SR; s[i] = g * (Math.sin(ph) * e[i] + 0.8 * nz[i] * e2[i]); } return s; };
+    const knock = (g) => { const n = Math.floor(0.25 * SR), nz = lp(Float32Array.from({ length: n }, gauss), 3000), e = env(n, 0.0005, 0.012), s = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const t = i / SR; s[i] = 1.2 * nz[i] * e[i]; for (const [f, d] of [[320, 0.05], [740, 0.03], [1500, 0.015]]) s[i] += 0.6 * Math.sin(2 * Math.PI * f * t) * Math.min(t / 0.0005, 1) * Math.exp(-t / d); s[i] *= g; } return s; };
+    if (kind === 'walk') { for (let t = 0.2; t < 4.6; t += 0.5 + (r() - 0.5) * 0.1) add(t, thud(60 + r() * 25 - 10, 0.7 + 0.3 * r())); }
+    if (kind === 'run') { for (let t = 0.2; t < 4.7; t += 0.3 + (r() - 0.5) * 0.04) add(t, thud(70 + r() * 20, 0.6 + 0.4 * r())); }
+    if (kind === 'hammer') { for (let t = 0.3; t < 4.6; t += 0.42 + (r() - 0.5) * 0.06) add(t, knock(0.8 + 0.2 * r())); }
+    if (kind === 'drag') {
+      const x = hp(lp(Float32Array.from({ length: len }, gauss), 1200), 150);
+      let am = 1; for (let i = 0; i < len; i++) { am = 0.9975 * am + 0.0025 * Math.max(0, 1 + 0.6 * gauss()); const t = i / SR;
+        const seg = (t > 0.5 && t < 2.3) || (t > 2.8 && t < 4.5) ? 1 : 0; const jud = 1 + 0.5 * Math.sin(2 * Math.PI * (18 + 4 * Math.sin(2 * Math.PI * 0.7 * t)) * t);
+        y[i] = x[i] * am * seg * jud; }
+    }
+    lp(y, 1800); // 천장 슬래브 통과(고음 감쇠)
+    let mx = 0; for (const v of y) mx = Math.max(mx, Math.abs(v));
+    const gainDb = { walk: -45, run: -43, hammer: -52, drag: -58 }[kind] || -50; // 실제 아파트 수준(최고 55~60dB 안팎)으로 맞춤
+    const g = 0.3 / mx * 10 ** (gainDb / 20), bg = lp(Float32Array.from({ length: len }, gauss), 800);
+    for (let i = 0; i < len; i++) y[i] = y[i] * g + bg[i] * 0.3 * 10 ** (-88 / 20); // 배경 소음
+    return y;
+  }
+
+  return { SR, STD, TYPES, ymapOf, analyze, synth, isNight };
+})();
+if (typeof module !== 'undefined') module.exports = KE;
+
+</script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s), $$ = (s) => [...document.querySelectorAll(s)];
+  const T = KE.TYPES;
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1900); };
+  const pad = (n) => String(n).padStart(2, '0');
+  const wk = '일월화수목금토';
+  const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}(${wk[d.getDay()]}) ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const localInput = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const copy = async (text, okMsg) => { try { await navigator.clipboard.writeText(text); toast(okMsg); } catch (e) { toast('복사가 막혀 있어 내용을 직접 선택해 주세요'); } };
+  const stTxt = { over: '기준 초과', near: '기준 근접', ok: '기준 이내', na: '해당 없음' };
+
+  /* ---------- 메뉴(해시) ---------- */
+  const VIEWS = ['analyze', 'journal', 'note'];
+  function show() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'analyze';
+    VIEWS.forEach((k) => { $('#v-' + k).hidden = k !== v; });
+    $$('.tab').forEach((a) => a.dataset.view === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+    if (v === 'journal') renderJournal();
+    if (v === 'analyze' && lastRes) requestAnimationFrame(() => drawChart(lastRes));
+    window.scrollTo({ top: 0 });
+  }
+  window.addEventListener('hashchange', show);
+  const go = (v) => { if (location.hash === '#' + v) show(); else location.hash = v; };
+
+  /* ---------- 설정 ---------- */
+  const now = new Date(); now.setHours(23, 10, 0, 0);
+  $('#when').value = localInput(now);
+  $('#cal').addEventListener('input', () => { $('#calV').textContent = $('#cal').value; if (last) run(last.y, last.label); });
+  $('#when').addEventListener('change', () => { if (last) run(last.y, last.label); });
+
+  /* ---------- 1단 AI: YAMNet (MediaPipe) ---------- */
+  let clf = null;
+  const setAI = (state, msg) => { const s = $('#aiStatus'); s.querySelector('.dot').className = 'dot ' + state; s.querySelector('span:last-child').textContent = msg; };
+  (async () => {
+    try {
+      const base = new URL('mp/', location.href).href;
+      const { AudioClassifier } = await import(base + 'audio_bundle.mjs');
+      const model = await fetch(base + 'yamnet.tflite.b64.txt').then((r) => r.text()).then((t) => Uint8Array.from(atob(t.trim()), (c) => c.charCodeAt(0)));
+      clf = await AudioClassifier.createFromOptions(
+        { wasmLoaderPath: base + 'wasm/audio_wasm_internal.js', wasmBinaryPath: base + 'wasm/audio_wasm_internal.wasm' },
+        { baseOptions: { modelAssetBuffer: model }, maxResults: 8 });
+      setAI('on', 'AI 소리 인식 모델 준비됨 (YAMNet · 기기 안에서 실행)');
+    } catch (e) {
+      console.warn('YAMNet load failed', e);
+      setAI('', 'AI 소리 인식 모델을 이 화면에서 불러오지 못해 층간소음 판별 규칙만으로 분석합니다');
+    }
+  })();
+  function yamnetOf(y) {
+    if (!clf) return null;
+    try {
+      let mx = 0; for (const v of y) mx = Math.max(mx, Math.abs(v));
+      const yn = Float32Array.from(y, (v) => v / (mx || 1) * 0.5); // 크기와 무관하게 '어떤 소리인지'만 보도록 정규화
+      const res = clf.classify(yn, KE.SR);
+      const chunks = res.map((r, i) => {
+        const t0 = (r.timestampMs ?? i * 975) / 1000, sc = {};
+        for (const c of (r.classifications?.[0]?.categories || [])) { const k = KE.ymapOf(c.categoryName); if (k) sc[k] = (sc[k] || 0) + c.score; }
+        return { t0, t1: t0 + 0.975, sc, top: (r.classifications?.[0]?.categories || []).slice(0, 3).map((c) => c.categoryName) };
+      });
+      const tot = {}; chunks.forEach((c) => Object.entries(c.sc).forEach(([k, v]) => { tot[k] = (tot[k] || 0) + v / chunks.length; }));
+      const dom = Object.entries(tot).sort((a, b) => b[1] - a[1])[0];
+      return {
+        chunks, tot, dominant: dom ? { type: dom[0], score: dom[1], why: 'AI 인식: ' + T[dom[0]].name } : null,
+        hintAt(t, span) { const c = chunks.find((c) => t + span / 2 >= c.t0 && t + span / 2 < c.t1); if (!c) return null; const b = Object.entries(c.sc).sort((a, b) => b[1] - a[1])[0]; return b && b[1] > 0.25 ? b[0] : null; }
+      };
+    } catch (e) { console.warn(e); return null; }
+  }
+
+  /* ---------- 입력 ---------- */
+  let last = null;
+  async function decodeTo16k(buf) {
+    const AC = window.AudioContext || window.webkitAudioContext; const ac = new AC();
+    const ab = await ac.decodeAudioData(buf); ac.close && ac.close();
+    const len = Math.ceil(ab.duration * KE.SR), off = new OfflineAudioContext(1, len, KE.SR);
+    const src = off.createBufferSource(); src.buffer = ab; src.connect(off.destination); src.start();
+    const r = await off.startRendering(); return r.getChannelData(0).slice(0, Math.min(len, KE.SR * 600));
+  }
+  async function fromFile(f) {
+    if (!f) return;
+    if (f.lastModified) $('#when').value = localInput(new Date(f.lastModified));
+    try { toast('분석 중…'); const y = await decodeTo16k(await f.arrayBuffer()); pressDemo(null); run(y, f.name); }
+    catch (err) { toast('이 파일은 열 수 없습니다. m4a·mp3·wav로 올려 주세요'); }
+  }
+  $('#file').addEventListener('change', (e) => { fromFile(e.target.files[0]); e.target.value = ''; });
+  const drop = $('#drop');
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, () => drop.classList.remove('drag')));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); fromFile(e.dataTransfer.files[0]); });
+  const pressDemo = (k) => $$('[data-demo]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === k)));
+  $$('[data-demo]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.demo; pressDemo(k); run(KE.synth(k, 7 + Math.floor(Math.random() * 50)), '시연용 ' + T[k].name + ' (합성음)');
+  }));
+  $('#micBtn').addEventListener('click', async () => {
+    const btn = $('#micBtn'), label = btn.innerHTML;
+    let stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }); }
+    catch (e) { toast('이 화면에서는 마이크를 쓸 수 없어요. 녹음 앱으로 녹음한 뒤 올려 주세요'); return; }
+    const rec = new MediaRecorder(stream), parts = [];
+    rec.ondataavailable = (e) => parts.push(e.data);
+    rec.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); btn.disabled = false; btn.innerHTML = label;
+      $('#when').value = localInput(new Date());
+      try { const y = await decodeTo16k(await new Blob(parts).arrayBuffer()); pressDemo(null); run(y, '마이크 녹음'); } catch (e) { toast('녹음을 분석하지 못했습니다'); } };
+    rec.start(); btn.disabled = true; let s = 30; btn.textContent = `녹음 중… ${s}초`;
+    const iv = setInterval(() => { s--; btn.textContent = `녹음 중… ${s}초`; if (s <= 0) { clearInterval(iv); rec.stop(); } }, 1000);
+  });
+
+  /* ---------- 분석 + 표시 ---------- */
+  let lastRes = null;
+  function run(y, label) {
+    last = { y, label };
+    const start = new Date($('#when').value || Date.now());
+    const ym = yamnetOf(y);
+    const r = KE.analyze(y, { cal: +$('#cal').value, start, yamnet: ym });
+    r.label = label; r.ym = ym; lastRes = r; render(r);
+  }
+  function gauge(v, lim, st) {
+    const lo = lim - 25, hi = lim + 15, p = (x) => Math.max(0, Math.min(100, (x - lo) / (hi - lo) * 100));
+    const col = st === 'over' ? 'var(--bad)' : st === 'near' ? 'var(--warn)' : st === 'ok' ? 'var(--ok)' : 'var(--fg3)';
+    return `<div class="gauge" aria-hidden="true"><div class="f" style="width:${p(v)}%;background:${col}"></div><div class="m" style="left:calc(${p(lim)}% - 1px)"></div></div>`;
+  }
+  function render(r) {
+    const el = $('#result');
+    const main = r.main ? T[r.main].name : '뚜렷한 소리 없음';
+    const n = Object.values(r.counts).reduce((a, b) => a + b, 0);
+    const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : r.checks.every((c) => c.st === 'na') ? 'na' : 'ok';
+    const types = Object.entries(r.counts).sort((a, b) => b[1] - a[1]).map(([k, c]) => {
+      const evs = r.ev.filter((e) => e.type === k), conf = evs.length ? evs.reduce((s, e) => s + e.conf, 0) / evs.length : (r.sustained?.score || 0.5);
+      return `<div class="tp"><span class="sw" style="background:var(--t-${T[k].color})"></span>${T[k].name} <b>${c}회</b><span class="note">확신 ${Math.round(conf * 100)}%</span></div>`;
+    }).join('');
+    const ymTop = r.ym ? [...new Set(r.ym.chunks.flatMap((c) => c.top))].slice(0, 5).join(', ') : null;
+    const short = { '직접충격 1분 등가소음도': '1분 평균 (직접충격)', '직접충격 최고소음도': '최고 소음 (직접충격)', '공기전달 5분 등가소음도': '5분 평균 (음악·TV 등)' };
+    el.innerHTML = `
+      <div class="verdict">
+        <div><div class="k">주된 소리</div><div class="main">${main}<span class="ai-tag">AI 추정</span></div></div>
+        <div class="seal ${worst}"><b>${stTxt[worst]}</b><span>${r.night ? '야간' : '주간'} 기준</span></div>
+        <div class="meta num">${r.label} · ${r.durSec.toFixed(1)}초 · 소리 ${n}회 찾음</div>
+      </div>
+      <div class="types">${types || '<span class="note">기준에 걸릴 만한 소리를 찾지 못했습니다.</span>'}</div>
+      <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas>
+        <div class="legend"><span><i></i>최고소음도 기준 ${KE.STD.impact[r.period].lmax}dB</span><span>점 = AI가 찾은 소리(색은 종류)</span><span>세로축 dB(A) 추정</span></div></div>
+      <div class="checks">${r.checks.map((c) => `<div class="chk"><div class="t">${short[c.k] || c.k}</div>
+        <div class="v">${c.v.toFixed(1)}<small>dB</small></div>${gauge(c.v, c.lim, c.st)}
+        <div class="foot"><span>기준 ${c.lim}dB</span><span class="pill ${c.st}">${stTxt[c.st]}</span></div>
+        <div class="note">${c.st === 'na' ? '이 종류의 소리가 없어 판정하지 않음' : c.note}</div></div>`).join('')}</div>
+      <details class="why"><summary>AI가 이렇게 판단한 이유 · 소리 ${r.ev.length}개</summary>
+        <div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th>시점</th><th>종류</th><th>최고</th><th>근거</th></tr></thead><tbody>
+        ${r.ev.slice(0, 20).map((e) => `<tr><td class="n">${e.t.toFixed(1)}초</td><td><span class="sw" style="background:var(--t-${T[e.type].color});margin-right:6px"></span>${T[e.type].name}</td><td class="n">${e.peak.toFixed(1)} dB</td><td class="note">${e.why}${e.yHint ? ' · AI 인식 ' + T[e.yHint].name : ''}</td></tr>`).join('')}
+        </tbody></table></div>
+        <p class="note" style="margin-top:6px">${ymTop ? '1단 AI(YAMNet)가 들은 소리: ' + ymTop + ' → 2단 층간소음 판별로 보정' : '1단 AI 모델 없이 2단 판별 규칙만으로 분석했습니다.'}</p></details>
+      <div class="next"><p><b>일지에 저장</b>하면 STEP 2 일지와 STEP 3 쪽지에 반영됩니다.</p><button class="primary" id="save" type="button">일지에 저장</button></div>`;
+    requestAnimationFrame(() => drawChart(r));
+    $('#save').addEventListener('click', () => { addEntry(r); toast('일지에 저장했습니다'); go('journal'); });
+  }
+  function drawChart(r) {
+    const cv = $('#cv'); if (!cv || !cv.clientWidth) return;
+    const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, Hh = cv.clientHeight;
+    cv.width = W * dpr; cv.height = Hh * dpr; const g = cv.getContext('2d'); g.scale(dpr, dpr);
+    const padL = 30, padB = 20, padT = 14, w = W - padL - 8, h = Hh - padT - padB;
+    const lo = 20, hi = Math.max(80, Math.ceil((r.lmax + 5) / 10) * 10);
+    const yOf = (v) => padT + h - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * h;
+    const xOf = (t) => padL + t / r.durSec * w;
+    g.font = '11px ' + css('--font'); g.fillStyle = css('--fg2'); g.strokeStyle = css('--line'); g.lineWidth = 1;
+    for (let v = lo; v <= hi; v += 20) { const yy = yOf(v); g.beginPath(); g.moveTo(padL, yy); g.lineTo(padL + w, yy); g.stroke(); g.fillText(v, 2, yy + 4); }
+    const step = r.durSec > 120 ? 60 : r.durSec > 60 ? 30 : r.durSec > 20 ? 5 : 1;
+    g.textAlign = 'center'; for (let t = 0; t <= r.durSec + 1e-6; t += step) g.fillText(t + 's', xOf(t), Hh - 4); g.textAlign = 'left';
+    // 영역 + 선
+    const grad = g.createLinearGradient(0, padT, 0, padT + h); grad.addColorStop(0, css('--accent') + '55'); grad.addColorStop(1, css('--accent') + '00');
+    g.beginPath(); r.Lf.forEach((v, i) => { const x = xOf(i * r.hop), yy = yOf(v); i ? g.lineTo(x, yy) : g.moveTo(x, yy); });
+    g.lineTo(xOf((r.Lf.length - 1) * r.hop), padT + h); g.lineTo(padL, padT + h); g.closePath(); g.fillStyle = grad; g.fill();
+    g.strokeStyle = css('--accent'); g.lineWidth = 1.6; g.beginPath();
+    r.Lf.forEach((v, i) => { const x = xOf(i * r.hop), yy = yOf(v); i ? g.lineTo(x, yy) : g.moveTo(x, yy); }); g.stroke();
+    const lim = KE.STD.impact[r.period].lmax; g.strokeStyle = css('--bad'); g.setLineDash([5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(padL, yOf(lim)); g.lineTo(padL + w, yOf(lim)); g.stroke(); g.setLineDash([]);
+    r.ev.forEach((e) => { const x = xOf(e.t + Math.min(e.span, 0.2) / 2), yy = yOf(e.peak) - 8; g.fillStyle = css('--surface'); g.beginPath(); g.arc(x, yy, 5.5, 0, Math.PI * 2); g.fill(); g.fillStyle = css('--t-' + T[e.type].color); g.beginPath(); g.arc(x, yy, 4, 0, Math.PI * 2); g.fill(); });
+  }
+  window.addEventListener('resize', () => { if (lastRes) drawChart(lastRes); });
+
+  /* ---------- 일지 ---------- */
+  const KEY = 'kungkwang.v1';
+  let log = []; let isExample = false;
+  try { log = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem('kunglog.v1') || '[]'); } catch (e) { log = []; }
+  function exampleLog() {
+    const out = [], base = new Date(); base.setHours(0, 0, 0, 0);
+    const plan = [[0, 22, 40, 'run', 18, 63.1], [0, 23, 15, 'walk', 11, 58.4], [1, 22, 55, 'run', 22, 64.0], [1, 23, 40, 'drag', 2, 59.8], [2, 7, 10, 'walk', 6, 55.2], [2, 22, 30, 'run', 15, 62.2],
+      [3, 23, 5, 'walk', 9, 57.6], [4, 10, 20, 'hammer', 24, 66.3], [4, 22, 45, 'run', 20, 63.5], [5, 0, 20, 'walk', 7, 56.9], [5, 21, 50, 'run', 12, 61.0], [6, 22, 35, 'run', 17, 62.8], [6, 23, 50, 'drag', 3, 60.4]];
+    for (const [ago, hh, mm, type, count, lmax] of plan) {
+      const d = new Date(base); d.setDate(d.getDate() - 6 + ago); d.setHours(hh, mm);
+      const night = KE.isNight(d), lim = KE.STD.impact[night ? 'night' : 'day'].lmax;
+      out.push({ ts: d.getTime(), type, count, lmax, night, over: lmax > lim ? (count >= 3 ? 'over' : 'near') : lmax > lim - 3 ? 'near' : 'ok', src: '예시', example: true });
+    }
+    return out;
+  }
+  function entries() { if (log.length) { isExample = false; return log; } isExample = true; return exampleLog(); }
+  function addEntry(r) {
+    const worst = r.checks.some((c) => c.st === 'over') ? 'over' : r.checks.some((c) => c.st === 'near') ? 'near' : 'ok';
+    log.push({ ts: r.start.getTime(), type: r.main || 'other', count: Object.values(r.counts).reduce((a, b) => a + b, 0), lmax: +r.lmax.toFixed(1), night: r.night, over: worst, src: r.label, counts: r.counts, leq1: +r.leq1.toFixed(1) });
+    log.sort((a, b) => a.ts - b.ts);
+    try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) {}
+  }
+  function renderJournal() {
+    const E = entries();
+    $('#jExample').hidden = !isExample;
+    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0);
+    const over = E.filter((e) => e.over === 'over' || e.over === 'near').length;
+    $('#jStats').innerHTML = [
+      [E.length, '건', '기록', ''], [total, '회', '들린 소리', ''], [total ? Math.round(nightN / total * 100) : 0, '%', '야간(22~06시) 비중', ''], [over, '건', '기준 초과·근접', over ? 'hot' : '']
+    ].map(([v, u, k, c]) => `<div class="stat ${c}"><div class="v">${v}<small>${u}</small></div><div class="k">${k}</div></div>`).join('');
+    const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
+    for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
+    const grid = days.map(() => new Array(24).fill(0));
+    E.forEach((e) => { const d = new Date(e.ts), di = days.findIndex((x) => x.getTime() === new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()); if (di >= 0) grid[di][d.getHours()] += e.count; });
+    const mx = Math.max(1, ...grid.flat());
+    let html = '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="hl">${h % 3 === 0 ? h : ''}</div>`).join('');
+    days.forEach((d, di) => {
+      html += `<div class="dl">${d.getMonth() + 1}/${d.getDate()} (${wk[d.getDay()]})</div>`;
+      grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; });
+    });
+    $('#heat').innerHTML = html;
+    $('#jList').innerHTML = [...E].reverse().slice(0, 14).map((e) => `<div class="li"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>
+      <div class="a">${T[e.type].name}${e.example ? ' <span class="tag-ex">예시</span>' : ''}</div><span class="pill ${e.over}">${stTxt[e.over]}</span>
+      <div class="b">${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · 최고 ${e.lmax}dB</div></div>`).join('');
+  }
+  function logText() {
+    const E = entries(), by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
+    const lines = E.map((e) => `- ${fmt(new Date(e.ts))}${e.night ? '(야간)' : ''} ${T[e.type].name} ${e.count}회, 최고 ${e.lmax}dB(추정), ${stTxt[e.over]}`);
+    return `[층간소음 기록 일지]${isExample ? ' ※ 예시 데이터' : ''}
+기간: ${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))} / 기록 ${E.length}건
+주된 소리: ${Object.entries(by).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${T[k].name} ${v}회`).join(', ')}
+${lines.join('\n')}
+※ 휴대폰으로 측정한 참고값이며 공인 측정값이 아닙니다. (쿵쾅)`;
+  }
+  $('#copyLog').addEventListener('click', () => copy(logText(), '상담용 일지를 복사했습니다'));
+  $('#clearLog').addEventListener('click', () => { $('#clearConfirm').hidden = false; });
+  $('#clearNo').addEventListener('click', () => { $('#clearConfirm').hidden = true; });
+  $('#clearYes').addEventListener('click', () => { log = []; try { localStorage.removeItem(KEY); localStorage.removeItem('kunglog.v1'); } catch (e) {} $('#clearConfirm').hidden = true; renderJournal(); toast('기록을 지웠습니다'); });
+
+  /* ---------- 쪽지: Claude(sample) → 없으면 기본 문안 ---------- */
+  let tone = 'soft';
+  $$('#tone button').forEach((b) => b.addEventListener('click', () => { tone = b.dataset.tone; $$('#tone button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); }));
+  const getSample = async () => { try { return window.claude?.use ? await window.claude.use('sample') : null; } catch (e) { return null; } };
+  function summaryForNote() {
+    const E = entries(), by = {}, hours = {};
+    E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; const h = new Date(e.ts).getHours(); hours[h] = (hours[h] || 0) + e.count; });
+    const topT = Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => T[k].name);
+    const topH = Object.entries(hours).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([h]) => +h).sort((a, b) => a - b);
+    return { days: new Set(E.map((e) => new Date(e.ts).toDateString())).size, topT, topH, nightPct: Math.round(E.filter((e) => e.night).reduce((s, e) => s + e.count, 0) / Math.max(1, E.reduce((s, e) => s + e.count, 0)) * 100) };
+  }
+  function templateNote(s, tone, who) {
+    const hrs = s.topH.map((h) => `${h}시`).join('~') + '쯤';
+    if (tone === 'soft') return `${who}
+
+안녕하세요, 아래층에 사는 이웃입니다.
+요즘 ${hrs}에 ${s.topT.join('나 ')} 같은 소리가 자주 들려서 조심스럽게 말씀드립니다.
+일부러 그러신 게 아니라는 건 잘 알고 있어요. 저희도 그 시간에 잠자리에 들다 보니 조금 예민해진 것 같습니다.
+그 시간대에만이라도 실내화나 매트를 써 주시면 정말 감사하겠습니다.
+저희 집에서 나는 소리가 불편하신 적이 있으면 편하게 알려 주세요.
+
+아래층 드림`;
+    return `${who}
+
+안녕하세요, 아래층 이웃입니다. 지난번에 이어 한 번 더 말씀드립니다.
+최근 ${s.days}일 동안 기록해 보니 ${s.topT.join(', ')} 소리가 주로 ${hrs}에 들렸고, 들린 소리의 ${s.nightPct}%가 밤 10시 이후였습니다.
+밤 10시 이후에는 뛰거나 가구를 옮기는 일을 줄여 주시고, 매트를 깔아 주시면 큰 도움이 될 것 같습니다.
+서로 편하게 지낼 수 있도록 방법을 같이 찾고 싶습니다. 필요하시면 기록도 보여 드릴게요.
+
+아래층 드림`;
+  }
+  $('#writeNote').addEventListener('click', async () => {
+    const s = summaryForNote(), who = $('#who').value.trim() || '윗집 이웃분께', out = $('#noteOut'), btn = $('#writeNote');
+    const sample = await getSample();
+    if (!sample) { out.textContent = templateNote(s, tone, who); $('#noteSrc').textContent = '기본 문안으로 만들었습니다 (AI 연결 없음). 직접 고칠 수 있습니다.'; return; }
+    btn.disabled = true; btn.textContent = 'AI가 쓰는 중…'; out.textContent = '';
+    const prompt = `너는 층간소음 갈등을 줄이는 중재 도우미야. 아래 기록 요약만 근거로, 아래층 주민이 윗집에 붙일 짧은 쪽지를 한국어로 써.
+규칙: 1) 탓하거나 단정하는 말, 법·신고·소송 언급 금지 2) 언제, 어떤 소리인지만 사실대로 3) 상대가 할 수 있는 구체적 부탁 1~2개 4) 우리 집 소리도 알려 달라는 한 줄 5) 7문장 이내 6) 첫 줄은 "${who}", 끝은 "아래층 드림" 7) 쪽지 본문만 출력.
+말투: ${tone === 'soft' ? '처음 말을 꺼내는 부드러운 말투' : '두 번째 이후라 조금 더 구체적이지만 정중한 말투'}
+기록 요약: 기록 ${s.days}일, 주된 소리 ${s.topT.join(', ')}, 자주 들린 시각 ${s.topH.join('시, ')}시, 야간(22~06시) 비중 ${s.nightPct}%`;
+    try {
+      const r = await sample(prompt, { modelTier: 'quick', onText: ({ text }) => { out.textContent = text; } });
+      out.textContent = r.text.trim(); $('#noteSrc').textContent = 'AI(Claude)가 쓴 초안입니다. 보내기 전에 직접 다듬어 주세요.';
+    } catch (e) {
+      out.textContent = templateNote(s, tone, who); $('#noteSrc').textContent = e?.code === 'rate_limited' ? 'AI 요청이 많아 기본 문안으로 만들었습니다.' : '기본 문안으로 만들었습니다.';
+    } finally { btn.disabled = false; btn.textContent = 'AI로 쪽지 쓰기'; }
+  });
+  $('#copyNote').addEventListener('click', () => copy($('#noteOut').innerText, '쪽지를 복사했습니다'));
+
+  show();
+  // 첫 화면: 시연용 뛰는 소리 결과를 바로 보여 줌
+  pressDemo('run'); run(KE.synth('run', 11), '시연용 뛰는 소리 (합성음)');
+  const waitAI = setInterval(() => { if (clf && last) { clearInterval(waitAI); run(last.y, last.label); } }, 500);
+  setTimeout(() => clearInterval(waitAI), 20000);
+})();
+</script>
+</body></html>
