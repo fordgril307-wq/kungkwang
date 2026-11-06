@@ -302,6 +302,12 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .rhead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:10px 16px}
 .rchips{display:flex;flex-wrap:wrap;gap:6px}
 .rchips span{font-size:11.5px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 9px;font-weight:700}
+.mix{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:13.5px;color:var(--fg2);margin-top:2px}
+.mix-k{font-size:12px;font-weight:700;color:var(--fg3);margin-right:2px}
+.mx{display:inline-flex;align-items:center;gap:5px;color:var(--fg)}
+.mx i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.mx b{font-weight:900}
+.mx-sep{color:var(--fg3)}
 /* 들린 소리 칩 */
 .snd{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
 .snd-h{display:flex;align-items:baseline;gap:8px;font-size:14px}
@@ -362,6 +368,36 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .in-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .rhead .sp{flex:1}
 @media (max-width:680px){.jrow{gap:6px}.jrow .jtabs button{padding:0 10px;font-size:12.5px;min-height:32px}.jrow h1{font-size:22px}}
+/* 대시보드 v3: 상자 최소화 */
+.dsum{display:flex;flex-direction:column;gap:14px;background:linear-gradient(140deg,var(--accent-soft),transparent 75%);border-radius:18px;padding:18px 18px 14px}
+.dsum .in-t{font-size:16px;line-height:1.6}
+.sts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.st{display:flex;flex-direction:column;gap:2px;padding:0 12px;border-left:1px solid var(--line2)}
+.st:first-child{padding-left:0;border-left:0}
+.st b{font-size:24px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.2}
+.st b small{font-size:12px;font-weight:700;margin-left:2px}
+.st span{font-size:12px;color:var(--fg2)}
+.st.hot b{color:var(--bad)}
+.dsum .txtbtn{align-self:flex-start;padding-left:0}
+.dsec{display:flex;flex-direction:column;gap:8px;padding-top:6px}
+.dsec-h{display:flex;justify-content:space-between;align-items:center}
+.dsec-h h3{font-size:16px;font-weight:700}
+.rlist a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none}
+.rlist a:first-child{border-top:1px solid var(--line)}
+.rlist .sw{width:10px;height:10px;border-radius:50%}
+.rl-t b{font-size:15px;display:block}
+.rl-t small{font-size:12.5px;color:var(--fg2)}
+.rl-s{font-size:12.5px;font-weight:700;color:var(--fg2)}
+.rl-s.st-over{color:var(--bad)}.rl-s.st-near{color:var(--warn)}.rl-s.st-ok{color:var(--ok)}
+.utabs{display:flex;gap:18px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.utabs::-webkit-scrollbar{display:none}
+.utabs button{flex:none;background:none;border:0;border-radius:0;min-height:40px;padding:0 2px;font-size:14px;color:var(--fg2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.utabs button[aria-selected="true"]{color:var(--fg);font-weight:700;border-bottom-color:var(--fg)}
+.dash .cp-body{min-height:0;padding-top:6px}
+@media (max-width:680px){.st{padding:0 8px}.st b{font-size:19px}.st span{font-size:11px}.dsum{padding:16px 14px 12px}.dsum .in-t{font-size:14.5px}}
+.dcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:start}
+.dash .cp-body svg{max-height:300px}
+@media (max-width:860px){.dcols{grid-template-columns:minmax(0,1fr);gap:14px}}
 /* 대시보드 v2 */
 .dash{gap:12px}
 .insight{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;background:linear-gradient(135deg,var(--accent-soft),var(--surface));border:1px solid var(--line);border-radius:16px;padding:16px 18px}
@@ -726,7 +762,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <p><b>측정 한계</b> 휴대폰 마이크로 잰 값은 공인 측정이 아니라 참고값입니다. 법적 판정은 이웃사이센터 등의 현장 측정으로 정해집니다. AI 분류 결과에는 'AI 추정' 표시를 붙였습니다.</p>
     <p><b>절차</b> 공동주택관리법 제20조(층간소음의 방지 등), 같은 법 시행령 제21조의2(층간소음관리위원회 구성 의무 700세대)</p>
     <p><b>기준</b> 공동주택 층간소음의 범위와 기준에 관한 규칙 · 직접충격 1분 등가 주간 39·야간 34dB, 최고 주간 57·야간 52dB(1시간 3회 이상) · 공기전달 5분 등가 주간 45·야간 40dB</p>
-    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.9 · 엘리스 AI 챌린지 출품작</p>
+    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v1.2 · 엘리스 AI 챌린지 출품작</p>
   </footer>
 </div>
 </main>
@@ -1127,15 +1163,13 @@ if (typeof module !== 'undefined') module.exports = KE;
         <div class="sum-meta"><span class="ai-tag">AI 추정</span><span class="num">${when} · ${r.durSec.toFixed(0)}초 녹음</span></div>
         <h1 class="sum-t">${main}</h1>
         <p class="sum-lead st-${worst}"><span class="sdot"></span><span>${lead}</span></p>
+        ${comp.length ? `<p class="mix" title="들린 소리 구성"><span class="mix-k">들린 소리</span>${comp.map(([k, c]) => `<span class="mx"><i style="background:var(--t-${T[k].color})"></i>${T[k].name} <b class="num">${c}</b></span>`).join('<span class="mx-sep">·</span>')}</p>` : ''}
       </div>
       ${fromLog ? `<div class="racts"><button type="button" class="primary" id="dGo">이 기록으로 알리기</button><button type="button" id="dCopy">일지 복사</button><span class="sp"></span><button type="button" class="danger" id="dDel">삭제</button></div><div class="selconf callout" id="dConf" hidden><span>이 기록을 지울까요? 되돌릴 수 없어요.</span><button type="button" class="danger" id="dDelYes">지우기</button><button type="button" id="dDelNo">취소</button></div>` : `<div class="racts"><button class="primary" id="save" type="button">일지에 저장</button><a class="btn" href="#analyze">다시 분석</a></div>`}
-      ${comp.length ? `<div class="snd"><div class="snd-h"><b>들린 소리</b><span class="num">${n}회${comp.length > 1 ? ` · ${comp.length}가지가 섞여 있어요` : ''}</span></div>
-        <div class="stackbar" aria-hidden="true">${comp.map(([k, c]) => `<i style="flex:${c};background:var(--t-${T[k].color})"></i>`).join('')}</div>
-        <div class="snd-c">${comp.map(([k, c]) => `<span class="sc"><i style="background:var(--t-${T[k].color})"></i>${T[k].name}<b class="num">${c}회</b><em class="num">${Math.round(c / n * 100)}%</em></span>`).join('')}</div></div>` : ''}
-      <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas></div>
       ${rows.length ? `<div class="blk"><h2>기준과 비교</h2><div class="cmp">${rows.map((c) => `
         <div class="cmp-r"><div><div class="cmp-k">${label[c.k]}</div><div class="cmp-s">${sub[c.k](c)}</div></div>
           <div class="cmp-v num"><b>${c.v.toFixed(1)}</b><span>/ ${c.lim} dB</span></div><span class="pill ${c.st}">${stTxt[c.st]}</span></div>`).join('')}</div></div>` : ''}
+      <div class="chart"><canvas id="cv" aria-label="시간에 따른 소음 크기 그래프"></canvas></div>
       <details class="why"><summary>AI가 이렇게 판단한 이유</summary>
         <div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th>시점</th><th>종류</th><th>최고</th><th>근거</th></tr></thead><tbody>
         ${r.ev.slice(0, 20).map((e) => `<tr><td class="n">${e.t.toFixed(1)}초</td><td>${T[e.type].name}</td><td class="n">${e.peak.toFixed(1)} dB</td><td class="note">${e.why}</td></tr>`).join('')}
@@ -1240,27 +1274,35 @@ if (typeof module !== 'undefined') module.exports = KE;
     // 히트맵(기존 렌더 재사용)
     const R3 = [...E].reverse().slice(0, 3);
     const npct = total ? Math.round(nightN / total * 100) : 0, topType = bys[0] ? T[bys[0][0]].name : '-';
-    const tabs = [['heat', '시간대'], ['daily', '일별'], ['type', '소리 종류'], ['peak', '최고 소음']];
+    // 시간대 24칸 막대
+    const W3 = 520, H3 = 170, bw3 = (W3 - pl - 6) / 24, hm = Math.max(1, ...hours), s3 = (v) => (H3 - pb - pt) * v / hm;
+    let g3 = `<line x1="${pl}" x2="${W3}" y1="${H3 - pb}" y2="${H3 - pb}" stroke="var(--line)"/>`;
+    hours.forEach((v, h) => { const x = pl + bw3 * h + 1.5, nt = h >= 22 || h < 6;
+      g3 += `<rect x="${x}" y="${H3 - pb - s3(v)}" width="${bw3 - 3}" height="${Math.max(v ? 2 : 0, s3(v))}" rx="2" fill="${nt ? 'var(--accent)' : 'color-mix(in srgb,var(--accent) 35%,var(--sunk))'}"><title>${h}시 ${v}회</title></rect>`;
+      if (h % 6 === 0) g3 += `<text x="${x + (bw3 - 3) / 2}" y="${H3 - 6}" text-anchor="middle" font-size="11" fill="var(--fg2)">${h}시</text>`;
+      if (v && v === hm) g3 += `<text x="${x + (bw3 - 3) / 2}" y="${H3 - pb - s3(v) - 5}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--fg)">${v}</text>`; });
+    const tabs = [['heat', '시간대'], ['daily', '날짜별'], ['type', '소리 종류'], ['peak', '최고 소음']];
     const panel = {
-      heat: `<div class="cp-h"><h3>언제 시끄러웠나</h3><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div><p class="cap">최근 7일, 시간대별로 들린 횟수 · 밑줄 칸은 야간</p><div class="heat-wrap"><div class="heat" id="heat"></div></div>`,
-      daily: `<div class="cp-h"><h3>날마다 몇 번 들렸나</h3><div class="leg2"><span><i style="background:var(--accent)"></i>야간</span><span><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i>주간</span></div></div><p class="cap">최근 7일 · 막대 위 숫자는 그날 들린 횟수</p>${svgEl(W, H, g)}`,
-      type: `<div class="cp-h"><h3>어떤 소리였나</h3></div><p class="cap">AI가 분류한 소리 종류별 횟수</p><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>`,
-      peak: `<div class="cp-h"><h3>얼마나 컸나</h3><div class="leg2"><span><i style="background:var(--bad)"></i>초과</span><span><i style="background:var(--warn)"></i>근접</span><span><i style="background:var(--ok)"></i>이내</span></div></div><p class="cap">기록별 최고 소음(dB) · 점선은 야간 52 · 주간 57 기준</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}`
+      heat: `<p class="cap">몇 시에 많이 들렸나 · 진한 막대가 야간(22~06시)</p>${svgEl(W3, H3, g3)}`,
+      daily: `<p class="cap">최근 7일 · 진한 막대가 야간</p>${svgEl(W, H, g)}`,
+      type: `<p class="cap">AI가 분류한 소리 종류별 횟수</p><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>`,
+      peak: `<p class="cap">기록별 최고 소음 · 점선은 야간 52 · 주간 57dB 기준 · 빨강 초과</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}`
     };
     if (!panel[dmenu]) dmenu = 'heat';
-    return `<div class="insight">
-        <p class="in-t">${E.length ? `들린 소리의 <b>${npct}%</b>가 밤 10시 이후였고,<br>가장 잦은 시각은 <b>${ph}시</b>, 주로 <b>${topType}</b>였어요.` : '아직 기록이 없어요.'}</p>
-        <div class="in-act">${over ? `<span class="pill over">기준 초과 ${over}건</span>` : ''}${E.length ? '<button type="button" class="txtbtn strong" id="copyLog">상담용 일지 복사</button>' : ''}</div>
-      </div>
-      <div class="kpis">${kpi(E.length, '건', '기록', '')}${kpi(total, '회', '들린 소리', '')}${kpi(avgMax.toFixed(1), 'dB', '평균 최고', '')}${kpi(over + near, '건', '초과·근접', '', over ? 'hot' : '')}</div>
-      <section class="chartpane">
-        <div class="seg ctabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dm="${k}" aria-pressed="${dmenu === k}">${l}</button>`).join('')}</div>
-        <div class="cp-body">${panel[dmenu]}</div>
+    const stat = (v, u, k, c = '') => `<div class="st ${c}"><b>${v}<small>${u}</small></b><span>${k}</span></div>`;
+    return `<section class="dsum">
+        <p class="in-t">${E.length ? `들린 소리의 <b>${npct}%</b>가 밤 10시 이후, 가장 잦은 시각은 <b>${ph}시</b>, 주로 <b>${topType}</b>였어요.` : '아직 기록이 없어요.'}</p>
+        <div class="sts">${stat(E.length, '건', '기록')}${stat(total, '회', '들린 소리')}${stat(avgMax.toFixed(1), 'dB', '평균 최고')}${stat(over, '건', '기준 초과', over ? 'hot' : '')}</div>
+        ${E.length ? '<button type="button" class="txtbtn" id="copyLog">상담용 일지 복사 ›</button>' : ''}
       </section>
-      <section class="rec-sec">
-        <div class="cp-h"><h3>최근 기록</h3><button type="button" class="more" id="toBoard">전체 보기 ›</button></div>
-        <div class="recent3">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span><b>${T[e.type].name}</b> ${e.count}회<small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.lmax}dB</small></span><span class="pill ${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>
-      </section>`;
+      <div class="dcols"><section class="dsec">
+        <div class="dsec-h"><h3>최근 기록</h3><button type="button" class="txtbtn" id="toBoard">전체 보기 ›</button></div>
+        <div class="rlist">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span class="rl-t"><b>${T[e.type].name}</b><small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.count}회 · ${e.lmax}dB</small></span><span class="rl-s st-${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div>
+      </section>
+      <section class="dsec">
+        <div class="utabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-dm="${k}" aria-selected="${dmenu === k}">${l}</button>`).join('')}</div>
+        <div class="cp-body">${panel[dmenu]}</div>
+      </section></div>`;
   }
   function heatHTML(E) {
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
@@ -1305,7 +1347,7 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
     const total = E.reduce((s, e) => s + e.count, 0);
     $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
-    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#copyLog') && $('#copyLog').addEventListener('click', () => copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`)); const hm = $('#heat'); if (hm) hm.innerHTML = heatHTML(E); $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#copyLog') && $('#copyLog').addEventListener('click', () => copy(logText(), `기록 ${E.length}건을 상담용 일지로 복사했습니다`));  $$('[data-dm]').forEach((b) => b.addEventListener('click', () => { dmenu = b.dataset.dm; renderJournal(); })); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
     const All = [...E].reverse(), R = All.filter(matches);
     [...pick].forEach((t) => { if (!E.some((e) => e.ts === t)) pick.delete(t); }); renderSel();
     const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
