@@ -285,6 +285,53 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
 .fc{min-height:34px;padding:4px 12px;border-radius:999px;font-size:12.5px;background:var(--sunk);border-color:transparent;color:var(--fg2)}
 .fc[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
 .nores{padding:22px 20px;color:var(--fg2);font-size:13.5px}
+/* 검색 2 */
+.bsearch select{font:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1px solid var(--line2);border-radius:10px;min-height:42px;padding:0 10px;flex:none}
+.sbtn{min-height:42px;padding:0 16px;flex:none}
+.adv-btn{min-height:42px;flex:none;gap:6px}
+.adv-btn[aria-expanded="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.adv{display:flex;flex-direction:column;gap:12px;padding:14px 16px;background:var(--sunk);border-bottom:1px solid var(--line)}
+.adv-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:10px;align-items:center}
+.adv-k{font-size:13px;font-weight:700;color:var(--fg2)}
+.adv-v{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--fg2)}
+.adv-v input{font:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:6px 8px;min-height:38px}
+.adv-v input[type=number]{width:96px}
+.adv-row.end{display:flex;justify-content:flex-end;gap:8px}
+.adv .fc{background:var(--surface);border:1px solid var(--line2)}
+.adv .fc[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.rhead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:10px 16px}
+.rchips{display:flex;flex-wrap:wrap;gap:6px}
+.rchips span{font-size:11.5px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 9px;font-weight:700}
+/* 대시보드 */
+.dash{display:flex;flex-direction:column;gap:14px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.kpi .k{font-size:12.5px;color:var(--fg2)}
+.kpi .v{font-size:26px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.25}
+.kpi .v small{font-size:13px;font-weight:700;margin-left:2px}
+.kpi .s{font-size:11.5px;color:var(--fg3)}
+.kpi.hot .v{color:var(--bad)}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.dcard h3{font-size:15px;font-weight:700}
+.dcard .cap{margin-top:-6px}
+.dcard svg{display:block;width:100%;height:auto;overflow:visible}
+.dcard.wide{grid-column:1/-1}
+.hb{display:flex;flex-direction:column;gap:8px}
+.hb-r{display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:13px}
+.hb-r .bar{height:12px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.hb-r .bar i{display:block;height:100%;border-radius:999px}
+.hb-r b{text-align:right;font-variant-numeric:tabular-nums}
+.leg2{display:flex;gap:12px;font-size:12px;color:var(--fg2)}
+.leg2 i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.recent3{display:flex;flex-direction:column}
+.recent3 a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 2px;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none;font-size:14px}
+.recent3 a:last-child{border-bottom:0}
+.recent3 .sw{width:10px;height:10px;border-radius:3px}
+.recent3 small{color:var(--fg2);font-size:12px;display:block}
+.more{align-self:flex-end;font-size:13px;font-weight:700;color:var(--accent);background:none;border:0;min-height:32px;padding:4px 6px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.dgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:680px){.kpi .v{font-size:20px}.kpi{padding:10px}.kpi .k{font-size:11.5px}.adv-row{grid-template-columns:minmax(0,1fr)}.bsearch{flex-wrap:nowrap;gap:6px;padding:12px}.bsearch select{flex:0 0 84px;padding:0 6px;font-size:13px}.sbox{flex:1 1 auto;min-width:0;padding:0 8px}.sbox svg{display:none}.sbtn{padding:0 12px}.adv-btn{width:42px;padding:0;font-size:0;gap:0}.hb-r{grid-template-columns:84px minmax(0,1fr) 40px}}
 /* STEP 3 상세 메뉴 고정 */
 #v-rdetail .stickyhd{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barH,60px));z-index:15;background:var(--bg);display:flex;flex-direction:column;gap:8px;padding:6px 0 10px;margin-top:-6px;border-bottom:1px solid var(--line)}
 /* STEP 2 게시판 */
@@ -537,18 +584,26 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
       <p class="jsum num" id="jSum"></p>
     </div>
     <div id="clearConfirm" class="callout" hidden>내 기록을 모두 지울까요? 되돌릴 수 없습니다. <button id="clearYes" type="button">지우기</button> <button id="clearNo" type="button">취소</button></div>
-    <div class="seg jtabs" role="tablist"><button type="button" role="tab" data-jt="board" aria-pressed="true">기록 게시판</button><button type="button" role="tab" data-jt="pattern" aria-pressed="false">시간대 패턴</button></div>
-    <div class="card board" id="jBoard">
-      <div class="bsearch">
-        <label class="sbox" for="q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="소리·날짜·판정으로 검색 (예: 뛰는, 11/5, 초과)" autocomplete="off"></label>
-        <div class="fchips" role="group" aria-label="빠른 필터"><button type="button" class="fc" data-fc="night" aria-pressed="false">야간만</button><button type="button" class="fc" data-fc="over" aria-pressed="false">기준 초과만</button></div>
+    <div class="seg jtabs" role="tablist"><button type="button" role="tab" data-jt="dash" aria-pressed="true">대시보드</button><button type="button" role="tab" data-jt="board" aria-pressed="false">기록 게시판</button></div>
+    <div id="jDash" class="dash"></div>
+    <div class="card board" id="jBoard" hidden>
+      <form class="bsearch" id="sForm" role="search">
+        <select id="qField" aria-label="검색 조건"><option value="all">전체</option><option value="type">소리 종류</option><option value="date">날짜</option><option value="verdict">판정</option><option value="time">시간대</option><option value="file">파일 이름</option></select>
+        <label class="sbox" for="q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="검색어 입력" autocomplete="off"></label>
+        <button type="submit" class="primary sbtn">검색</button>
+        <button type="button" class="adv-btn" id="advBtn" aria-expanded="false" aria-controls="adv"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>상세</button>
+      </form>
+      <div class="adv" id="adv" hidden>
+        <div class="adv-row"><span class="adv-k">기간</span><div class="adv-v"><input type="date" id="dFrom" aria-label="시작 날짜"><span>~</span><input type="date" id="dTo" aria-label="끝 날짜"></div></div>
+        <div class="adv-row"><span class="adv-k">소리 종류</span><div class="adv-v chips" id="aTypes"><button type="button" class="fc" data-at="walk" aria-pressed="false">걷는 소리</button><button type="button" class="fc" data-at="run" aria-pressed="false">뛰는 소리</button><button type="button" class="fc" data-at="hammer" aria-pressed="false">망치질</button><button type="button" class="fc" data-at="drag" aria-pressed="false">가구 끌기</button><button type="button" class="fc" data-at="door" aria-pressed="false">문 여닫기</button><button type="button" class="fc" data-at="music" aria-pressed="false">음악·악기</button><button type="button" class="fc" data-at="speech" aria-pressed="false">말소리·TV</button><button type="button" class="fc" data-at="appl" aria-pressed="false">가전</button><button type="button" class="fc" data-at="other" aria-pressed="false">기타</button></div></div>
+        <div class="adv-row"><span class="adv-k">시간대</span><div class="adv-v chips"><button type="button" class="fc" data-tz="all" aria-pressed="true">전체</button><button type="button" class="fc" data-tz="day" aria-pressed="false">주간 06~22시</button><button type="button" class="fc" data-tz="night" aria-pressed="false">야간 22~06시</button></div></div>
+        <div class="adv-row"><span class="adv-k">판정</span><div class="adv-v chips"><button type="button" class="fc" data-vd="over" aria-pressed="false">기준 초과</button><button type="button" class="fc" data-vd="near" aria-pressed="false">기준 근접</button><button type="button" class="fc" data-vd="ok" aria-pressed="false">기준 이내</button></div></div>
+        <div class="adv-row"><span class="adv-k">최고 소음</span><div class="adv-v"><input type="number" id="minDb" min="0" max="120" step="1" placeholder="예: 55" aria-label="최고 소음 최소값"><span>dB 이상</span></div></div>
+        <div class="adv-row end"><button type="button" id="advReset">조건 초기화</button><button type="button" class="primary" id="advApply">이 조건으로 검색</button></div>
       </div>
+      <div class="rhead"><span id="rCount" class="note num"></span><span id="rChips" class="rchips"></span></div>
       <div class="bt" id="jList" role="list"></div>
       <div class="pager" id="pager"></div>
-    </div>
-    <div class="card" id="jPattern" hidden>
-      <div class="card-h"><div><h2>언제 시끄러웠나</h2><p class="cap">최근 7일, 시간대별로 들린 횟수예요. 밑줄 칸은 야간이에요.</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div>
-      <div class="heat-wrap"><div class="heat" id="heat"></div></div>
     </div>
     <div class="cta-bar"><a class="btn primary wide" href="#report">다음: 알리기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </section>
@@ -579,7 +634,7 @@ footer{font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:6p
     <p><b>측정 한계</b> 휴대폰 마이크로 잰 값은 공인 측정이 아니라 참고값입니다. 법적 판정은 이웃사이센터 등의 현장 측정으로 정해집니다. AI 분류 결과에는 'AI 추정' 표시를 붙였습니다.</p>
     <p><b>절차</b> 공동주택관리법 제20조(층간소음의 방지 등), 같은 법 시행령 제21조의2(층간소음관리위원회 구성 의무 700세대)</p>
     <p><b>기준</b> 공동주택 층간소음의 범위와 기준에 관한 규칙 · 직접충격 1분 등가 주간 39·야간 34dB, 최고 주간 57·야간 52dB(1시간 3회 이상) · 공기전달 5분 등가 주간 45·야간 40dB</p>
-    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.4 · 엘리스 AI 챌린지 출품작</p>
+    <p><b>AI 구성</b> 1단 공개 소리 인식 AI(YAMNet 521종, Apache 2.0, MediaPipe로 기기 안에서 실행) + 2단 층간소음 판별(저음 비중·지속시간·반복 간격). 판별 범위는 한국환경공단 현장진단 민원 원인 통계(2024년 뛰거나 걷는 소리 74.0%, 망치질 12.9%, 가구 4.6%)를 근거로 정했습니다. · 쿵쾅 PoC v0.6 · 엘리스 AI 챌린지 출품작</p>
   </footer>
 </div>
 </main>
@@ -1052,15 +1107,47 @@ if (typeof module !== 'undefined') module.exports = KE;
     log.sort((a, b) => a.ts - b.ts);
     try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e) { toast('저장 공간이 부족해 그래프 없이 저장했습니다'); log[log.length - 1].res = null; try { localStorage.setItem(KEY, JSON.stringify(log)); } catch (e2) {} }
   }
-  let jtab = 'board'; const fc = { night: false, over: false };
-  function renderJournal() {
-    const E = entries();
-    $('#exBtn').setAttribute('aria-pressed', String(isExample));
-    $('#jBoard').hidden = jtab !== 'board'; $('#jPattern').hidden = jtab !== 'pattern';
-    $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
-    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0), over = E.filter((e) => e.over === 'over' || e.over === 'near').length;
-    $('#jSum').innerHTML = E.length ? `기록 <b>${E.length}</b>건 · 소리 <b>${total}</b>회 · 야간 <b>${total ? Math.round(nightN / total * 100) : 0}%</b> · 초과 <b class="${over ? 'hot' : ''}">${over}</b>건` : '저장한 기록이 없어요.';
-    // 히트맵
+  let jtab = 'dash';
+  const SF = { field: 'all', q: '', from: '', to: '', types: new Set(), tz: 'all', vd: new Set(), minDb: '' };
+  const svgEl = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
+  function dashboard(E) {
+    const total = E.reduce((s, e) => s + e.count, 0), nightN = E.filter((e) => e.night).reduce((s, e) => s + e.count, 0), over = E.filter((e) => e.over === 'over').length, near = E.filter((e) => e.over === 'near').length;
+    const avgMax = E.length ? E.reduce((s, e) => s + e.lmax, 0) / E.length : 0, peak = E.reduce((m, e) => e.lmax > m.lmax ? e : m, E[0] || { lmax: 0 });
+    const hours = new Array(24).fill(0); E.forEach((e) => { hours[new Date(e.ts).getHours()] += e.count; }); const ph = hours.indexOf(Math.max(...hours));
+    const kpi = (v, u, k, s2, c = '') => `<div class="kpi ${c}"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div><div class="s">${s2}</div></div>`;
+    // 일별
+    const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
+    for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
+    const dn = days.map(() => ({ d: 0, n: 0 }));
+    E.forEach((e) => { const d = new Date(e.ts), di = days.findIndex((x) => x.getTime() === new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()); if (di >= 0) dn[di][e.night ? 'n' : 'd'] += e.count; });
+    const W = 520, H = 190, pl = 28, pb = 24, pt = 10, bw = (W - pl - 10) / 7, mx = Math.max(10, ...dn.map((x) => x.d + x.n)), sc = (v) => (H - pb - pt) * v / mx;
+    let g = ''; for (let t = 0; t <= 2; t++) { const v = Math.round(mx * t / 2), y = H - pb - sc(v); g += `<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pl - 6}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--fg2)">${v}</text>`; }
+    dn.forEach((x, i) => { const cx = pl + bw * i + bw * 0.2, w = bw * 0.6, yN = H - pb - sc(x.n), yD = yN - sc(x.d);
+      g += `<rect x="${cx}" y="${yN}" width="${w}" height="${sc(x.n)}" rx="3" fill="var(--accent)"/><rect x="${cx}" y="${yD}" width="${w}" height="${sc(x.d)}" rx="3" fill="color-mix(in srgb,var(--accent) 35%,var(--sunk))"/>`;
+      if (x.d + x.n) g += `<text x="${cx + w / 2}" y="${yD - 4}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--fg)">${x.d + x.n}</text>`;
+      g += `<text x="${cx + w / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--fg2)">${days[i].getMonth() + 1}/${days[i].getDate()}</text>`; });
+    // 종류
+    const by = {}; E.forEach((e) => Object.entries(e.counts || { [e.type]: e.count }).forEach(([k, c]) => { by[k] = (by[k] || 0) + c; }));
+    const bys = Object.entries(by).sort((a, b) => b[1] - a[1]), bmx = Math.max(1, ...bys.map((x) => x[1]));
+    // 최고 소음 추이
+    const L = [...E].slice(-14), W2 = 520, H2 = 170, lo = 40, hi = Math.max(75, ...L.map((e) => e.lmax + 3)), y2 = (v) => pt + (H2 - pb - pt) * (1 - (v - lo) / (hi - lo)), x2 = (i) => pl + (W2 - pl - 14) * (L.length > 1 ? i / (L.length - 1) : 0.5);
+    let g2 = ''; [40, 52, 57, 70].filter((v) => v <= hi).forEach((v) => { g2 += `<line x1="${pl}" x2="${W2}" y1="${y2(v)}" y2="${y2(v)}" stroke="${v === 52 || v === 57 ? 'var(--bad)' : 'var(--line)'}" ${v === 52 || v === 57 ? 'stroke-dasharray="4 4"' : ''}/><text x="${pl - 6}" y="${y2(v) + 4}" text-anchor="end" font-size="11" fill="${v === 52 || v === 57 ? 'var(--bad)' : 'var(--fg2)'}">${v}</text>`; });
+    g2 += `<text x="${W2}" y="${y2(52) - 5}" text-anchor="end" font-size="10.5" fill="var(--bad)">야간 기준 52 · 주간 57</text>`;
+    if (L.length > 1) g2 += `<polyline points="${L.map((e, i) => `${x2(i)},${y2(e.lmax)}`).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+    L.forEach((e, i) => { g2 += `<circle cx="${x2(i)}" cy="${y2(e.lmax)}" r="4.5" fill="${e.over === 'over' ? 'var(--bad)' : e.over === 'near' ? 'var(--warn)' : 'var(--ok)'}" stroke="var(--surface)" stroke-width="1.5"><title>${fmt(new Date(e.ts))} ${e.lmax}dB</title></circle>`; });
+    // 히트맵(기존 렌더 재사용)
+    const R3 = [...E].reverse().slice(0, 3);
+    return `<div class="kpis">${kpi(E.length, '건', '기록', '최근 저장')}${kpi(total, '회', '들린 소리', 'AI가 찾은 소리')}${kpi(total ? Math.round(nightN / total * 100) : 0, '%', '야간 비중', '22~06시')}
+      ${kpi(over, '건', '기준 초과', `근접 ${near}건`, over ? 'hot' : '')}${kpi(avgMax.toFixed(1), 'dB', '평균 최고 소음', `최대 ${peak.lmax}dB`)}${kpi(E.length ? ph : '-', E.length ? '시' : '', '가장 잦은 시각', E.length ? `${hours[ph]}회` : '')}</div>
+      <div class="dgrid">
+        <div class="dcard"><h3>일별 소리 횟수</h3><div class="leg2"><span><i style="background:var(--accent)"></i>야간</span><span><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i>주간</span></div>${svgEl(W, H, g)}</div>
+        <div class="dcard"><h3>어떤 소리였나</h3><div class="hb">${bys.map(([k, c]) => `<div class="hb-r"><span>${T[k].name}</span><span class="bar"><i style="width:${c / bmx * 100}%;background:var(--t-${T[k].color})"></i></span><b>${c}회</b></div>`).join('') || '<p class="note">기록이 없어요.</p>'}</div></div>
+        <div class="dcard"><h3>최고 소음 추이</h3><p class="cap">최근 ${L.length}건 · 점 색은 판정(빨강 초과, 주황 근접, 초록 이내)</p>${L.length ? svgEl(W2, H2, g2) : '<p class="note">기록이 없어요.</p>'}</div>
+        <div class="dcard"><h3>최근 기록</h3><div class="recent3">${R3.map((e) => `<a href="#log-${e.ts}"><span class="sw" style="background:var(--t-${T[e.type].color})"></span><span><b>${T[e.type].name}</b> ${e.count}회<small>${fmt(new Date(e.ts))}${e.night ? ' · 야간' : ''} · ${e.lmax}dB</small></span><span class="pill ${e.over}">${stTxt[e.over]}</span></a>`).join('') || '<p class="note">기록이 없어요.</p>'}</div><button type="button" class="more" id="toBoard">게시판 전체 보기 ›</button></div>
+        <div class="dcard wide"><div class="card-h"><div><h3>언제 시끄러웠나</h3><p class="cap" style="margin-top:2px">최근 7일 시간대별 횟수 · 밑줄 칸은 야간</p></div><div class="scale"><span>적음</span><i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--accent) 70%,var(--sunk))"></i><i style="background:var(--accent)"></i><span>많음</span></div></div><div class="heat-wrap"><div class="heat" id="heat"></div></div></div>
+      </div>`;
+  }
+  function heatHTML(E) {
     const days = [], today = new Date(); today.setHours(0, 0, 0, 0);
     for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
     const grid = days.map(() => new Array(24).fill(0));
@@ -1069,18 +1156,40 @@ if (typeof module !== 'undefined') module.exports = KE;
     let html = '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="hl">${h % 3 === 0 ? h : ''}</div>`).join('');
     days.forEach((d, di) => { html += `<div class="dl">${d.getMonth() + 1}/${d.getDate()} (${wk[d.getDay()]})</div>`;
       grid[di].forEach((v, h) => { const a = v ? 0.3 + 0.7 * v / mx : 0, nt = h >= 22 || h < 6; html += `<div class="c${nt ? ' night' : ''}" title="${d.getMonth() + 1}/${d.getDate()} ${h}시 · ${v}회" style="${v ? `background:color-mix(in srgb, var(--accent) ${Math.round(a * 100)}%, var(--sunk))` : ''}"></div>`; }); });
-    $('#heat').innerHTML = html;
-    // 게시판
-    if (!E.length) { $('#jList').innerHTML = '<p class="empty-j" style="padding:18px 20px">아직 저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.<br>\'예시\'를 누르면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
-    const q = ($('#q').value || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
-    const hay = (e) => { const d = new Date(e.ts); return [T[e.type].name, fmt(d), `${d.getMonth() + 1}/${d.getDate()}`, `${d.getMonth() + 1}월 ${d.getDate()}일`, e.night ? '야간 밤' : '주간 낮', stTxt[e.over], e.src || '', Object.keys(e.counts || {}).map((k) => T[k].name).join(' ')].join(' ').toLowerCase(); };
-    const All = [...E].reverse();
-    const R = All.filter((e) => q.every((w) => hay(e).includes(w)) && (!fc.night || e.night) && (!fc.over || e.over === 'over'));
+    return html;
+  }
+  function matches(e) {
+    const d = new Date(e.ts), q = SF.q.trim().toLowerCase(), dayKey = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const parts = { type: [T[e.type].name, ...Object.keys(e.counts || {}).map((k) => T[k].name)].join(' '), date: `${fmt(d)} ${d.getMonth() + 1}/${d.getDate()} ${d.getMonth() + 1}월 ${d.getDate()}일 ${dayKey}`, verdict: stTxt[e.over], time: `${e.night ? '야간 밤' : '주간 낮'} ${d.getHours()}시`, file: e.src || '' };
+    const hay = (SF.field === 'all' ? Object.values(parts).join(' ') : parts[SF.field]).toLowerCase();
+    if (q && !q.split(/\s+/).every((w) => hay.includes(w))) return false;
+    if (SF.from && dayKey < SF.from) return false;
+    if (SF.to && dayKey > SF.to) return false;
+    if (SF.types.size && ![e.type, ...Object.keys(e.counts || {})].some((t) => SF.types.has(t))) return false;
+    if (SF.tz === 'day' && e.night) return false; if (SF.tz === 'night' && !e.night) return false;
+    if (SF.vd.size && !SF.vd.has(e.over)) return false;
+    if (SF.minDb && e.lmax < +SF.minDb) return false;
+    return true;
+  }
+  function renderJournal() {
+    const E = entries();
+    $('#exBtn').setAttribute('aria-pressed', String(isExample));
+    $('#jDash').hidden = jtab !== 'dash'; $('#jBoard').hidden = jtab !== 'board';
+    $$('[data-jt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.jt === jtab)));
+    const total = E.reduce((s, e) => s + e.count, 0);
+    $('#jSum').innerHTML = E.length ? `${isExample ? '예시 데이터 · ' : ''}${fmt(new Date(E[0].ts))} ~ ${fmt(new Date(E[E.length - 1].ts))}` : '저장한 기록이 없어요. STEP 1에서 분석한 뒤 \'일지에 저장\'을 눌러 주세요.';
+    if (jtab === 'dash') { $('#jDash').innerHTML = dashboard(E); $('#heat').innerHTML = heatHTML(E); $('#toBoard').addEventListener('click', () => { jtab = 'board'; renderJournal(); }); return; }
+    const All = [...E].reverse(), R = All.filter(matches);
+    const tags = []; if (SF.q) tags.push(`"${SF.q}"${SF.field !== 'all' ? ' · ' + $('#qField').selectedOptions[0].text : ''}`); if (SF.from || SF.to) tags.push(`${SF.from || '처음'} ~ ${SF.to || '오늘'}`);
+    SF.types.forEach((t) => tags.push(T[t].name)); if (SF.tz !== 'all') tags.push(SF.tz === 'day' ? '주간' : '야간'); SF.vd.forEach((v) => tags.push(stTxt[v])); if (SF.minDb) tags.push(`${SF.minDb}dB 이상`);
+    $('#rCount').textContent = tags.length ? `검색 결과 ${R.length}건 / 전체 ${All.length}건` : `전체 ${All.length}건 · 최신순`;
+    $('#rChips').innerHTML = tags.map((t) => `<span>${t}</span>`).join('');
+    if (!All.length) { $('#jList').innerHTML = '<p class="nores">저장한 기록이 없어요. \'예시\'를 누르면 예시 일지를 볼 수 있어요.</p>'; $('#pager').innerHTML = ''; return; }
     const PER = 8, pages = Math.max(1, Math.ceil(R.length / PER)); if (page >= pages) page = pages - 1;
-    if (!R.length) { $('#jList').innerHTML = `<p class="nores">'${$('#q').value || '필터'}' 조건에 맞는 기록이 없어요.</p>`; $('#pager').innerHTML = ''; return; }
+    if (!R.length) { $('#jList').innerHTML = '<p class="nores">조건에 맞는 기록이 없어요. 검색어나 상세 조건을 바꿔 보세요.</p>'; $('#pager').innerHTML = ''; return; }
     const latest = All[0].ts, isNew = (e) => e.ts === latest && Date.now() - e.ts < 36e5 * 24;
     const head = `<div class="br th" role="presentation"><span class="no">번호</span><span>일시</span><span>소리</span><span class="n2">횟수</span><span class="n2">최고</span><span>판정</span><span></span></div>`;
-    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e, k) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
+    $('#jList').innerHTML = head + R.slice(page * PER, page * PER + PER).map((e) => { const no = All.length - All.indexOf(e), d = new Date(e.ts);
       return `<a class="br" role="listitem" href="#log-${e.ts}"><span class="no">${no}</span><span class="dt">${fmt(d)}${e.night ? ' <span class="nt">야간</span>' : ''}</span>
         <span class="ttl"><span class="sw" style="background:var(--t-${T[e.type].color})"></span>${T[e.type].name}${isNew(e) ? ' <span class="new">NEW</span>' : ''}</span>
         <span class="n2">${e.count}회</span><span class="n2">${e.lmax}dB</span><span class="pill ${e.over}">${stTxt[e.over]}</span><span class="go" aria-hidden="true">›</span>
@@ -1089,8 +1198,15 @@ if (typeof module !== 'undefined') module.exports = KE;
     $$('#pager [data-pg]').forEach((b) => b.addEventListener('click', () => { page = +b.dataset.pg; renderJournal(); }));
   }
   $$('[data-jt]').forEach((b) => b.addEventListener('click', () => { jtab = b.dataset.jt; renderJournal(); }));
-  $('#q').addEventListener('input', () => { page = 0; renderJournal(); });
-  $$('[data-fc]').forEach((b) => b.addEventListener('click', () => { fc[b.dataset.fc] = !fc[b.dataset.fc]; b.setAttribute('aria-pressed', String(fc[b.dataset.fc])); page = 0; renderJournal(); }));
+  const doSearch = () => { SF.field = $('#qField').value; SF.q = $('#q').value; page = 0; renderJournal(); };
+  $('#sForm').addEventListener('submit', (e) => { e.preventDefault(); doSearch(); });
+  $('#q').addEventListener('input', doSearch); $('#qField').addEventListener('change', doSearch);
+  $('#advBtn').addEventListener('click', () => { const o = $('#adv').hidden; $('#adv').hidden = !o; $('#advBtn').setAttribute('aria-expanded', String(o)); });
+  $$('[data-at]').forEach((b) => b.addEventListener('click', () => { const k = b.dataset.at; SF.types.has(k) ? SF.types.delete(k) : SF.types.add(k); b.setAttribute('aria-pressed', String(SF.types.has(k))); }));
+  $$('[data-tz]').forEach((b) => b.addEventListener('click', () => { SF.tz = b.dataset.tz; $$('[data-tz]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); }));
+  $$('[data-vd]').forEach((b) => b.addEventListener('click', () => { const k = b.dataset.vd; SF.vd.has(k) ? SF.vd.delete(k) : SF.vd.add(k); b.setAttribute('aria-pressed', String(SF.vd.has(k))); }));
+  $('#advApply').addEventListener('click', () => { SF.from = $('#dFrom').value; SF.to = $('#dTo').value; SF.minDb = $('#minDb').value; doSearch(); });
+  $('#advReset').addEventListener('click', () => { Object.assign(SF, { from: '', to: '', tz: 'all', minDb: '' }); SF.types.clear(); SF.vd.clear(); $('#dFrom').value = $('#dTo').value = $('#minDb').value = ''; $$('#adv [aria-pressed]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tz === 'all'))); doSearch(); });
   function logText() {
     const E = entries(); if (!E.length) return '';
     const by = {}; E.forEach((e) => { by[e.type] = (by[e.type] || 0) + e.count; });
