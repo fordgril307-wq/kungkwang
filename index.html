@@ -2906,11 +2906,28 @@ if (typeof module !== 'undefined') module.exports = KE;
     const b = $('#recent2'); if (!b) return;
     const L = log.length ? log : [], e = L[L.length - 1];
     const today = new Date(); today.setHours(0, 0, 0, 0); const nT = L.filter((x) => x.ts >= today.getTime()).length;
+    greet();
     { const d = new Date(); $('#greetS').textContent = `${d.getMonth() + 1}월 ${d.getDate()}일 (${wk[d.getDay()]})${nT ? ` · 오늘 기록 ${nT}건` : ''}`; }
     if (!e) { b.innerHTML = '<span class="k">최근 소음 기록</span><span class="chev">›</span><span class="d" style="color:var(--fg2)">아직 기록이 없어요 · 예시 일지 보기</span>'; b.onclick = () => { exMode = true; go('journal'); }; return; }
     const d = new Date(e.ts);
     b.innerHTML = `<span class="k">최근 소음 기록</span><span class="chev">›</span><span class="d"><i><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></i>${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${wk[d.getDay()]}) ${pad(d.getHours())}:${pad(d.getMinutes())} · ${T[e.type].name} <span class="pill ${e.over}">${stTxt[e.over]}</span></span>`;
     b.onclick = () => { location.hash = 'log-' + e.ts; };
+  }
+  /* 홈 인사: 시간대 + 어젯밤 기록에 따라 안부 문구 (날짜마다 바뀜) */
+  function greet() {
+    const now = new Date(), h = now.getHours(), day = Math.floor((now - now.getTimezoneOffset() * 6e4) / 864e5);
+    const n0 = new Date(now); n0.setHours(h < 12 ? 0 : 24, 0, 0, 0); const from = n0.getTime() - 2 * 36e5, to = n0.getTime() + 6 * 36e5; // 전날 22시~오늘 06시
+    const last = entries().filter((e) => e.ts >= from && e.ts < to && e.ts <= Date.now()), hard = last.some((e) => e.over === 'over');
+    const top = h >= 5 && h < 11 ? '좋은 아침이에요' : h >= 11 && h < 18 ? '안녕하세요!' : h >= 18 && h < 22 ? '편안한 저녁이에요' : '늦은 밤이네요';
+    const P = {
+      hard: ['어젯밤 많이 힘드셨죠', '밤새 잘 버티셨어요', '기록은 잘 남겨 뒀어요'],
+      morning: ['푹 쉬셨길 바라요 ☀️', '오늘은 조용한 하루이길', '좋은 하루 보내세요'],
+      day: ['혼자 참지 않아도 돼요', '감정 대신 기록으로', '차분하게, 하나씩 해결해요'],
+      evening: ['오늘 하루도 수고했어요', '편안한 저녁 보내세요', '집이 쉼이 되길 바라요'],
+      night: ['오늘 밤은 조용하길 바라요 🌙', '소리가 나면 녹음만 눌러 두세요', '편히 쉬세요, 기록은 쿵쾅이']
+    };
+    const k = h >= 22 || h < 5 ? 'night' : h < 11 ? (hard ? 'hard' : 'morning') : h < 18 ? 'day' : 'evening';
+    const L = P[k]; $('.greet .g-top small').textContent = top; $('#greetT').textContent = L[day % L.length];
   }
   function renderHomeWidgets() {
     const E = entries(), now = Date.now(), t0 = new Date(); t0.setHours(0, 0, 0, 0); const w0 = new Date(t0); w0.setDate(w0.getDate() - 6);
