@@ -2911,11 +2911,21 @@ if (typeof module !== 'undefined') module.exports = KE;
     const b = $('#recent2'); if (!b) return;
     const L = log.length ? log : [], e = L[L.length - 1];
     const today = new Date(); today.setHours(0, 0, 0, 0); const nT = L.filter((x) => x.ts >= today.getTime()).length;
+    greet();
     { const d = new Date(); $('#greetS').textContent = `${d.getMonth() + 1}월 ${d.getDate()}일 (${wk[d.getDay()]})${nT ? ` · 오늘 기록 ${nT}건` : ''}`; }
     if (!e) { b.innerHTML = '<span class="k">최근 소음 기록</span><span class="chev">›</span><span class="d" style="color:var(--fg2)">아직 기록이 없어요 · 예시 일지 보기</span>'; b.onclick = () => { exMode = true; go('journal'); }; return; }
     const d = new Date(e.ts);
     b.innerHTML = `<span class="k">최근 소음 기록</span><span class="chev">›</span><span class="d"><i><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></i>${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${wk[d.getDay()]}) ${pad(d.getHours())}:${pad(d.getMinutes())} · ${T[e.type].name} <span class="pill ${e.over}">${stTxt[e.over]}</span></span>`;
     b.onclick = () => { location.hash = 'log-' + e.ts; };
+  }
+  /* 홈 인사 (A안: 상황마다 문구 하나 고정) */
+  function greet() {
+    const now = new Date(), h = now.getHours();
+    const n0 = new Date(now); n0.setHours(h < 12 ? 0 : 24, 0, 0, 0); const from = n0.getTime() - 2 * 36e5, to = n0.getTime() + 6 * 36e5; // 전날 22시~오늘 06시
+    const hard = entries().some((e) => e.ts >= from && e.ts < to && e.ts <= Date.now() && e.over === 'over');
+    const top = h >= 5 && h < 11 ? '좋은 아침이에요' : h >= 11 && h < 18 ? '안녕하세요!' : h >= 18 && h < 22 ? '편안한 저녁이에요' : '늦은 밤이네요';
+    const big = h >= 22 || h < 5 ? '오늘 밤은 조용하길 바라요 🌙' : h < 11 ? (hard ? '어젯밤 많이 힘드셨죠' : '푹 쉬셨길 바라요 ☀️') : h < 18 ? '혼자 참지 않아도 돼요' : '오늘 하루도 수고했어요';
+    $('.greet .g-top small').textContent = top; $('#greetT').textContent = big;
   }
   function renderHomeWidgets() {
     const E = entries(), now = Date.now(), t0 = new Date(); t0.setHours(0, 0, 0, 0); const w0 = new Date(t0); w0.setDate(w0.getDate() - 6);
