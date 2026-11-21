@@ -1850,6 +1850,11 @@ button.rl-empty b{display:block;color:var(--accent);margin-top:4px}
 .dx-ck li.no i{background:var(--warn)}
 .dx-go{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--accent);border-top:1px solid var(--line);padding-top:10px;text-decoration:none}
 .dash>.dx{margin-bottom:12px}#aiHome{margin-bottom:12px}#pg>.dx{margin:4px 0 14px}.resbody>.dx{margin:0}
+
+.dxa{display:flex;align-items:center;gap:8px;background:var(--accent-soft);border-radius:14px;padding:11px 14px;text-decoration:none;color:var(--fg);font-size:13.5px;font-weight:700;width:100%;box-sizing:border-box}
+.dxa i{font-style:normal;background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:2px 6px;font-size:11px;flex:none}
+.dxa .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dxa .t em{font-style:normal;color:var(--accent)}
+.dxa .dot{width:7px;height:7px;border-radius:50%;background:var(--warn);flex:none}.dxa .c{color:var(--fg2);flex:none}
 </style>
 
 <div class="splash" id="splash" aria-hidden="true"><div class="sp-in">
@@ -1925,7 +1930,7 @@ button.rl-empty b{display:block;color:var(--accent);margin-top:4px}
           <path class="g-bld-sound" d="m30 21 9 4m-1-14 7 8m7-13v9" fill="none" stroke-width="3" stroke-linecap="round"/>
         </svg>
         <span hidden><b id="gsT"></b><b id="gsW"></b><b id="gsN"></b></span></div>
-      <a class="dx soft" href="#stats" id="aiHome"></a>
+      <a class="dxa" href="#stats" id="aiHome"></a>
       <a class="gwk" href="#stats" id="gWk"></a>
       <button type="button" class="nightc" id="nightBtn"><span class="ni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></span><span class="nt"><b>자는 동안 자동 기록</b><small>켜 두면, 큰 소리가 날 때만 알아서 녹음해요</small></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <div class="qa"><button type="button" id="qaPick"><span class="qi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>파일 올리기</button>
@@ -3151,7 +3156,7 @@ summary: 최근 소음 패턴 한 문장(60자 이내). advice: 분석을 더 �
       root.querySelectorAll('[data-aib]').forEach((el) => { el.textContent = 'AI 분석'; }); });
   }
   const dxBadge = (D) => `<span class="dx-b ${D.ready ? 'ok' : 'wait'}">${D.ready ? '✓ 분석에 충분한 기록이 모였어요' : `● 분석을 위한 정보가 아직 부족해요 (${D.nOk}/4)`}</span>`;
-  function aiHomeHTML(E) { const D = aiDiag(E); return `${dxHead('이번 주 소음')}<p class="dx-s" data-ai="summary">${D.pat}</p>${dxBadge(D)}`; }
+  function aiHomeHTML(E) { const D = aiDiag(E); return `<i data-aib>기록 분석</i><span class="t" data-ai="summary">${D.pat}</span>${D.ready ? '' : '<b class="dot" title="분석을 위한 기록이 더 필요해요"></b>'}<span class="c" aria-hidden="true">›</span>`; }
   function aiStatsHTML(E) {
     const D = aiDiag(E);
     return `<div class="dx">${dxHead('기록 진단 · 최근 7일 패턴')}<p class="dx-s" data-ai="summary">${D.pat}</p>${weekCmp(E).replace('class="wcmp"', 'class="wcmp dx-n"')}
